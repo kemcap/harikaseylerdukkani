@@ -1,0 +1,643 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Harika Şeyler Dükkânı – Hero Prototipi</title>
+<meta name="description" content="Harika Şeyler Dükkânı için interaktif hero prototipi.">
+<style>
+:root{
+  --green:#173e31;
+  --green2:#2a6b52;
+  --mint:#8fd1ae;
+  --gold:#d7b46a;
+  --gold-soft:#f1d79a;
+  --cream:#f7f1e6;
+  --text:#ffffff;
+}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%;font-family:Inter,ui-sans-serif,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:#091611;color:#fff}
+a{text-decoration:none;color:inherit}
+button{font:inherit}
+.hero{
+  position:relative;
+  min-height:100vh;
+  overflow:hidden;
+  background:#091611;
+}
+.hero-bg{
+  position:absolute;inset:0;
+  background:#0b1a14;
+  transform:scale(1.04);
+}
+.hero-bg:after{
+  content:"";
+  position:absolute;inset:0;
+  background:rgba(6,18,14,.10);
+}
+.navbar{
+  position:absolute;z-index:20;left:0;right:0;top:0;
+  height:86px;display:flex;align-items:center;justify-content:space-between;
+  padding:0 4vw;
+  background:transparent;
+}
+.brand{
+  font-family:Georgia,"Times New Roman",serif;
+  font-size:1.45rem;font-weight:700;line-height:.95
+}
+.navlinks{display:flex;gap:26px;font-size:.9rem;font-weight:700}
+.navlinks a{opacity:.86}.navlinks a:hover{opacity:1}
+.hero-inner{
+  position:relative;z-index:5;
+  min-height:100vh;
+  display:grid;
+  grid-template-columns:minmax(260px,29vw) minmax(0,1fr);
+  gap:0;
+  padding:115px 0 32px 4vw;
+}
+.left{
+  position:relative;z-index:8;
+  align-self:center;
+  padding-right:2.6vw;
+  text-shadow:0 2px 18px rgba(0,0,0,.30);
+}
+.kicker{
+  font-size:.72rem;text-transform:uppercase;letter-spacing:.16em;
+  font-weight:800;color:#cfe4da;margin-bottom:17px
+}
+h1{
+  font-family:Georgia,"Times New Roman",serif;
+  margin:0 0 28px;
+  font-size:clamp(2.8rem,5vw,5.2rem);
+  line-height:.94;
+  letter-spacing:-.045em;
+}
+.category-nav{display:flex;flex-direction:column;gap:6px}
+.cat-btn{
+  position:relative;
+  border:0;background:transparent;color:rgba(255,255,255,.42);
+  text-align:left;padding:12px 0 18px;
+  font-weight:500;font-size:1.05rem;cursor:pointer;
+  transition:.22s ease;
+}
+.cat-btn:hover{color:rgba(255,255,255,.82)}
+.cat-btn.active{color:#fff;font-weight:800}
+.progress-track{
+  position:absolute;
+  left:0;
+  bottom:5px;
+  width:100px;
+  height:3px;
+  background:rgba(255,255,255,.22);
+  overflow:hidden;
+  border-radius:999px;
+}
+.progress{
+  display:block;
+  width:0;
+  height:100%;
+  background:#fff;
+  border-radius:999px;
+  box-shadow:none;
+}
+.cat-btn.active .progress{
+  animation:slideProgress 7s linear forwards;
+}
+@keyframes slideProgress{
+  from{width:0}
+  to{width:100%}
+}to{width:100%}}
+.note{
+  max-width:320px;margin-top:22px;color:rgba(255,255,255,.58);
+  line-height:1.55;font-size:.86rem
+}
+
+/* SLANTED STAGE */
+.stage-wrap{
+  position:relative;
+  min-width:0;
+  align-self:stretch;
+  overflow:hidden;
+  transform:translateY(-34px);
+}
+.stage{
+  position:absolute;
+  inset:0;
+  display:flex;
+  align-items:stretch;
+  gap:0;
+  padding-left:0;
+}
+.slant-card{
+  position:relative;
+  flex:1 1 0;
+  min-width:0;
+  overflow:hidden;
+  cursor:pointer;
+  clip-path:polygon(16% 0,100% 0,84% 100%,0 100%);
+  margin-left:-4.5%;
+  background:#183c30;
+  opacity:0;
+  transform:translateX(140px);
+  box-shadow:-14px 0 34px rgba(0,0,0,.2), 0 0 0 1px rgba(215,180,106,.18);
+}
+.slant-card:first-child{margin-left:0}
+.slant-card.show{animation:slideIn .8s cubic-bezier(.16,.82,.22,1) forwards}
+.slant-card.leave{animation:slideOut .38s ease forwards}
+.slant-card:nth-child(1){z-index:3}
+.slant-card:nth-child(2){z-index:2}
+.slant-card:nth-child(3){z-index:1}
+@keyframes slideIn{
+  from{opacity:0;transform:translateX(150px)}
+  to{opacity:1;transform:translateX(0)}
+}
+@keyframes slideOut{
+  from{opacity:1;transform:translateX(0)}
+  to{opacity:0;transform:translateX(-110px)}
+}
+.slant-card img{
+  position:absolute;inset:-2%;
+  width:104%;height:104%;object-fit:cover;
+  transform:scale(1.03);
+  transition:transform .65s ease;
+}
+.slant-card:hover img{transform:scale(1.08)}
+.slant-card:after{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:transparent;
+}
+.slant-card:before{
+  content:"";
+  position:absolute;
+  z-index:5;
+  inset:0;
+  pointer-events:none;
+  clip-path:inherit;
+  box-shadow:
+    inset 0 0 0 1.5px rgba(215,180,106,.95),
+    inset 0 0 18px rgba(215,180,106,.06);
+}
+.card-copy{
+  position:absolute;
+  z-index:6;
+  left:16%;
+  right:16%;
+  bottom:40px;
+  color:#fff;
+  text-shadow:0 2px 10px rgba(0,0,0,.42);
+  max-width:68%;
+  overflow:hidden;
+}
+.card-copy small{
+  display:block;color:#d0e6db;font-size:.74rem;
+  text-transform:uppercase;letter-spacing:.1em;font-weight:800;margin-bottom:8px
+}
+.card-copy h3{
+  font-family:Georgia,"Times New Roman",serif;
+  font-size:clamp(1.28rem,1.9vw,2.08rem);
+  margin:0 0 7px;
+  line-height:1.02;
+  max-width:100%;
+  overflow-wrap:anywhere;
+  word-break:break-word;
+  hyphens:auto;
+}
+.card-copy p{
+  margin:0;
+  color:rgba(255,255,255,.74);
+  font-size:.84rem;
+  line-height:1.34;
+  max-width:100%;
+  overflow-wrap:anywhere;
+  word-break:break-word;
+}
+.open{
+  position:absolute;z-index:6;right:10%;top:28px;
+  width:42px;height:42px;border-radius:50%;
+  display:grid;place-items:center;
+  background:rgba(15,31,25,.34);
+  border:1px solid rgba(215,180,106,.72);
+  backdrop-filter:blur(8px);
+  font-size:1.1rem;
+  transform:rotate(-35deg);
+}
+.stage-glow{display:none}
+.category-title-mobile{display:none}
+.hint{
+  position:absolute;z-index:12;bottom:20px;right:3vw;
+  color:rgba(255,255,255,.45);font-size:.72rem;letter-spacing:.09em;text-transform:uppercase
+}
+@media(max-width:980px){
+  .hero-inner{
+    grid-template-columns:1fr;
+    padding:105px 18px 22px;
+    gap:22px;
+  }
+  .left{padding-right:0}
+  h1{max-width:780px;font-size:clamp(2.7rem,8vw,4.5rem)}
+  .category-nav{flex-direction:row;gap:18px;overflow-x:auto;padding-bottom:4px}
+  .cat-btn{min-width:max-content;width:auto;padding-right:24px}
+  .progress-track{width:100%}
+  .note{display:none}
+  .stage-wrap{height:58vh;min-height:430px}
+  .stage{position:absolute;inset:0}
+}
+@media(max-width:720px){
+  .hero{
+    min-height:100svh;
+    overflow:hidden;
+  }
+
+  .navbar{
+    height:68px;
+    padding:0 16px;
+  }
+
+  .navlinks{display:none}
+
+  .brand{
+    font-size:1.18rem;
+  }
+
+  .hero-inner{
+    display:flex;
+    flex-direction:column;
+    min-height:100svh;
+    padding:84px 12px 14px;
+    gap:12px;
+  }
+
+  .left{
+    padding:0;
+    max-width:none;
+    flex:0 0 auto;
+  }
+
+  .kicker{
+    margin-bottom:8px;
+    font-size:.66rem;
+  }
+
+  h1{
+    max-width:100%;
+    margin:0 0 14px;
+    font-size:clamp(2.15rem,10.5vw,3.25rem);
+    line-height:.95;
+  }
+
+  /* Kategorien kompakter, ohne hinterlegte Boxen */
+  .category-nav{
+    display:grid;
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    column-gap:10px;
+    row-gap:4px;
+    width:100%;
+    overflow:visible;
+    margin-bottom:6px;
+  }
+
+  .cat-btn{
+    min-width:0;
+    width:100%;
+    min-height:36px;
+    padding:5px 2px 12px;
+    border:0;
+    border-radius:0;
+    background:transparent;
+    text-align:center;
+    font-size:.83rem;
+    line-height:1.12;
+    overflow:hidden;
+  }
+
+  .cat-btn.active{
+    color:#fff;
+    font-weight:800;
+    background:transparent;
+    border-color:transparent;
+  }
+
+  .progress-track{
+    left:50%;
+    bottom:6px;
+    width:min(100px,72%);
+    height:3px;
+    transform:translateX(-50%);
+    background:rgba(255,255,255,.22);
+  }
+
+  .note{display:none}
+
+  /* Die 3 mobilen Rechtecke sollen die restliche Hero-Höhe füllen */
+  .stage-wrap{
+    position:relative;
+    flex:1 1 auto;
+    min-height:0;
+    overflow:visible;
+    transform:none;
+    display:flex;
+  }
+
+  .stage{
+    position:relative;
+    inset:auto;
+    display:grid;
+    grid-template-columns:repeat(3,minmax(0,1fr));
+    gap:8px;
+    width:100%;
+    height:100%;
+    min-height:0;
+    padding:0;
+    overflow:visible;
+    align-items:stretch;
+  }
+
+  .slant-card{
+    flex:none;
+    width:100%;
+    min-width:0;
+    height:100%;
+    min-height:0;
+    margin:0;
+    border-radius:14px;
+    clip-path:none;
+    aspect-ratio:auto;
+    box-shadow:0 14px 28px rgba(0,0,0,.22);
+  }
+
+  .slant-card:nth-child(1),
+  .slant-card:nth-child(2),
+  .slant-card:nth-child(3){
+    grid-column:auto;
+    min-height:0;
+    height:100%;
+  }
+
+  .slant-card img{
+    inset:0;
+    width:100%;
+    height:100%;
+    transform:scale(1.01);
+  }
+
+  .slant-card:hover img{
+    transform:scale(1.01);
+  }
+
+  .card-copy{
+    left:10px;
+    right:10px;
+    bottom:10px;
+    max-width:none;
+  }
+
+  .slant-card:nth-child(2) .card-copy,
+  .slant-card:nth-child(3) .card-copy{
+    left:10px;
+    right:10px;
+    bottom:10px;
+    max-width:none;
+  }
+
+  .card-copy small{
+    font-size:.54rem;
+    margin-bottom:3px;
+  }
+
+  .card-copy h3{
+    font-size:.88rem;
+    line-height:1.05;
+    margin-bottom:3px;
+    overflow-wrap:anywhere;
+    word-break:break-word;
+    hyphens:auto;
+  }
+
+  .slant-card:nth-child(2) .card-copy h3,
+  .slant-card:nth-child(3) .card-copy h3{
+    font-size:.88rem;
+    line-height:1.05;
+  }
+
+  .card-copy p{
+    display:none;
+  }
+
+  .slant-card:nth-child(2) .card-copy p,
+  .slant-card:nth-child(3) .card-copy p{
+    display:none;
+  }
+
+  .open{
+    width:28px;
+    height:28px;
+    right:8px;
+    top:8px;
+    font-size:.75rem;
+  }
+
+  .stage-glow{display:none}
+  .hint{display:none}
+}
+
+@media(max-width:390px){
+  .hero-inner{padding-left:10px;padding-right:10px;padding-bottom:12px}
+  .category-nav{column-gap:8px;row-gap:3px}
+  .cat-btn{font-size:.74rem;padding-left:1px;padding-right:1px;padding-bottom:11px}
+  .stage{gap:6px}
+  .card-copy h3{font-size:.8rem}
+  .slant-card:nth-child(2) .card-copy h3,
+  .slant-card:nth-child(3) .card-copy h3{font-size:.8rem}
+}
+
+
+55%{width:76%}
+  100%{width:100%}
+}
+
+</style>
+</head>
+
+<body>
+</div>
+
+<section class="hero">
+  <div class="hero-bg"></div>
+
+  <header class="navbar">
+    <div class="brand">Harika Şeyler<br>Dükkânı</div>
+    <nav class="navlinks">
+      <a href="#">Mağazamız</a>
+      <a href="#">Kategoriler</a>
+      <a href="#">Hakkımızda</a>
+      <a href="#">İletişim</a>
+    </nav>
+  </header>
+
+  <div class="hero-inner">
+    <aside class="left">
+      <div class="kicker">Döşemealtı · Antalya</div>
+      <h1>Bir kategori seç. Üç harika şey keşfet.</h1>
+      <div class="category-nav" id="categoryNav"></div>
+      <div class="note">Aktif kategorinin altındaki beyaz çizgi 7 saniye boyunca dolar. Çizgi tamamlandığında bir sonraki kategoriye geçilir; istersen fareyle veya tıklayarak manuel değiştirebilirsin.</div>
+    </aside>
+
+    <div class="stage-wrap">
+      <div class="stage-glow"></div>
+      <div class="stage" id="stage"></div>
+    </div>
+  </div>
+
+  <div class="hint">Otomatik geçiş · 7 saniye</div>
+</section>
+
+<script>
+const data=[
+  {
+    name:"Hediyelik Eşya",
+    items:[
+      {img:"assets/placeholder-gift.png",title:"Mum Hediye Kutusu",desc:"Özel günler için sıcak bir seçim"},
+      {img:"assets/placeholder-stationery.png",title:"Gece Lambası",desc:"Dekoratif ve huzurlu"},
+      {img:"assets/placeholder-jewelry.png",title:"Desenli Kupa",desc:"Günlük küçük mutluluklar"}
+    ]
+  },
+  {
+    name:"Kırtasiye",
+    items:[
+      {img:"assets/placeholder-gift.png",title:"Renkli Defterler",desc:"Notlar ve fikirler için"},
+      {img:"assets/placeholder-stationery.png",title:"Defter & Kalem Seti",desc:"Sade ve şık"},
+      {img:"assets/placeholder-jewelry.png",title:"Masaüstü Seçkisi",desc:"Eğlenceli kırtasiye detayları"}
+    ]
+  },
+  {
+    name:"Bijuteri",
+    items:[
+      {img:"assets/placeholder-gift.png",title:"Minimal Kolye",desc:"Günlük zarif detaylar"},
+      {img:"assets/placeholder-stationery.png",title:"Hediye Takı Seçkisi",desc:"Yeşil ve altın dokunuşlar"},
+      {img:"assets/placeholder-jewelry.png",title:"Zarif Aksesuarlar",desc:"Hediye etmeye hazır"}
+    ]
+  },
+  {
+    name:"Oyuncak",
+    items:[
+      {img:"assets/placeholder-gift.png",title:"Yumuşak Ayıcık",desc:"Kucaklamalık küçük dost"},
+      {img:"assets/placeholder-stationery.png",title:"Ahşap Tren Seti",desc:"Doğal ve eğlenceli"},
+      {img:"assets/placeholder-jewelry.png",title:"Çocuk Dünyası",desc:"Oyun, dekor ve sürprizler"}
+    ]
+  }
+];
+
+const nav=document.getElementById("categoryNav");
+const stage=document.getElementById("stage");
+
+let active=0;
+let timer=null;
+let hoverTimer=null;
+let isTransitioning=false;
+
+function renderNav(){
+  nav.innerHTML="";
+  data.forEach((cat,i)=>{
+    const btn=document.createElement("button");
+    btn.className="cat-btn"+(i===active?" active":"");
+    btn.innerHTML=`${cat.name}<span class="progress-track"><span class="progress"></span></span>`;
+
+    btn.addEventListener("click",()=>{
+      if(i===active || isTransitioning) return;
+      setCategory(i,true);
+    });
+
+    btn.addEventListener("mouseenter",()=>{
+      if(i===active || isTransitioning) return;
+      clearTimeout(hoverTimer);
+      hoverTimer=setTimeout(()=>{
+        if(i!==active && !isTransitioning){
+          setCategory(i,true);
+        }
+      },220);
+    });
+
+    btn.addEventListener("mouseleave",()=>{
+      clearTimeout(hoverTimer);
+    });
+
+    nav.appendChild(btn);
+  });
+}
+
+function renderCards(index){
+  isTransitioning=true;
+
+  const old=[...stage.querySelectorAll(".slant-card")];
+  old.forEach(el=>el.classList.add("leave"));
+
+  const delay=old.length?320:0;
+
+  setTimeout(()=>{
+    stage.innerHTML="";
+
+    data[index].items.forEach((item,i)=>{
+      const a=document.createElement("a");
+      a.href="#";
+      a.className="slant-card";
+      a.innerHTML=`
+        <img src="${item.img}" alt="${item.title}">
+        <span class="open">→</span>
+        <div class="card-copy">
+          <small>${data[index].name}</small>
+          <h3>${item.title}</h3>
+          <p>${item.desc}</p>
+        </div>`;
+      stage.appendChild(a);
+
+      setTimeout(()=>{
+        a.classList.add("show");
+      },80+i*120);
+    });
+
+    setTimeout(()=>{
+      isTransitioning=false;
+    },520);
+  },delay);
+}
+
+function setCategory(i,manual=false){
+  // Aynı kategoriye tekrar girildiğinde hiçbir şey yapma.
+  // Böylece mouse üzerinde kaldığında animasyon sonsuz döngüye girmez.
+  if(i===active || isTransitioning) return;
+
+  active=i;
+  renderNav();
+  renderCards(active);
+
+  if(manual) restartTimer();
+}
+
+function nextCategory(){
+  if(isTransitioning) return;
+  const next=(active+1)%data.length;
+  setCategory(next,false);
+}
+
+function restartTimer(){
+  clearInterval(timer);
+  timer=setInterval(nextCategory,7000);
+}
+
+renderNav();
+renderCards(active);
+restartTimer();
+
+document.addEventListener("visibilitychange",()=>{
+  if(document.hidden){
+    clearInterval(timer);
+    clearTimeout(hoverTimer);
+  }else{
+    restartTimer();
+  }
+});
+</script>
+</body>
+</html>

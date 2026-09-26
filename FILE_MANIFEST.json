@@ -1,0 +1,30 @@
+{
+  ".gitignore": {
+    "bytes": 20,
+    "sha256": "2bdfdb216230559f36faf46907142b8afd478401150f810e1ddaf9a4fdcc656c"
+  },
+  ".nojekyll": {
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "README.md": {
+    "bytes": 1078,
+    "sha256": "2149c83945e75ec4c3226ff52f4c53a5c76b18f69ca7023c3c9d44dfad320380"
+  },
+  "assets/placeholder-gift.png": {
+    "bytes": 2190549,
+    "sha256": "cb5b00246a969f6eb584efe7319e906393e4d9bd2584494efb6118365501c0ab"
+  },
+  "assets/placeholder-jewelry.png": {
+    "bytes": 2498001,
+    "sha256": "bfd29f55fd1598afa49ffaa5deaadaa83aad8a0e9b1e0297252a18905c0a5a5e"
+  },
+  "assets/placeholder-stationery.png": {
+    "bytes": 2163241,
+    "sha256": "26ea4c54f34aaddaa371de02ad465ea43d3a19a2aadb5989cde3e82952d07351"
+  },
+  "index.html": {
+    "bytes": 14854,
+    "sha256": "cde20764a3a56d1780a58776072cab8a14f799699ab306057d2036d5f367fa04"
+  }
+}
