@@ -1,0 +1,53 @@
+name: Publish development preview
+
+on:
+  push:
+    branches:
+      - entwicklung
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  publish-preview:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout main
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          path: main
+          fetch-depth: 0
+
+      - name: Checkout development
+        uses: actions/checkout@v4
+        with:
+          ref: entwicklung
+          path: development
+          fetch-depth: 0
+
+      - name: Build preview folder
+        shell: bash
+        run: |
+          rm -rf main/entwicklung
+          mkdir -p main/entwicklung
+          rsync -av --delete \
+            --exclude='.git' \
+            --exclude='.github' \
+            --exclude='Harika_Seyler_GitHub_Pages_Ready.zip' \
+            development/ main/entwicklung/
+
+      - name: Commit preview to main
+        shell: bash
+        run: |
+          cd main
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add entwicklung
+          if git diff --cached --quiet; then
+            echo "No preview changes to publish."
+            exit 0
+          fi
+          git commit -m "Update development preview"
+          git push origin main
