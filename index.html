@@ -433,6 +433,37 @@ body.header-over-light .site-header{
   position:absolute !important;
 }
 
+
+/* ===== HERO SECTION PADDING FIX v4 ===== */
+
+/* Die globale Regel "section { padding:82px 0 }" darf auf die Heroes nicht wirken. */
+.hero-panel,
+.hero-panel > .hero,
+.hero-panel .family-hero{
+  padding-top:0 !important;
+  padding-bottom:0 !important;
+}
+
+/* Beide Hero-Varianten belegen exakt die sichtbare Bildschirmhöhe. */
+.hero-panel.active{
+  height:100svh !important;
+  min-height:100svh !important;
+}
+.hero-a .family-hero,
+.hero-b .dark-hero{
+  height:100% !important;
+  min-height:0 !important;
+}
+
+/* Beim dunklen Hero darf nirgendwo der cremefarbene Seitenhintergrund durchscheinen. */
+body.hero-dark{
+  background:#0b1a14 !important;
+}
+.hero-b,
+.hero-b .dark-hero{
+  background:#0b1a14 !important;
+}
+
 </style>
 </head>
 <body>
