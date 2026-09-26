@@ -358,60 +358,79 @@ body:not(.hero-dark) .hero-switch.active{background:#294138;color:#fff}
 }
 
 
-/* ===== HERO / HEADER HEIGHT FIX v2 ===== */
 
-/* Aile-Dostu: Optik des vorhandenen Menüs bleibt erhalten,
-   aber Topbar + Menü liegen über dem Hero und vergrößern ihn nicht mehr. */
-body:not(.hero-dark) .topbar{
-  position:absolute;
+/* ===== HERO / HEADER FIX v3 ===== */
+
+/* Header and topbar must never add height above the hero. */
+.topbar{
+  position:absolute !important;
   top:0;
   left:0;
   right:0;
   z-index:72;
 }
-body:not(.hero-dark) .site-header{
-  position:absolute;
-  top:33px;
+.site-header{
+  position:absolute !important;
   left:0;
   right:0;
   z-index:71;
 }
 
-/* Nach dem Hero verhält sich das Menü wieder wie eine feste Navigation. */
-body:not(.hero-dark).header-over-light .site-header{
-  position:fixed;
-  top:0;
+/* Aile Dostu keeps its original visual menu, only overlaid on the hero. */
+body:not(.hero-dark):not(.header-over-light) .site-header{
+  top:33px !important;
 }
 
-/* Beide Hero-Varianten belegen exakt den sichtbaren Bildschirm. */
-.hero-a .family-hero{
-  height:100svh;
-  min-height:100svh;
+/* The active hero itself is exactly one visible viewport high. */
+.hero-panel.active{
+  position:relative;
+  height:100svh !important;
+  min-height:100svh !important;
+  overflow:hidden;
 }
-.dark-hero{
-  height:100svh;
-  min-height:100svh;
+.hero-a .family-hero,
+.hero-b .dark-hero{
+  height:100% !important;
+  min-height:0 !important;
+  margin:0 !important;
 }
 
-/* Zweiter Hero: Menü-Hintergrund wirklich vollständig transparent. */
-body.hero-dark:not(.header-over-light) .site-header{
+/* Dark category hero: no cream/white menu strip at all. */
+body.hero-dark:not(.header-over-light) .topbar{
+  display:none !important;
+}
+body.hero-dark:not(.header-over-light) .site-header,
+body.hero-dark:not(.header-over-light) .header-inner{
+  top:0 !important;
   background:transparent !important;
-  border-bottom-color:transparent !important;
+  background-color:transparent !important;
+  border-bottom:0 !important;
   box-shadow:none !important;
   backdrop-filter:none !important;
   -webkit-backdrop-filter:none !important;
 }
-
-/* H1 in beiden Hero-Varianten exakt wie vorgegeben. */
-.hero-a .family-hero h1,
-.hero-b .dark-left h1{
-  font-family:Georgia,"Times New Roman",serif;
+body.hero-dark:not(.header-over-light) .site-header .searchbar,
+body.hero-dark:not(.header-over-light) .site-header .icon-btn{
+  background:transparent !important;
+  background-color:transparent !important;
 }
 
-/* Scroll-Hinweis bleibt innerhalb des 100svh-Hero. */
+/* Once the hero has been left, navigation may sit fixed above the page content. */
+body.header-over-light .site-header{
+  position:fixed !important;
+  top:0 !important;
+}
+
+/* Exact H1 family requested. */
+.hero-a .family-hero h1,
+.hero-b .dark-left h1{
+  font-family:Georgia,"Times New Roman",serif !important;
+}
+
+/* Scroll cue stays inside the viewport rather than adding document height. */
 .hero-a .scroll-cue,
 .hero-b .scroll-cue{
-  position:absolute;
+  position:absolute !important;
 }
 
 </style>
@@ -632,8 +651,8 @@ document.querySelectorAll(".hero-switch").forEach(btn=>btn.addEventListener("cli
 function updateHeaderTheme(){
   const dark=document.body.classList.contains("hero-dark");
   const activeHero=dark?document.getElementById("heroB"):document.getElementById("heroA");
-  const heroHeight=activeHero.offsetHeight;
-  document.body.classList.toggle("header-over-light",window.scrollY>=heroHeight);
+  const heroBottom=activeHero.getBoundingClientRect().bottom + window.scrollY;
+  document.body.classList.toggle("header-over-light",window.scrollY>=heroBottom-1);
 }
 window.addEventListener("scroll",updateHeaderTheme,{passive:true});
 window.addEventListener("resize",updateHeaderTheme);
