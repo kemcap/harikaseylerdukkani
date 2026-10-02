@@ -1,0 +1,504 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Döşemealtı'nda Hediyelik Eşya, Kırtasiye, Bijuteri ve Oyuncak | Harika Şeyler Dükkânı</title>
+<meta name="description" content="Harika Şeyler Dükkânı, Döşemealtı Antalya'da hediyelik eşya, kırtasiye, bijuteri ve oyuncak ürünlerini bir arada sunan yerel mağazadır.">
+<style>
+:root{
+  --green:#3D7C5D;
+  --green-dark:#28513E;
+  --ink:#294138;
+  --cream:#FBF7EF;
+  --cream-light:#FFF7E8;
+  --soft:#DCECDF;
+  --apricot:#EF9B7B;
+  --gold:#C7A25D;
+  --white:#fff;
+  --line:rgba(41,65,56,.14);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:86px}
+body{
+  margin:0;
+  background:var(--cream);
+  color:var(--ink);
+  font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  line-height:1.65;
+}
+img{display:block;width:100%}
+a{color:inherit;text-decoration:none}
+button{font:inherit}
+.wrap{width:min(1180px,calc(100% - 40px));margin:auto}
+.serif,h1,h2,h3{font-family:Georgia,"Times New Roman",serif}
+.kicker{
+  font-size:.76rem;
+  font-weight:800;
+  letter-spacing:.16em;
+  text-transform:uppercase;
+  color:var(--green);
+  margin-bottom:14px;
+}
+h1,h2,h3,p{margin-top:0}
+h1{font-size:clamp(3rem,6.6vw,6rem);line-height:.95;letter-spacing:-.045em;margin-bottom:24px}
+h2{font-size:clamp(2.3rem,4.8vw,4.7rem);line-height:1;letter-spacing:-.04em;margin-bottom:24px}
+h3{font-size:clamp(1.4rem,2vw,2rem);line-height:1.08}
+p{font-size:1.03rem;color:rgba(41,65,56,.86)}
+.lead{font-size:clamp(1.08rem,1.5vw,1.25rem);line-height:1.7}
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:10px;
+  min-height:48px;padding:0 20px;border-radius:999px;border:1px solid transparent;
+  font-weight:800;font-size:.93rem;transition:.2s;
+}
+.btn:hover{transform:translateY(-2px)}
+.btn-primary{background:var(--green-dark);color:#fff}
+.btn-outline{border-color:rgba(41,65,56,.28);background:rgba(255,255,255,.45)}
+.btn-light{background:#fff;color:var(--green-dark)}
+.btn-ghost-light{color:#fff;border-color:rgba(255,255,255,.34)}
+.header{
+  position:absolute;top:0;left:0;right:0;z-index:30;color:#fff;
+}
+.nav{
+  min-height:82px;display:grid;grid-template-columns:auto 1fr auto;gap:28px;align-items:center;
+}
+.brand{display:flex;gap:11px;align-items:center;font-weight:850;line-height:1.05}
+.brand-mark{
+  width:38px;height:38px;border-radius:50%;display:grid;place-items:center;
+  border:1px solid rgba(255,255,255,.48);background:rgba(255,255,255,.10);
+  font-family:Georgia,serif;
+}
+.navlinks{display:flex;justify-content:center;gap:22px;font-size:.87rem;font-weight:750}
+.navlinks a{opacity:.86}
+.navlinks a:hover{opacity:1}
+.nav-actions{display:flex;gap:8px}
+.nav .btn{min-height:42px;padding:0 15px;font-size:.82rem}
+.mobile-toggle{display:none;border:1px solid rgba(255,255,255,.35);background:transparent;color:#fff;width:42px;height:42px;border-radius:50%}
+.hero{
+  min-height:100svh;
+  background:var(--green-dark);
+  color:#fff;
+  position:relative;
+  overflow:hidden;
+  display:flex;
+  align-items:center;
+  padding:110px 0 62px;
+}
+.hero:before{
+  content:"";position:absolute;inset:0;
+  background:
+    radial-gradient(circle at 75% 22%,rgba(199,162,93,.18),transparent 28%),
+    linear-gradient(120deg,rgba(8,30,22,.14),rgba(8,30,22,.0) 55%);
+  pointer-events:none;
+}
+.hero-grid{
+  position:relative;z-index:2;
+  display:grid;grid-template-columns:minmax(0,.95fr) minmax(460px,1.05fr);
+  gap:56px;align-items:center;
+}
+.hero-copy .kicker{color:#d9e8e1}
+.hero-copy p{color:rgba(255,255,255,.79);max-width:690px}
+.hero-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:30px}
+.hero-badges{display:flex;gap:10px;flex-wrap:wrap;margin-top:28px}
+.hero-badges span{
+  font-size:.75rem;font-weight:750;border:1px solid rgba(255,255,255,.22);
+  padding:7px 11px;border-radius:999px;color:rgba(255,255,255,.78)
+}
+.hero-collage{
+  display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1.05fr .85fr;gap:14px;
+  height:min(68vh,650px);
+}
+.hero-card{overflow:hidden;position:relative;background:#173b2d}
+.hero-card img{height:100%;object-fit:cover;transition:.5s}
+.hero-card:hover img{transform:scale(1.035)}
+.hero-card:nth-child(1){grid-row:1/3;border-radius:38px 12px 38px 38px}
+.hero-card:nth-child(2){border-radius:12px 38px 12px 28px}
+.hero-card:nth-child(3){border-radius:28px 12px 38px 12px}
+.hero-stamp{
+  position:absolute;right:20px;bottom:20px;z-index:3;
+  width:122px;height:122px;border-radius:50%;display:grid;place-items:center;text-align:center;
+  background:var(--cream-light);color:var(--green-dark);font-family:Georgia,serif;font-weight:700;
+  border:1px solid rgba(41,65,56,.14);transform:rotate(-5deg);line-height:1.15;
+}
+.scrollcue{
+  position:absolute;bottom:24px;left:50%;transform:translateX(-50%);
+  font-size:.72rem;text-transform:uppercase;letter-spacing:.13em;color:rgba(255,255,255,.62)
+}
+.intro{padding:110px 0 90px;background:var(--cream-light)}
+.intro-grid{display:grid;grid-template-columns:.8fr 1.2fr;gap:70px;align-items:start}
+.definition{
+  font-family:Georgia,"Times New Roman",serif;
+  font-size:clamp(1.6rem,2.6vw,2.7rem);line-height:1.2;color:var(--green-dark);
+}
+.info-strip{
+  margin-top:52px;border-top:1px solid var(--line);border-bottom:1px solid var(--line);
+  display:grid;grid-template-columns:repeat(3,1fr)
+}
+.info-item{padding:22px 22px 22px 0}
+.info-item + .info-item{border-left:1px solid var(--line);padding-left:22px}
+.info-label{font-size:.7rem;text-transform:uppercase;letter-spacing:.13em;font-weight:800;color:rgba(41,65,56,.55)}
+.info-value{font-weight:800;margin-top:4px}
+.categories{padding:34px 0 0}
+.cat-section{padding:110px 0}
+.cat-section:nth-child(even){background:#f3eee4}
+.cat-section.soft{background:var(--soft)}
+.cat-grid{display:grid;grid-template-columns:1fr 1fr;gap:72px;align-items:center}
+.cat-grid.reverse .cat-media{order:2}
+.cat-media{position:relative}
+.cat-main{
+  aspect-ratio:4/3;object-fit:cover;border-radius:36px 10px 36px 10px;
+}
+.cat-thumb{
+  position:absolute;width:35%;aspect-ratio:1/1;object-fit:cover;
+  right:-5%;bottom:-9%;border:10px solid var(--cream);border-radius:12px 30px 12px 30px;
+}
+.cat-section.soft .cat-thumb{border-color:var(--soft)}
+.cat-section:nth-child(even) .cat-thumb{border-color:#f3eee4}
+.tags{display:flex;gap:8px;flex-wrap:wrap;margin:24px 0}
+.tags span{
+  padding:7px 11px;border-radius:999px;border:1px solid var(--line);
+  background:rgba(255,255,255,.4);font-size:.76rem;font-weight:800
+}
+.cat-copy p{max-width:620px}
+.local-proof{padding:100px 0;background:var(--soft)}
+.proof-head{display:grid;grid-template-columns:1fr .9fr;gap:70px;margin-bottom:50px}
+.proof-grid{display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid rgba(41,65,56,.18)}
+.proof{padding:28px 26px 0 0}
+.proof + .proof{border-left:1px solid rgba(41,65,56,.18);padding-left:26px}
+.proof strong{display:block;font-family:Georgia,"Times New Roman",serif;font-size:1.4rem;margin-bottom:8px}
+.store{padding:110px 0;background:var(--green-dark);color:#fff}
+.store p{color:rgba(255,255,255,.76)}
+.store .kicker{color:#d9e8e1}
+.store-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:56px;align-items:stretch}
+.store-media{min-height:560px;border-radius:36px 12px 36px 12px;overflow:hidden}
+.store-media img{height:100%;object-fit:cover}
+.store-copy{display:flex;flex-direction:column;justify-content:center}
+.store-facts{margin:28px 0;display:grid;gap:0;border-top:1px solid rgba(255,255,255,.18)}
+.store-fact{display:grid;grid-template-columns:150px 1fr;gap:18px;padding:14px 0;border-bottom:1px solid rgba(255,255,255,.18)}
+.store-fact span:first-child{font-size:.73rem;text-transform:uppercase;letter-spacing:.12em;color:rgba(255,255,255,.52);font-weight:800}
+.store-actions{display:flex;gap:10px;flex-wrap:wrap}
+.faq{padding:110px 0;background:var(--cream)}
+.faq-grid{display:grid;grid-template-columns:.75fr 1.25fr;gap:70px;align-items:start}
+.faq-list{border-top:1px solid var(--line)}
+.faq-item{border-bottom:1px solid var(--line)}
+.faq-q{
+  width:100%;padding:22px 0;border:0;background:transparent;text-align:left;
+  display:flex;justify-content:space-between;gap:20px;color:var(--ink);font-weight:850;
+}
+.faq-q span:last-child{font-size:1.4rem;font-weight:400;transition:.2s}
+.faq-a{max-height:0;overflow:hidden;transition:max-height .3s ease}
+.faq-a p{padding:0 34px 22px 0;margin:0}
+.faq-item.open .faq-a{max-height:260px}
+.faq-item.open .faq-q span:last-child{transform:rotate(45deg)}
+.contact{padding:90px 0;background:var(--cream-light)}
+.contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:38px}
+.map-placeholder{
+  min-height:390px;border:1px solid var(--line);border-radius:28px;
+  display:grid;place-items:center;text-align:center;padding:30px;
+  background:
+    linear-gradient(rgba(61,124,93,.06) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(61,124,93,.06) 1px,transparent 1px);
+  background-size:28px 28px;
+}
+.contact-card{padding:40px;border:1px solid var(--line);border-radius:28px;background:#fff}
+.footer{padding:34px 0;background:#18392d;color:rgba(255,255,255,.75)}
+.footer-inner{display:flex;justify-content:space-between;gap:20px;align-items:center;font-size:.8rem}
+@media(max-width:980px){
+  .nav{grid-template-columns:auto 1fr auto}
+  .navlinks{display:none;position:absolute;top:74px;left:20px;right:20px;flex-direction:column;background:var(--green-dark);padding:20px;border:1px solid rgba(255,255,255,.15);border-radius:20px}
+  .navlinks.open{display:flex}
+  .nav-actions .btn{display:none}
+  .mobile-toggle{display:block}
+  .hero-grid,.cat-grid,.proof-head,.store-grid,.faq-grid,.contact-grid,.intro-grid{grid-template-columns:1fr}
+  .hero-grid{gap:34px}
+  .hero-collage{height:520px}
+  .cat-grid.reverse .cat-media{order:0}
+  .cat-thumb{right:3%;bottom:-6%}
+  .proof-grid{grid-template-columns:repeat(2,1fr)}
+  .proof:nth-child(3){border-left:0}
+}
+@media(max-width:640px){
+  .wrap{width:min(100% - 24px,1180px)}
+  .brand span:last-child{font-size:.82rem;max-width:130px}
+  .hero{padding-top:94px}
+  h1{font-size:clamp(2.75rem,13vw,4.4rem)}
+  h2{font-size:clamp(2.15rem,10vw,3.6rem)}
+  .hero-collage{height:430px;gap:8px}
+  .hero-card:nth-child(1){border-radius:26px 8px 26px 26px}
+  .hero-card:nth-child(2),.hero-card:nth-child(3){border-radius:8px 24px 8px 20px}
+  .hero-stamp{width:96px;height:96px;font-size:.8rem;right:12px;bottom:12px}
+  .intro,.cat-section,.local-proof,.store,.faq{padding:76px 0}
+  .info-strip{grid-template-columns:1fr}
+  .info-item + .info-item{border-left:0;border-top:1px solid var(--line);padding-left:0}
+  .cat-grid{gap:38px}
+  .cat-main{border-radius:26px 8px 26px 8px}
+  .cat-thumb{width:38%;border-width:7px}
+  .proof-grid{grid-template-columns:1fr}
+  .proof + .proof{border-left:0;border-top:1px solid rgba(41,65,56,.18);padding-left:0;padding-top:24px}
+  .proof{padding-bottom:24px}
+  .store-media{min-height:360px}
+  .store-fact{grid-template-columns:1fr;gap:3px}
+  .footer-inner{flex-direction:column;align-items:flex-start}
+}
+</style>
+<script type="application/ld+json">
+{
+  "@context":"https://schema.org",
+  "@type":"Store",
+  "name":"Harika Şeyler Dükkânı",
+  "address":{
+    "@type":"PostalAddress",
+    "addressLocality":"Döşemealtı",
+    "addressRegion":"Antalya",
+    "addressCountry":"TR"
+  },
+  "areaServed":["Döşemealtı","Antalya"],
+  "knowsAbout":["Hediyelik eşya","Kırtasiye","Bijuteri","Oyuncak"]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context":"https://schema.org",
+  "@type":"FAQPage",
+  "mainEntity":[
+    {"@type":"Question","name":"Döşemealtı'nda hediyelik eşya nereden alabilirim?","acceptedAnswer":{"@type":"Answer","text":"Harika Şeyler Dükkânı, Döşemealtı'nda hediyelik eşya seçenekleri sunan yerel bir mağazadır. Mağazada farklı yaş grupları ve çeşitli özel günler için uygun ürünleri inceleyebilirsiniz."}},
+    {"@type":"Question","name":"Döşemealtı'nda kırtasiye ürünleri satıyor musunuz?","acceptedAnswer":{"@type":"Answer","text":"Evet. Harika Şeyler Dükkânı'nda okul, ev ve günlük kullanım için çeşitli kırtasiye ürünleri bulunmaktadır."}},
+    {"@type":"Question","name":"Harika Şeyler Dükkânı'nda oyuncak var mı?","acceptedAnswer":{"@type":"Answer","text":"Evet. Mağazamızda çocuklara yönelik farklı oyuncak ve hediye seçenekleri bulunmaktadır. Ürün çeşitleri dönemsel olarak değişebilir."}},
+    {"@type":"Question","name":"Mağazada bijuteri ve aksesuar satılıyor mu?","acceptedAnswer":{"@type":"Answer","text":"Evet. Harika Şeyler Dükkânı'nda farklı tarzlara uygun bijuteri, takı ve aksesuar ürünleri bulunmaktadır."}}
+  ]
+}
+</script>
+</head>
+<body>
+<header class="header">
+  <div class="wrap nav">
+    <a class="brand" href="#top"><span class="brand-mark">✦</span><span>Harika Şeyler Dükkânı</span></a>
+    <nav class="navlinks" id="navlinks">
+      <a href="#magazamiz">Mağazamız</a>
+      <a href="#hediyelik">Hediyelik Eşya</a>
+      <a href="#kirtasiye">Kırtasiye</a>
+      <a href="#bijuteri">Bijuteri</a>
+      <a href="#oyuncak">Oyuncak</a>
+      <a href="#sss">SSS</a>
+    </nav>
+    <div class="nav-actions">
+      <a class="btn btn-ghost-light" href="#iletisim">Yol Tarifi</a>
+      <a class="btn btn-light" href="../">Online Mağaza</a>
+      <button class="mobile-toggle" id="mobileToggle" aria-label="Menü">☰</button>
+    </div>
+  </div>
+</header>
+
+<main id="top">
+<section class="hero">
+  <div class="wrap hero-grid">
+    <div class="hero-copy">
+      <div class="kicker">Döşemealtı · Antalya</div>
+      <h1>Döşemealtı'nda Hediyelik Eşya, Kırtasiye, Bijuteri ve Oyuncak</h1>
+      <p class="lead">Harika Şeyler Dükkânı'nda çocuklar, aileler ve sevdikleriniz için özenle seçilmiş ürünleri bir arada keşfedin. Döşemealtı'ndaki mağazamızda hediyelik eşyalardan kırtasiye ürünlerine, bijuteriden oyuncaklara kadar farklı seçenekleri yakından inceleyebilirsiniz.</p>
+      <div class="hero-actions">
+        <a class="btn btn-light" href="#magazamiz">Mağazamızı Keşfet</a>
+        <a class="btn btn-ghost-light" href="#iletisim">Yol Tarifi Al</a>
+      </div>
+      <div class="hero-badges"><span>Yerel mağaza</span><span>Dört ana kategori</span><span>Döşemealtı · Antalya</span></div>
+    </div>
+    <div class="hero-collage" aria-label="Mağaza ürün dünyaları">
+      <figure class="hero-card"><img src="../assets/placeholder-gift.png" alt="Döşemealtı hediyelik eşya ürünleri"></figure>
+      <figure class="hero-card"><img src="../assets/placeholder-stationery.png" alt="Döşemealtı kırtasiye ürünleri"></figure>
+      <figure class="hero-card"><img src="../assets/placeholder-jewelry.png" alt="Döşemealtı bijuteri ve aksesuar ürünleri"></figure>
+      <div class="hero-stamp">Dört dünya.<br>Tek dükkân.</div>
+    </div>
+  </div>
+  <div class="scrollcue">Aşağı kaydır ↓</div>
+</section>
+
+<section class="intro" id="magazamiz">
+  <div class="wrap">
+    <div class="intro-grid">
+      <div>
+        <div class="kicker">Harika Şeyler Dükkânı</div>
+        <h2>Bir mağaza, dört farklı dünya.</h2>
+      </div>
+      <div>
+        <p class="definition">Harika Şeyler Dükkânı, Döşemealtı'nda hediyelik eşya, kırtasiye, bijuteri ve oyuncak satan yerel bir mağazadır.</p>
+        <p>Amacımız farklı ihtiyaçları tek bir sıcak ve keyifli mağaza deneyiminde bir araya getirmek. Bir doğum günü hediyesi, okul için yeni bir defter, günlük stilinizi tamamlayan küçük bir aksesuar veya çocuklar için yeni bir oyuncak arıyorsanız ürünleri mağazamızda yakından inceleyebilirsiniz.</p>
+      </div>
+    </div>
+    <div class="info-strip">
+      <div class="info-item"><div class="info-label">Konum</div><div class="info-value">Döşemealtı, Antalya</div></div>
+      <div class="info-item"><div class="info-label">Ana kategoriler</div><div class="info-value">Hediye · Kırtasiye · Bijuteri · Oyuncak</div></div>
+      <div class="info-item"><div class="info-label">Alışveriş</div><div class="info-value">Yerinde keşfet · Online mağazaya geç</div></div>
+    </div>
+  </div>
+</section>
+
+<div class="categories">
+<section class="cat-section" id="hediyelik">
+  <div class="wrap cat-grid">
+    <div class="cat-media">
+      <img class="cat-main" src="../assets/placeholder-gift.png" alt="Döşemealtı'nda hediyelik eşya seçenekleri">
+      <img class="cat-thumb" src="../assets/placeholder-jewelry.png" alt="Özel günler için hediye fikirleri">
+    </div>
+    <div class="cat-copy">
+      <div class="kicker">Hediye Dünyası</div>
+      <h2>Döşemealtı'nda Hediyelik Eşya</h2>
+      <p>Sevdiklerinize küçük bir sürpriz yapmak, özel bir günü güzelleştirmek veya kendinize hoş bir detay almak istediğinizde Harika Şeyler Dükkânı'nda farklı hediyelik eşya seçeneklerini bir arada bulabilirsiniz.</p>
+      <p>Döşemealtı'ndaki mağazamızda doğum günü, özel günler, ziyaretler ve günlük küçük mutluluklar için uygun ürünleri yakından inceleyebilirsiniz. Hediye seçerken yalnızca ürünün kendisi değil, kime ve hangi amaçla verileceği de önemlidir.</p>
+      <p>Döşemealtı'nda hediyelik eşya arıyorsanız Harika Şeyler Dükkânı'nı ziyaret ederek ürünleri yerinde görebilir ve size uygun seçenekleri karşılaştırabilirsiniz.</p>
+      <div class="tags"><span>Hediye fikirleri</span><span>Doğum günü</span><span>Özel günler</span><span>Döşemealtı</span></div>
+      <a class="btn btn-primary" href="#iletisim">Mağazada Keşfet</a>
+    </div>
+  </div>
+</section>
+
+<section class="cat-section soft" id="kirtasiye">
+  <div class="wrap cat-grid reverse">
+    <div class="cat-media">
+      <img class="cat-main" src="../assets/placeholder-stationery.png" alt="Döşemealtı kırtasiye mağazası ürünleri">
+      <img class="cat-thumb" src="../assets/placeholder-gift.png" alt="Defter ve okul ihtiyaçları">
+    </div>
+    <div class="cat-copy">
+      <div class="kicker">Kırtasiye Dünyası</div>
+      <h2>Döşemealtı'nda Kırtasiye Ürünleri</h2>
+      <p>Okul, ev, ofis ve günlük kullanım için ihtiyaç duyulan kırtasiye ürünlerini Harika Şeyler Dükkânı'nda keşfedebilirsiniz. Döşemealtı'ndaki mağazamızda öğrenciler, çocuklar, aileler ve yetişkinler için farklı kırtasiye ürünlerini bir araya getiriyoruz.</p>
+      <p>Defterlerden kalemlere, okul ihtiyaçlarından yaratıcı çalışmalarda kullanılabilecek ürünlere kadar kırtasiye alışverişini daha keyifli hale getiren seçenekler sunmayı amaçlıyoruz.</p>
+      <p>Döşemealtı'nda kırtasiye arayanlar mağazamızı ziyaret ederek ürünleri doğrudan inceleyebilir, farklı seçenekleri karşılaştırabilir ve ihtiyaçlarına uygun ürünleri seçebilir.</p>
+      <div class="tags"><span>Defter</span><span>Kalem</span><span>Okul ihtiyaçları</span><span>Kırtasiye</span></div>
+      <a class="btn btn-primary" href="#iletisim">Mağazada Keşfet</a>
+    </div>
+  </div>
+</section>
+
+<section class="cat-section" id="bijuteri">
+  <div class="wrap cat-grid">
+    <div class="cat-media">
+      <img class="cat-main" src="../assets/placeholder-jewelry.png" alt="Döşemealtı bijuteri ve takı seçenekleri">
+      <img class="cat-thumb" src="../assets/placeholder-gift.png" alt="Hediye edilebilecek aksesuar ürünleri">
+    </div>
+    <div class="cat-copy">
+      <div class="kicker">Zarif Detaylar</div>
+      <h2>Döşemealtı'nda Bijuteri ve Aksesuar</h2>
+      <p>Günlük stilinizi tamamlayacak küçük detaylardan hediye olarak tercih edilebilecek aksesuarlara kadar farklı bijuteri ürünlerini Harika Şeyler Dükkânı'nda bulabilirsiniz.</p>
+      <p>Döşemealtı'ndaki mağazamızda farklı tarzlara hitap eden bijuteri ve aksesuar seçeneklerini yakından inceleyebilirsiniz. Bijuteri alışverişinde ürünün fotoğrafta nasıl göründüğünden çok, gerçekte rengi, boyutu ve tarzınıza uyumu önemlidir.</p>
+      <p>Döşemealtı'nda bijuteri, takı veya küçük aksesuar seçenekleri arıyorsanız Harika Şeyler Dükkânı'ndaki güncel ürünleri yerinde keşfedebilirsiniz.</p>
+      <div class="tags"><span>Bijuteri</span><span>Takı</span><span>Aksesuar</span><span>Hediye</span></div>
+      <a class="btn btn-primary" href="#iletisim">Mağazada Keşfet</a>
+    </div>
+  </div>
+</section>
+
+<section class="cat-section soft" id="oyuncak">
+  <div class="wrap cat-grid reverse">
+    <div class="cat-media">
+      <img class="cat-main" src="../assets/placeholder-gift.png" alt="Döşemealtı oyuncak ve çocuk hediyesi seçenekleri">
+      <img class="cat-thumb" src="../assets/placeholder-stationery.png" alt="Çocuklar için yaratıcı ürünler">
+    </div>
+    <div class="cat-copy">
+      <div class="kicker">Çocuk Dünyası</div>
+      <h2>Döşemealtı'nda Oyuncak</h2>
+      <p>Çocuklara hediye seçerken veya günlük oyun zamanlarını daha keyifli hale getirecek yeni bir ürün ararken farklı oyuncak seçeneklerini Harika Şeyler Dükkânı'nda keşfedebilirsiniz.</p>
+      <p>Döşemealtı'ndaki mağazamızda çocukların ilgisini çekebilecek eğlenceli ürünleri ailelerin kolayca inceleyebileceği bir ortamda sunmayı hedefliyoruz. Oyuncak seçerken çocuğun yaşı, ilgi alanları ve ürünü nasıl kullanacağı önemlidir.</p>
+      <p>Döşemealtı'nda oyuncak veya çocuklara uygun hediye arıyorsanız mağazamızı ziyaret ederek mevcut seçenekleri yakından inceleyebilirsiniz.</p>
+      <div class="tags"><span>Oyuncak</span><span>Çocuk hediyesi</span><span>Yaratıcı oyun</span><span>Aile</span></div>
+      <a class="btn btn-primary" href="#iletisim">Mağazada Keşfet</a>
+    </div>
+  </div>
+</section>
+</div>
+
+<section class="local-proof">
+  <div class="wrap">
+    <div class="proof-head">
+      <div><div class="kicker">Yerinde Keşfet</div><h2>Mağazada keşfetmenin farkı.</h2></div>
+      <p class="lead">Harika şeyler bazen ekranda değil, yakından bakınca kendini gösterir.</p>
+    </div>
+    <div class="proof-grid">
+      <div class="proof"><strong>Yakından görün</strong><p>Renk, boyut ve detayları ürünün kendisinden değerlendirin.</p></div>
+      <div class="proof"><strong>Karşılaştırın</strong><p>Farklı seçenekleri yan yana görün ve size uygun olanı seçin.</p></div>
+      <div class="proof"><strong>Yeni şeyler keşfedin</strong><p>Aradığınız ürünün yanında beklemediğiniz küçük bir favori bulabilirsiniz.</p></div>
+      <div class="proof"><strong>Hemen alın</strong><p>Mağazada bulunan ürünleri beklemeden yanınızda götürün.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="store">
+  <div class="wrap store-grid">
+    <div class="store-media"><img src="../assets/placeholder-gift.png" alt="Harika Şeyler Dükkânı Döşemealtı mağazası için görsel yer tutucu"></div>
+    <div class="store-copy">
+      <div class="kicker">Döşemealtı'nda bizi bulun</div>
+      <h2>Harika Şeyler Dükkânı'nı ziyaret edin.</h2>
+      <p>Harika Şeyler Dükkânı, Döşemealtı'nda hediyelik eşya, kırtasiye, bijuteri ve oyuncak ürünlerini bir arada bulabileceğiniz yerel bir mağazadır. Ürünlerimizi yakından incelemek, yeni gelenleri keşfetmek veya aradığınız ürün hakkında bilgi almak için mağazamızı ziyaret edebilirsiniz.</p>
+      <div class="store-facts">
+        <div class="store-fact"><span>Konum</span><strong>Döşemealtı · Antalya</strong></div>
+        <div class="store-fact"><span>Tam adres</span><strong>Henüz eklenecek</strong></div>
+        <div class="store-fact"><span>Çalışma saatleri</span><strong>Henüz eklenecek</strong></div>
+        <div class="store-fact"><span>Telefon / WhatsApp</span><strong>Henüz eklenecek</strong></div>
+      </div>
+      <div class="store-actions">
+        <a class="btn btn-light" href="#iletisim">Yol Tarifi Al</a>
+        <a class="btn btn-ghost-light" href="#iletisim">İletişime Geç</a>
+        <a class="btn btn-ghost-light" href="../">Online Mağazaya Git</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="faq" id="sss">
+  <div class="wrap faq-grid">
+    <div>
+      <div class="kicker">SSS</div>
+      <h2>Mağaza hakkında sık sorulan sorular</h2>
+      <p>Yerel aramalar ve yapay zeka destekli arama sistemleri için açık, doğrudan ve doğrulanabilir cevaplar.</p>
+    </div>
+    <div class="faq-list">
+      <div class="faq-item open"><button class="faq-q"><span>Döşemealtı'nda hediyelik eşya nereden alabilirim?</span><span>+</span></button><div class="faq-a"><p>Harika Şeyler Dükkânı, Döşemealtı'nda hediyelik eşya seçenekleri sunan yerel bir mağazadır. Mağazada farklı yaş grupları ve çeşitli özel günler için uygun ürünleri inceleyebilirsiniz.</p></div></div>
+      <div class="faq-item"><button class="faq-q"><span>Döşemealtı'nda kırtasiye ürünleri satıyor musunuz?</span><span>+</span></button><div class="faq-a"><p>Evet. Harika Şeyler Dükkânı'nda okul, ev ve günlük kullanım için çeşitli kırtasiye ürünleri bulunmaktadır. Güncel ürünleri Döşemealtı'ndaki mağazamızda inceleyebilirsiniz.</p></div></div>
+      <div class="faq-item"><button class="faq-q"><span>Harika Şeyler Dükkânı'nda oyuncak var mı?</span><span>+</span></button><div class="faq-a"><p>Evet. Mağazamızda çocuklara yönelik farklı oyuncak ve hediye seçenekleri bulunmaktadır. Ürün çeşitleri dönemsel olarak değişebilir.</p></div></div>
+      <div class="faq-item"><button class="faq-q"><span>Mağazada bijuteri ve aksesuar satılıyor mu?</span><span>+</span></button><div class="faq-a"><p>Evet. Harika Şeyler Dükkânı'nda farklı tarzlara uygun bijuteri, takı ve aksesuar ürünleri bulunmaktadır. Güncel seçenekleri mağazada yakından inceleyebilirsiniz.</p></div></div>
+      <div class="faq-item"><button class="faq-q"><span>Harika Şeyler Dükkânı nerede?</span><span>+</span></button><div class="faq-a"><p>Harika Şeyler Dükkânı Döşemealtı, Antalya'da hizmet vermektedir. Tam adres ve yol tarifi bilgileri iletişim bölümüne eklenecektir.</p></div></div>
+      <div class="faq-item"><button class="faq-q"><span>Ürünleri internetten de satın alabilir miyim?</span><span>+</span></button><div class="faq-a"><p>Online satışa sunulan ürünlere Harika Şeyler Dükkânı'nın ayrı online mağazasından ulaşılabilir.</p></div></div>
+      <div class="faq-item"><button class="faq-q"><span>Mağazadaki ürünler ile internet sitesindeki ürünler aynı mı?</span><span>+</span></button><div class="faq-a"><p>Mağaza ve online shop ürünleri aynı ürün dünyasına ait olabilir, ancak stok ve ürün çeşitleri değişebilir. Belirli bir ürün için mağazayla iletişime geçmek en güncel bilgiyi sağlar.</p></div></div>
+      <div class="faq-item"><button class="faq-q"><span>Mağazaya gelmeden ürün hakkında bilgi alabilir miyim?</span><span>+</span></button><div class="faq-a"><p>Evet. Telefon veya WhatsApp üzerinden mağazayla iletişime geçerek ürün ve stok durumu hakkında bilgi alınabilir.</p></div></div>
+    </div>
+  </div>
+</section>
+
+<section class="contact" id="iletisim">
+  <div class="wrap contact-grid">
+    <div class="map-placeholder">
+      <div><div class="kicker">Harita</div><h3>Google Maps alanı</h3><p>Gerçek mağaza adresi verildiğinde harita burada gösterilecek.</p></div>
+    </div>
+    <div class="contact-card">
+      <div class="kicker">İletişim</div>
+      <h2>Döşemealtı'ndaki mağazamıza uğrayın.</h2>
+      <p><strong>Adres:</strong><br>Henüz eklenecek</p>
+      <p><strong>Çalışma saatleri:</strong><br>Henüz eklenecek</p>
+      <p><strong>Telefon / WhatsApp:</strong><br>Henüz eklenecek</p>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:26px">
+        <a class="btn btn-primary" href="#">Yol Tarifi Al</a>
+        <a class="btn btn-outline" href="../">Online Mağaza</a>
+      </div>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer class="footer">
+  <div class="wrap footer-inner">
+    <div><strong>Harika Şeyler Dükkânı</strong> · Döşemealtı, Antalya</div>
+    <div>Hediyelik Eşya · Kırtasiye · Bijuteri · Oyuncak</div>
+  </div>
+</footer>
+
+<script>
+document.querySelectorAll('.faq-q').forEach(btn=>{
+  btn.addEventListener('click',()=>btn.parentElement.classList.toggle('open'));
+});
+const mobileToggle=document.getElementById('mobileToggle');
+const navlinks=document.getElementById('navlinks');
+mobileToggle.addEventListener('click',()=>navlinks.classList.toggle('open'));
+navlinks.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>navlinks.classList.remove('open')));
+</script>
+</body>
+</html>
