@@ -6,6 +6,8 @@
  const links = [...dock.querySelectorAll('a')];
  const story = document.querySelector('.story');
  const header = document.querySelector('.header');
+ const closerSection = document.querySelector('.closer');
+ const closerCard = document.querySelector('.closer-small');
  const progress = document.getElementById('stage-progress');
  const label = document.querySelector('.stage-label');
  const detail = document.querySelector('.stage-detail');
@@ -83,6 +85,14 @@
   }
   const ratio=clamp((y-storyTop)/Math.max(1,storyHeight-vh));
   progress.style.width=(ratio*100)+'%';
+  if(closerSection && closerCard){
+   const rect=closerSection.getBoundingClientRect();
+   if(reduced.matches || (rect.top<vh && rect.bottom>0)){
+    const phase=clamp((vh-rect.top)/(vh+rect.height));
+    const shift=reduced.matches ? 0 : (phase-.5)*(desktop.matches ? 110 : 55);
+    closerCard.style.setProperty('--closer-float-y',shift.toFixed(2)+'px');
+   }
+  }
   if(reduced.matches){
    root.style.setProperty('--float-one','0px');
    root.style.setProperty('--float-two','0px');
