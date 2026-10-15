@@ -274,3 +274,16 @@ h1.eyebrow,h2.eyebrow{font-family:var(--sans);font-size:.8125rem;font-weight:600
 /* Reserve space for the equal horizontal/vertical floating path at narrow widths. */
 .closer-small{right:110px}
 @media(max-width:760px){.closer-small{right:60px}}
+
+/* Golden hero emphasis and the supplied luminous-line reference. */
+.hero-description{font-size:clamp(1.125rem,1.7vw,1.375rem);line-height:1.65}
+.hero-harika{display:inline-block;font-family:var(--serif);font-style:italic;font-size:1.2em;font-weight:600;line-height:1.3;color:#946723}
+@supports((background-clip:text) or (-webkit-background-clip:text)){
+ .hero-harika{background-image:linear-gradient(110deg,#77501d 10%,#a77a2d 28%,#e5c575 43%,#8e6120 58%,#bf9340 75%,#77501d 95%);background-size:200% 100%;background-clip:text;-webkit-background-clip:text;color:transparent;animation:hero-gold-sheen 7s ease-in-out infinite alternate}
+}
+.hero-gold-line{position:relative;width:clamp(150px,24vw,310px);max-width:100%;height:2px;border-radius:50%;margin:-8px 0 30px;background:linear-gradient(90deg,transparent,#8e6424 14%,#dfb73f 32%,#fff1a3 50%,#dfb73f 68%,#8e6424 86%,transparent);box-shadow:0 0 7px rgba(211,169,55,.48)}
+.hero-gold-line:after{content:'';position:absolute;inset:0 20%;height:1px;background:linear-gradient(90deg,transparent,#fff7d1,transparent);border-radius:50%}
+@keyframes hero-gold-sheen{from{background-position:0% 50%}to{background-position:100% 50%}}
+@media(max-width:760px){.hero-description{font-size:1.125rem;line-height:1.7}.hero-gold-line{margin:-6px 0 26px}}
+@media(prefers-reduced-motion:reduce){.hero-harika{animation:none}}
+@media(forced-colors:active){.hero-harika{background:none;color:CanvasText}.hero-gold-line{background:CanvasText;box-shadow:none}}
