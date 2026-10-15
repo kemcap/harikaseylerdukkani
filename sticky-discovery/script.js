@@ -89,7 +89,7 @@
    const rect=closerSection.getBoundingClientRect();
    if(reduced.matches || (rect.top<vh && rect.bottom>0)){
     const phase=clamp((vh-rect.top)/(vh+rect.height));
-    const shift=reduced.matches ? 0 : (phase-.5)*(desktop.matches ? 110 : 55);
+    const shift=reduced.matches ? 0 : (phase-.5)*(desktop.matches ? 260 : 130);
     closerCard.style.setProperty('--closer-float-y',shift.toFixed(2)+'px');
    }
   }
