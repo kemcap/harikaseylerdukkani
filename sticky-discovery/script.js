@@ -90,7 +90,10 @@
    if(reduced.matches || (rect.top<vh && rect.bottom>0)){
     const phase=clamp((vh-rect.top)/(vh+rect.height));
     const shift=reduced.matches ? 0 : (phase-.5)*(desktop.matches ? 260 : 130);
-    closerCard.style.setProperty('--closer-float-y',shift.toFixed(2)+'px');
+    const rotation=reduced.matches ? 0 : phase*6-3;
+    closerCard.style.setProperty('--closer-float-x',shift.toFixed(2)+'px');
+    closerCard.style.setProperty('--closer-float-y',(-shift).toFixed(2)+'px');
+    closerCard.style.setProperty('--closer-float-rotation',rotation.toFixed(2)+'deg');
    }
   }
   if(reduced.matches){
