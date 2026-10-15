@@ -20,10 +20,10 @@
  const desktop = matchMedia('(min-width: 761px)');
  const root = document.documentElement;
  const data = [
-  {title:'Zarif detaylar.', kicker:'Sana benzeyen bir parça', color:'#8b6c38', detail:'jewelry.webp', note:'Kendin gibi.'},
-  {title:'Yeni fikirler.', kicker:'Yaz. Çiz. Üret.', color:'#567654', detail:'stationery.webp', note:'Bir fikirle başlar.'},
-  {title:'Oyun zamanı.', kicker:'Kocaman hayaller', color:'#526e46', detail:'teddy.webp', note:'Biraz neşe.'},
-  {title:'Hediye dünyası.', kicker:'Küçük sürprizler', color:'#93703b', detail:'cup.webp', note:'Severek seç.'}
+  {title:'Zarif detaylar.', kicker:'Sana benzeyen bir parça', color:'#8b6c38', detail:'yesil-tasli-bijuteri-taki-aksesuarlari.webp', note:'Kendin gibi.'},
+  {title:'Yeni fikirler.', kicker:'Yaz. Çiz. Üret.', color:'#567654', detail:'defter-kalem-kirtasiye-urunleri.webp', note:'Bir fikirle başlar.'},
+  {title:'Oyun zamanı.', kicker:'Kocaman hayaller', color:'#526e46', detail:'pelus-oyuncak-ayicik.webp', note:'Biraz neşe.'},
+  {title:'Hediye dünyası.', kicker:'Küçük sürprizler', color:'#93703b', detail:'dekoratif-seramik-kupa.webp', note:'Severek seç.'}
  ];
  let current = -1, frame = 0, swapTimer, geometry = [], storyTop = 0, storyHeight = 1, isVisible = false;
  let headerAnchor = window.scrollY, headerDirection = 0;
