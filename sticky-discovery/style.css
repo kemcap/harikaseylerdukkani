@@ -242,3 +242,8 @@ h1.eyebrow,h2.eyebrow{font-family:var(--sans);font-size:.8125rem;font-weight:600
 .footer-logo{display:block;width:230px;max-width:100%;height:auto;object-fit:contain;filter:brightness(0) invert(1)}
 @media(max-width:760px){.brand-logo{height:58px}.header-compact .brand-logo{height:30px}.footer-logo{width:210px}}
 @media(prefers-reduced-motion:reduce){.brand-logo{transition:none}}
+
+.footer-instagram{display:inline-flex;align-items:center;gap:10px;min-height:44px;max-width:100%;margin-top:8px;color:var(--cream);font-size:.875rem;line-height:1.5}
+.footer-instagram svg{flex-shrink:0}
+.footer-instagram span{overflow-wrap:anywhere}
+.footer-instagram:hover{color:#e4c998}
