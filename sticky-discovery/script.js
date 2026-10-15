@@ -18,10 +18,10 @@
  const desktop = matchMedia('(min-width: 761px)');
  const root = document.documentElement;
  const data = [
-  {title:'Hediye dünyası.', kicker:'Küçük sürprizler', color:'#93703b', detail:'cup.jpg', note:'Severek seç.'},
-  {title:'Yeni fikirler.', kicker:'Yaz. Çiz. Üret.', color:'#567654', detail:'stationery.jpg', note:'Bir fikirle başlar.'},
   {title:'Zarif detaylar.', kicker:'Sana benzeyen bir parça', color:'#8b6c38', detail:'jewelry.jpg', note:'Kendin gibi.'},
-  {title:'Oyun zamanı.', kicker:'Kocaman hayaller', color:'#526e46', detail:'teddy.jpg', note:'Biraz neşe.'}
+  {title:'Yeni fikirler.', kicker:'Yaz. Çiz. Üret.', color:'#567654', detail:'stationery.jpg', note:'Bir fikirle başlar.'},
+  {title:'Oyun zamanı.', kicker:'Kocaman hayaller', color:'#526e46', detail:'teddy.jpg', note:'Biraz neşe.'},
+  {title:'Hediye dünyası.', kicker:'Küçük sürprizler', color:'#93703b', detail:'cup.jpg', note:'Severek seç.'}
  ];
  let current = -1, frame = 0, swapTimer, geometry = [], storyTop = 0, storyHeight = 1, isVisible = false;
  let headerAnchor = window.scrollY, headerDirection = 0;

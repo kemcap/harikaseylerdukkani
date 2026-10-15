@@ -224,3 +224,14 @@ html{scroll-padding-top:calc(var(--header-height) + 16px)}
 
 /* Semantic headings retain the small label typography; editorial titles retain their display typography. */
 h1.eyebrow,h2.eyebrow{font-family:var(--sans);font-size:.8125rem;font-weight:600;line-height:1.6;letter-spacing:.13em;margin:0}
+
+/* Small finishing details; retain the existing responsive composition and motion. */
+.hero-gold-line{display:block;width:105px;height:1px;background:var(--gold);margin:-10px 0 28px}
+.button,.header-store,.story-dock a{border-radius:4px}
+.story-dock,.stage-label,.detail-photo,.hero-float,.closer-small,.visit-image>span,.chapter-tags span{border-radius:3px}
+.map-section iframe,.faq details{border-radius:4px}
+.detail-photo img,.hero-float img,.closer-small img{border-radius:2px}
+/* Preserve the deliberately round and arched editorial photo masks. */
+.jewelry-detail,.jewelry-detail img{border-radius:50% 50% 0 0}
+.toy-composition .detail-photo,.toy-composition img{border-radius:50%}
+@media(max-width:760px){.hero-gold-line{margin:-6px 0 24px}}
