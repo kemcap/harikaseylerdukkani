@@ -247,3 +247,10 @@ h1.eyebrow,h2.eyebrow{font-family:var(--sans);font-size:.8125rem;font-weight:600
 .footer-instagram svg{flex-shrink:0}
 .footer-instagram span{overflow-wrap:anywhere}
 .footer-instagram:hover{color:#e4c998}
+
+.header-actions{display:flex;align-items:center;gap:14px;flex-shrink:0}
+.header-instagram{display:inline-flex;align-items:center;justify-content:center;width:40px;min-height:40px;color:var(--forest);border-radius:4px}
+.header-instagram:hover{background:rgba(24,62,48,.08)}
+.header-instagram svg{display:block;flex-shrink:0}
+.header-compact .header-instagram{min-height:34px}
+@media(max-width:760px){.header-actions{gap:6px}.header-instagram{width:34px;min-height:37px}.header-compact .header-instagram{min-height:30px}}
