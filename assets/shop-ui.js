@@ -86,8 +86,18 @@ $('#contact-form')?.addEventListener('submit',e=>{e.preventDefault();toast('Form
 function applyTheme(theme){document.body.classList.toggle('hero-dark',theme==='dark');document.querySelectorAll('.hero-switch').forEach(b=>{const active=b.dataset.theme===theme;b.classList.toggle('active',active);b.setAttribute('aria-pressed',String(active))});try{localStorage.setItem('harika-shop-theme',theme)}catch{}}
 let chosenTheme='dark';try{chosenTheme=localStorage.getItem('harika-shop-theme')||'dark'}catch{}applyTheme(chosenTheme);
 document.querySelectorAll('.hero-switch').forEach(b=>b.addEventListener('click',()=>applyTheme(b.dataset.theme)));
-const siteHeader=$('.site-header');function updateHeader(){const y=Math.max(0,window.scrollY);siteHeader.classList.toggle('compact',y>30);siteHeader.style.setProperty('--promo-offset',Math.max(0,33-y)+'px')}
-window.addEventListener('scroll',updateHeader,{passive:true});updateHeader();
+const siteHeader=$('.site-header'), promoBand=$('#topbar');
+function updateHeader(){
+  const y=Math.max(0,window.scrollY);
+  const promoHeight=promoBand?.getBoundingClientRect().height||promoBand?.offsetHeight||33;
+  siteHeader.classList.toggle('compact',y>Math.max(30,promoHeight-1));
+  // Overlap the measured band by at least a fraction of a pixel.
+  siteHeader.style.setProperty('--promo-offset',Math.max(0,Math.ceil(promoHeight)-1-y)+'px');
+}
+window.addEventListener('scroll',updateHeader,{passive:true});
+window.addEventListener('resize',updateHeader);
+if(typeof ResizeObserver!=='undefined'&&promoBand)new ResizeObserver(updateHeader).observe(promoBand);
+updateHeader();
 let drawerFocus=null;function closeDrawer(){$('#cartDrawer').classList.remove('open');$('#cartBackdrop').classList.remove('open');document.body.classList.remove('locked');$('#cartDrawer').setAttribute('aria-hidden','true');drawerFocus?.focus()}
 $('#cartButton').addEventListener('click',()=>{drawerFocus=document.activeElement;renderDrawer();$('#cartDrawer').classList.add('open');$('#cartBackdrop').classList.add('open');document.body.classList.add('locked');$('#cartDrawer').setAttribute('aria-hidden','false');$('#cartClose').focus()});
 $('#cartClose').addEventListener('click',closeDrawer);$('#cartBackdrop').addEventListener('click',closeDrawer);
