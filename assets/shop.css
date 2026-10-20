@@ -179,3 +179,10 @@ body.hero-dark .shop-brand-logo{filter:brightness(0) invert(1)}
 .dark-progress{background:#fff}
 /* Keep heading typography consistent, including component font shorthands. */
 h1,h2,h3,h4,h5,h6{font-family:Georgia,"Times New Roman",serif!important}
+
+/* Shared button shape on the homepage and every shop subpage. */
+button,[role="button"],input[type="button"],input[type="submit"],input[type="reset"],.btn,.checkout,.icon-button,.dark-open,.scroll-cue{border-radius:5px!important}
+.subpage .stepper{border-radius:5px}
+/* Keep the catalog search clear of its action and the toolbar divider. */
+.subpage .catalog-search{display:flex;flex-direction:column;align-items:flex-start;gap:16px;margin:0 0 24px}
+.subpage .catalog-search .field{width:100%}
