@@ -26,7 +26,7 @@ button{color:inherit}
 .site-header,.topbar,body,.dark-hero,.product-card,.benefit,.newsletter{transition:background-color .25s,color .25s,border-color .25s}
 .topbar{position:absolute;top:0;left:0;right:0;z-index:72}
 .site-header{position:absolute;top:33px;left:0;right:0;z-index:71;color:var(--ink)}
-body.header-over-light .site-header{position:fixed;top:0}
+
 .icon-btn,.searchbar{color:var(--ink)}
 .btn.primary,.add-cart,.newsletter button,.checkout,.product-badge{color:var(--on-primary)}
 .family-clouds span{background:var(--surface)}
@@ -105,6 +105,67 @@ body.header-over-light .site-header{position:fixed;top:0}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*:before,*:after{transition:none!important;animation:none!important}.dark-card.show{opacity:1;transform:none}.reveal{opacity:1;transform:none}}
 
 .dark-card:after{content:"";position:absolute;inset:45% 0 0;pointer-events:none;background:linear-gradient(transparent,rgba(5,20,13,.78))}
+
+/* Persistent navigation, compact from the first scroll; one header in both themes. */
+html{scroll-padding-top:75px}
+.site-header{position:fixed;top:var(--promo-offset,33px);left:0;right:0;z-index:71;background:color-mix(in srgb,var(--surface) 67%,transparent);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border-bottom:1px solid color-mix(in srgb,var(--ink) 12%,transparent);transition:background-color .25s,border-color .25s}
+.site-header .header-inner{min-height:86px;gap:24px;transition:min-height .25s ease,gap .25s ease}
+.site-header .brand{min-width:0}
+.shop-brand-logo{display:block;width:auto;height:70px;max-width:160px;object-fit:contain;transition:height .25s ease}
+.site-header.compact{top:0}
+.site-header.compact .header-inner{min-height:46px;gap:20px}
+.site-header.compact .shop-brand-logo{height:36px}
+.site-header .icon-btn,.site-header .searchbar{transition:height .25s ease,width .25s ease,background-color .25s ease}
+.site-header.compact .icon-btn{width:34px;height:34px}
+.site-header.compact .searchbar{height:32px}
+.site-header.compact .searchbar input{width:145px}
+.site-header.compact .main-nav{font-size:13px}
+.site-header .icon-btn:hover{transform:none}
+.hero-switcher{top:132px}
+#newsletterForm{scroll-margin-top:85px}
+/* Footer follows the local-store reference with shop-specific links. */
+.site-footer{display:block;padding:70px 7.5vw 28px;background:#183e30;color:#faf6ed;border:0}
+.site-footer .footer-grid{display:grid;grid-template-columns:1.45fr 1fr 1fr 1.2fr;gap:40px}
+.site-footer h3{font:500 16px/1.5 Inter,'Segoe UI',Arial,sans-serif;margin:0 0 20px;color:#e4c998}
+.site-footer p{font:400 15px/1.85 Inter,'Segoe UI',Arial,sans-serif;text-align:left;color:#d0dbcb;margin:0 0 14px;opacity:1}
+.site-footer .footer-about>p{max-width:34ch;margin-top:25px}
+.site-footer .footer-note{font:italic 17.6px/1.6 Georgia,'Times New Roman',serif;color:#e4c998;margin-top:14px}
+.site-footer .footer-brand{display:inline-block;margin:0;opacity:1}
+.site-footer .footer-logo{display:block;width:230px;max-width:100%;height:auto;object-fit:contain;filter:brightness(0) invert(1)}
+.site-footer nav a{display:block;font-size:15px;line-height:1.55;margin:0 0 13px;color:#d9e2d3;width:fit-content;opacity:1}
+.site-footer a:hover{color:#e4c998}
+.site-footer .footer-instagram{display:inline-flex;align-items:center;gap:10px;min-height:44px;max-width:100%;margin:8px 0 0;color:#faf6ed;font-size:14px;line-height:1.5;opacity:1}
+.footer-instagram svg{flex-shrink:0}
+.footer-instagram span{overflow-wrap:anywhere}
+.site-footer .footer-location address{font:400 15px/1.85 Inter,'Segoe UI',Arial,sans-serif;font-style:normal;color:#d0dbcb}
+.site-footer .footer-phone{display:inline-block;font-size:16px;margin:16px 0;opacity:1}
+.site-footer .footer-hours{font-size:14px;line-height:1.9}
+.site-footer .footer-store-link{display:inline-block;margin-top:10px;border-bottom:1px solid #ccb583;padding-bottom:5px;font-size:14px;opacity:1}
+.site-footer .footer-bottom{display:flex;justify-content:space-between;gap:25px;margin-top:50px;padding-top:24px;border-top:1px solid #ffffff2b;font-size:14px;opacity:1}
+.site-footer .footer-bottom>a{margin:0;font-size:14px;opacity:1}
+.site-footer .copyright{color:#bbcbb6;font-size:13px}
+@media(max-width:1100px){.site-footer .footer-grid{grid-template-columns:1.2fr 1fr;gap:40px 65px}.site-header .main-nav{gap:16px}}
+@media(max-width:760px){
+.site-header .header-inner{min-height:72px;gap:12px}
+.shop-brand-logo{height:58px;max-width:126px}
+.site-header.compact .header-inner{min-height:40px;gap:10px}
+.site-header.compact .shop-brand-logo{height:30px}
+.site-header.compact .icon-btn{width:30px;height:30px}
+.site-header.compact .ui-icon,.site-header.compact .ui-icon svg{width:18px;height:18px}
+.site-header .main-nav{top:calc(100% + 8px);box-shadow:none;border:1px solid color-mix(in srgb,var(--ink) 14%,transparent);border-radius:4px}
+.hero-switcher{top:116px}
+.site-footer{padding:55px 6vw 25px}
+.site-footer .footer-grid{grid-template-columns:1fr 1fr;gap:34px 24px}
+.site-footer .footer-about,.site-footer .footer-location{grid-column:1/-1}
+.site-footer .footer-about>p{max-width:42ch}
+.site-footer nav a{font-size:14px}
+.site-footer .footer-logo{width:210px}
+.site-footer .footer-bottom{margin-top:35px;align-items:flex-start;flex-direction:row;font-size:14px}
+}
+@media(max-width:360px){.site-footer .footer-grid{grid-template-columns:1fr}.site-footer .footer-grid>*{grid-column:1}.site-footer .footer-bottom{flex-direction:column}}
+
+.site-header .actions{justify-self:end}
+body.hero-dark .shop-brand-logo{filter:brightness(0) invert(1)}
 </style>
 <link rel="preload" as="image" href="assets/hediyelik-esya-hediye-kutusu.webp">
 </head>
@@ -114,7 +175,7 @@ body.header-over-light .site-header{position:fixed;top:0}
 <div class="topbar" id="topbar"><div class="wrap"><span>1500 TL ve üzeri siparişlerde ücretsiz kargo • Güvenli ödeme</span><span>Yeni üyelere %10 indirim • Kolay iade</span></div></div>
 <header class="site-header" id="siteHeader">
   <div class="wrap header-inner">
-    <a class="brand" href="#top"><span class="brand-mark">✦</span><span>Harika Şeyler Dükkânı</span></a>
+    <a class="brand" href="#top" aria-label="Harika Şeyler Dükkanı, ana sayfa"><img class="shop-brand-logo" src="assets/harika-seyler-dukkani-logo.webp" alt="Harika Şeyler Dükkanı" width="1000" height="550" decoding="async"></a>
     <nav class="main-nav">
       <a href="#top">Ana Sayfa</a><a href="#categories">Kategoriler</a><a href="#products">Çok Satanlar</a><a href="#discover">Hediye Rehberi</a><a href="#footer">Hakkımızda</a>
     </nav>
@@ -196,7 +257,40 @@ body.header-over-light .site-header{position:fixed;top:0}
 <section class="wrap reveal"><div class="newsletter"><div><span class="eyebrow">Harika Haberler</span><h2>Yeni ürünleri ilk sen gör.</h2><p>Kampanyalar, yeni koleksiyonlar ve hediye fikirleri için bültene katıl.</p></div><form id="newsletterForm"><input type="email" aria-label="E-posta" placeholder="E-posta adresin"><button type="submit">Katıl →</button></form></div></section>
 
 </main>
-<footer class="site-footer" id="footer"><div class="wrap"><div class="footer-grid"><div><a class="brand" href="#top"><span class="brand-mark">✦</span><span>Harika Şeyler Dükkânı</span></a><p>Kişiselleştirilmiş hediyeler, çocuk ürünleri, aksesuarlar ve ev için küçük mutluluklar. Bu sayfa müşteri sunumu için hazırlanmış interaktif bir prototiptir.</p></div><div><h4>Keşfet</h4><a href="#products">Yeni Gelenler</a><a href="#products">Çok Satanlar</a><a href="#categories">Kategoriler</a><a href="#discover">Hediye Rehberi</a></div><div><h4>Yardım</h4><a>Sipariş Takibi</a><a>Kargo & Teslimat</a><a>İade & Değişim</a><a>SSS</a></div><div><h4>İletişim</h4><a>WhatsApp</a><a>Instagram</a><a>E-posta</a><a>Mağaza Hakkında</a></div></div><div class="footer-bottom"><span>© 2026 Harika Şeyler Dükkânı • Demo prototip</span><span>Visa • Mastercard • iyzico / PayTR (demo)</span></div></div></footer>
+<footer class="site-footer" id="footer">
+  <div class="footer-grid">
+    <div class="footer-about">
+      <a class="footer-brand" href="#top"><img class="footer-logo" src="assets/harika-seyler-dukkani-logo.webp" alt="Harika Şeyler Dükkanı" width="1000" height="550" loading="lazy" decoding="async"></a>
+      <p>Bijuteri, hediyelik eşya, kırtasiye ve oyuncak dünyalarından kendin ve sevdiklerin için küçük keşifler.</p>
+      <p class="footer-note">Küçük keşifler. Güzel hisler.</p>
+      <a class="footer-instagram" href="https://www.instagram.com/_harikaseylerdukkani/" target="_blank" rel="noopener noreferrer" aria-label="Instagram: @_harikaseylerdukkani"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg><span>@_harikaseylerdukkani</span></a>
+    </div>
+    <nav aria-label="Footer ürün dünyaları">
+      <h3>Dört dünya</h3>
+      <a href="#products" data-shop-filter="aksesuar">Bijuteri & aksesuar</a>
+      <a href="#products" data-shop-filter="hediyelik">Hediyelik eşya</a>
+      <a href="#products" data-shop-filter="kırtasiye">Kırtasiye</a>
+      <a href="#products" data-shop-filter="oyuncak">Oyuncak & çocuk hediyeleri</a>
+    </nav>
+    <nav aria-label="Footer alışveriş bağlantıları">
+      <h3>Alışveriş</h3>
+      <a href="#products" data-shop-filter="all">Tüm ürünler</a>
+      <a href="#products" data-shop-filter="bestsellers">Çok satanlar</a>
+      <a href="#cartDrawer" data-footer-cart>Sepetim</a>
+      <a href="#newsletterForm">Harika haberler</a>
+      <a href="https://harikaseylerdukkani.com/dosemealti/" target="_blank" rel="noopener noreferrer">Yerel mağazamız ↗</a>
+    </nav>
+    <div class="footer-location">
+      <h3>Döşemealtı, Antalya</h3>
+      <p>Harika Şeyler Dükkanı</p>
+      <address>Yeniköy, İnönü Cd. No: 127/8, 07190 Döşemealtı/Antalya</address>
+      <a class="footer-phone" href="tel:+905323733633">0532 373 36 33</a>
+      <p class="footer-hours">Hafta içi: 08:00 – 20:00<br>Cumartesi – Pazar: 10:00–21:00</p>
+      <a class="footer-store-link" href="https://www.google.com/maps/dir/?api=1&amp;destination=Harika%20%C5%9Eeyler%20D%C3%BCkkan%C4%B1%2C%20Yenik%C3%B6y%2C%20%C4%B0n%C3%B6n%C3%BC%20Cd.%20No%3A%20127%2F8%2C%20D%C3%B6%C5%9Femealt%C4%B1%2FAntalya" target="_blank" rel="noopener noreferrer">Mağazaya yol tarifi ↗</a>
+    </div>
+  </div>
+  <div class="footer-bottom"><span class="copyright">© 2026 Harika Şeyler Dükkanı · Shop tasarım önizlemesi</span><a href="#top">Başa dön ↑</a></div>
+</footer>
 <div class="cart-backdrop" id="cartBackdrop"></div><aside class="cart-drawer" id="cartDrawer" aria-hidden="true"><div class="cart-head"><h3>Sepetim</h3><button id="cartClose" aria-label="Kapat">×</button></div><div class="cart-items" id="cartItems"><p class="cart-empty">Sepetiniz şu an boş.</p></div><div class="cart-foot"><div class="cart-total"><span>Ara Toplam</span><strong id="cartTotal">0 TL</strong></div><button class="checkout" id="checkoutDemo">Ödemeye Geç</button></div></aside><div class="toast" id="toast"></div>
 <script>
 
@@ -219,7 +313,7 @@ $$('.add-cart').forEach(btn=>btn.addEventListener('click',()=>{const card=btn.cl
 $$('.fav-btn').forEach(btn=>btn.addEventListener('click',()=>{btn.classList.toggle('active');btn.textContent=btn.classList.contains('active')?'♥':'♡';toast(btn.classList.contains('active')?'Favorilere eklendi':'Favorilerden çıkarıldı')}));
 $('#cartButton').addEventListener('click',openCart); $('#cartClose').addEventListener('click',closeCart); cartBackdrop.addEventListener('click',closeCart);
 menuBtn.addEventListener('click',()=>{nav.classList.toggle('open');menuBtn.setAttribute('aria-expanded',nav.classList.contains('open'))});
-window.addEventListener('scroll',()=>header?.classList.toggle('compact',window.scrollY>30));
+
 const reveal=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('in')}),{threshold:.12});$$('.reveal').forEach(el=>reveal.observe(el));
 const search=$('#searchInput'); if(search) search.addEventListener('input',()=>{const q=search.value.trim().toLocaleLowerCase('tr');$$('.product-card').forEach(c=>c.hidden=!(c.dataset.name.toLocaleLowerCase('tr').includes(q)||c.dataset.category.includes(q)))});
 $$('.category-card').forEach(btn=>btn.addEventListener('click',()=>{const q=btn.dataset.filter;$$('.category-card').forEach(b=>b.classList.toggle('active',b===btn));$$('.product-card').forEach(c=>c.hidden=!(c.dataset.category.includes(q)));document.querySelector('#products').scrollIntoView({behavior:'smooth'});toast(btn.innerText.trim()+' filtrelendi')}));
@@ -376,9 +470,9 @@ document.querySelectorAll(".hero-switch").forEach(button=>{
   button.addEventListener("click",()=>applyTheme(button.dataset.theme));
 });
 function updateHeaderTheme(){
-  const hero=document.getElementById("shopHero");
-  const heroBottom=hero.getBoundingClientRect().bottom+window.scrollY;
-  document.body.classList.toggle("header-over-light",window.scrollY>=heroBottom-1);
+  const scroll=Math.max(0,window.scrollY);
+  header.classList.toggle("compact",scroll>30);
+  header.style.setProperty("--promo-offset",Math.max(0,33-scroll)+"px");
 }
 window.addEventListener("scroll",updateHeaderTheme,{passive:true});
 window.addEventListener("resize",updateHeaderTheme);
@@ -392,6 +486,23 @@ document.getElementById("topFavorite")?.addEventListener("click",()=>{
 document.addEventListener("visibilitychange",()=>{
   if(document.hidden){clearInterval(darkTimer);clearTimeout(darkHoverTimer)}
   else restartDarkTimer();
+});
+
+
+document.querySelector("[data-footer-cart]")?.addEventListener("click",event=>{
+  event.preventDefault();
+  openCart();
+});
+document.querySelectorAll("[data-shop-filter]").forEach(link=>{
+  link.addEventListener("click",()=>{
+    const filter=link.dataset.shopFilter;
+    if(search)search.value="";
+    $$(".category-card").forEach(button=>button.classList.toggle("active",button.dataset.filter===filter));
+    $$(".product-card").forEach(card=>{
+      const category=card.dataset.category;
+      card.hidden=filter==="all"?false:filter==="bestsellers"?!card.querySelector(".product-badge")?.textContent.includes("Çok Satan"):filter==="oyuncak"?!(category==="oyuncak"||category==="çocuk & aile"):!category.includes(filter);
+    });
+  });
 });
 
 </script>
