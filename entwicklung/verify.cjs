@@ -34,10 +34,23 @@ const heroCards=[...p.document.querySelectorAll('.dark-card')];p.click(p.documen
 p.click(p.document.querySelector('[data-action="add"]'));assert.equal(JSON.parse(storage['harika-demo-cart-v1'])[0].qty,1);
 p.click(p.document.querySelector('[data-action="save"]'));assert.equal(JSON.parse(storage['harika-demo-favs-v1']).length,1);
 p=open('sepet');assert(p.document.querySelector('.cart-row'),'cart persists across pages');p.click(p.document.querySelector('[data-action="cart-qty"][data-delta="1"]'));assert.equal(JSON.parse(storage['harika-demo-cart-v1'])[0].qty,2);
-p=open('odeme');p.submit('#checkout-form');assert(p.loc.href.endsWith('/entwicklung/siparis/'));assert.equal(JSON.parse(session['harika-demo-order']).total,1698);
+p=open('odeme');p.submit('#checkout-form');assert(p.loc.href.endsWith('/entwicklung/siparis/'));const selectedCart=JSON.parse(storage['harika-demo-cart-v1']);assert.equal(JSON.parse(session['harika-demo-order']).total,p.ctx.window.Shop.totals(selectedCart).subtotal);
 p=open('siparis');assert(p.document.querySelector('.status-box'));
 p=open('siparis-takibi');p.document.querySelector('[name="number"]').value='DEMO-001';p.submit('#tracking-form');assert(p.document.querySelector('#tracking-result').innerHTML.includes('Örnek sipariş onaylandı'));
 p=open('favoriler');assert.equal(p.document.querySelectorAll('.product-card').length,1);
 p=open('giris');p.submit('#auth-form');assert(!Object.keys(storage).some(k=>/password|email/.test(k)));
 p=open('');p.ctx.window.scrollY=500;for(const f of p.ctx.window.listeners||[])f();assert(p.document.querySelector('.site-header'));
+
+// Category assignments, collection filters and the persisted gift choice.
+p=open('kategoriler');assert.equal(p.document.querySelectorAll('.category-directory-card').length,4);
+assert.equal(p.document.querySelectorAll('.category-menu-group').length,4);
+assert.equal(p.document.querySelectorAll('.subcategory-toggle').length,4);
+const Shop=p.ctx.window.Shop;
+for(const c of Shop.categories){assert.equal(c.subcategories.length,6);for(const sub of c.subcategories){const list=Shop.filter(c.id,'','default',sub.id);assert(list.every(x=>x.cat===c.id&&x.subcategories.includes(sub.id)));}}
+for(const c of Shop.collections){const list=Shop.filter('','','default','',c.id);assert(list.length>0);assert.equal(new Set(list.map(x=>x.id)).size,list.length);}
+p=open('kategori/bijuteri/kupeler');assert.equal(p.document.querySelectorAll('.product-card').length,1);
+p=open('kategori/bijuteri/yuzukler');assert.equal(p.document.querySelectorAll('.product-card').length,0);assert(p.document.querySelector('.empty'));
+p=open('kampanyali-urunler');assert.equal(p.document.querySelectorAll('.product-card').length,3);assert.equal(p.document.querySelectorAll('del').length,3);
+p=open('urun/masa-lambasi');const wrap=p.document.querySelector('#gift-wrap'),note=p.document.querySelector('#gift-note');wrap.checked=true;for(const f of p.listeners.change||[])f({target:wrap});note.value='<b>İyi ki varsın!</b>';for(const f of p.listeners.input||[])f({target:note});
+p=open('sepet');assert(p.document.querySelector('#gift-wrap').attrs.checked!==undefined);assert(p.document.querySelector('#gift-note').textContent.includes('<b>İyi ki varsın!</b>'));p=open('odeme');p.submit('#checkout-form');assert.equal(JSON.parse(session['harika-demo-order']).gift.wrap,true);p=open('siparis');assert(p.body.textContent.includes('İyi ki varsın!'));assert(p.body.innerHTML.includes('&lt;b&gt;İyi ki varsın!&lt;/b&gt;'));
 console.log('PASS:',routes.length,'rendered routes;',renderedLinks,'local links/assets; persistent cart/favorites, quantity, checkout, order tracking, shared hero theme, auth demo.');
