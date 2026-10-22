@@ -117,7 +117,7 @@ html{scroll-padding-top:75px}
 .hero-switcher{top:132px}
 #newsletterForm{scroll-margin-top:85px}
 /* Footer follows the local-store reference with shop-specific links. */
-.site-footer{display:block;padding:70px 7.5vw 28px;background:#183e30;color:#faf6ed;border:0}
+.site-footer{display:block;padding:70px 7.5vw 28px;background:#0f4336;color:#faf6ed;border:0}
 .site-footer .footer-grid{display:grid;grid-template-columns:1.45fr 1fr 1fr 1.2fr;gap:40px}
 .site-footer h3{font:500 16px/1.5 Inter,'Segoe UI',Arial,sans-serif;margin:0 0 20px;color:#e4c998}
 .site-footer p{font:400 15px/1.85 Inter,'Segoe UI',Arial,sans-serif;text-align:left;color:#d0dbcb;margin:0 0 14px;opacity:1}
