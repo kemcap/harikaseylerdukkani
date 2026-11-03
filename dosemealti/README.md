@@ -9,11 +9,15 @@ Fiziksel mağaza için statik HTML/CSS/JavaScript kategori sayfaları. WooCommer
 3. [Oyuncak](./oyuncak/)
 4. [Hediyelik Eşya](./hediyelik-esya/)
 
-Her kategoride `index.html`, `category.css`, `category.js` bulunur. Görseller `assets/` içinde tutulur. Ortak üst menü görünümü `assets/category-nav.css` dosyasındadır.
+Her kategoride `index.html`, `category.css`, `category.js` bulunur. Görseller `assets/` içinde tutulur. Ortak üst menü görünümü `assets/category-nav.css` dosyasındadır; mobil kategori gezintisi `assets/category-navigation.css` ve `assets/category-navigation.js` dosyalarını kullanır.
 
-## Üst menü
+## Üst menü ve mobil kategori gezinmesi
 
-Yayımlanan Döşemealtı ana sayfasındaki menü esas alındı: Harika Şeyler Dükkanı logosu, **Dört dünya**, **Yakından bak**, **Sık sorulanlar**, Instagram ve **Online-Mağazamız**. Kategori sayfalarında ikinci ve üçüncü bağlantı, sayfanın kendi keşif ve SSS bölümlerine gider. Koyu Hero üzerinde logo beyaz; aşağı kaydırıldıktan sonra yarı saydam açık renk menüde logo koyudur. Mobil düzen de ana sayfayı takip eder.
+Döşemealtı canlı ana sayfasının başlık düzeni korunur: Harika Şeyler Dükkanı logosu, **Dört dünya**, **Yakından bak**, **Sık sorulanlar**, Instagram ve **Online-Mağazamız**. Kategori sayfalarında ikinci ve üçüncü bağlantı, sayfanın kendi keşif ve SSS bölümlerine gider. Koyu Hero üzerinde logo beyaz; aşağı kaydırıldıktan sonra yarı saydam açık renk menüde logo koyudur.
+
+- **Desktop / tablet (761 px ve üzeri):** `Dört dünya` başlığı dört kategoriyi ve Döşemealtı ana sayfasını içeren bir alt menü açar. Diğer canlı ana sayfa menü öğeleri değişmez.
+- **Telefon (760 px ve altı):** canlı ana sayfadaki üst menü korunur. İlk kaydırmanın ardından altta dört kategoriye ve ana sayfaya giden beş öğeli, aktif sayfayı vurgulayan sabit bir kategori gezintisi belirir; güvenli ekran alt boşluğu desteklenir.
+- Kod: `assets/category-nav.css` (mevcut üst menü ve 100svh hero), `assets/category-navigation.css` (yeni gezinme düzeni), `assets/category-navigation.js` (menü ve kaydırma görünürlüğü).
 
 ## Yerel SEO ve indexleme
 
