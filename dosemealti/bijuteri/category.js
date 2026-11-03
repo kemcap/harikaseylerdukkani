@@ -32,6 +32,8 @@
       star.style.setProperty(property, (motion * extent).toFixed(2) + 'deg');
     });
   }
+  let headerAnchor = window.scrollY;
+  let headerDirection = 0;
   let lastY = window.scrollY;
   let raf = 0;
   function onScroll() {
@@ -49,8 +51,18 @@
     if (heroStar) heroStar.style.setProperty('--hero-star-rotation', reducedMotion.matches ? '0deg' : `${(Math.max(0, y) * 0.105).toFixed(2)}deg`);
     updateSmallStars();
     updateVisualChapter();
-    if (y > 180 && y > lastY + 7) header.classList.add('is-hidden');
-    else if (y < lastY - 7 || y < 80) header.classList.remove('is-hidden');
+    if (header) header.classList.toggle('scrolled', y > 24);
+    const delta = y - headerAnchor;
+    const direction = Math.sign(delta);
+    if (y < 25) {
+      document.documentElement.classList.remove('header-compact');
+      headerAnchor = y; headerDirection = 0;
+    } else if (direction !== headerDirection) {
+      headerDirection = direction; headerAnchor = y;
+    } else if (Math.abs(delta) > 12) {
+      document.documentElement.classList.toggle('header-compact', direction > 0 && y > 80);
+      headerAnchor = y;
+    }
     lastY = y;
   }
   window.addEventListener('scroll', () => { if (!raf) raf = requestAnimationFrame(onScroll); }, { passive: true });

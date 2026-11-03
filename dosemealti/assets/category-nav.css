@@ -1,0 +1,42 @@
+/* Same structure, sizing and controls as the published Döşemealtı homepage header. */
+:root{--header-height:100px}
+html{scroll-padding-top:calc(var(--header-height) + 16px)}
+.header{position:fixed;inset:0 0 auto;z-index:80;display:flex;align-items:center;justify-content:space-between;gap:24px;width:100%;height:var(--header-height);padding:0 5.2vw;color:#fff;border-bottom:1px solid rgba(255,255,255,.17);background:transparent;transform:none;transition:height .25s ease,background-color .25s ease,border-color .25s ease,backdrop-filter .25s ease}
+.header.is-hidden{transform:none}
+.header.scrolled{background:rgba(255,255,255,.70);color:#183e30;backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border-bottom-color:rgba(33,66,53,.13)}
+:root.header-compact{--header-height:50px}
+.header .brand{display:flex;align-items:center;flex-shrink:0;width:auto;min-width:0;white-space:nowrap}
+.header .brand-logo{display:block;width:auto;max-width:100%;height:74px;object-fit:contain;filter:brightness(0) invert(1);transition:height .25s ease}
+.header.scrolled .brand-logo{filter:none}
+.header-compact .header .brand-logo{height:38px}
+.header .desktop-nav{display:flex;align-items:center;gap:36px;font-size:.875rem;font-weight:500;min-width:0}
+.header .desktop-nav a{position:relative;padding:10px 0;white-space:nowrap}
+.header .desktop-nav a::after{content:"";position:absolute;bottom:3px;left:0;right:100%;height:1px;background:#c2a268;transition:right .25s}
+.header .desktop-nav a:hover::after,.header .desktop-nav a:focus-visible::after{right:0}
+.header .header-actions{display:flex;align-items:center;gap:14px;flex-shrink:0}
+.header .header-instagram{display:inline-flex;align-items:center;justify-content:center;min-width:40px;min-height:40px;color:inherit;border-radius:4px}
+.header .header-instagram:hover{background:rgba(255,255,255,.12)}
+.header.scrolled .header-instagram:hover{background:rgba(24,62,48,.08)}
+.header .header-instagram svg{display:block;width:33px;height:33px;transition:width .25s ease,height .25s ease;flex-shrink:0}
+.header .header-store{display:inline-flex;align-items:center;justify-content:center;min-height:42px;padding:10px 22px;background:#183e30;color:#faf6ed;border:1px solid rgba(250,246,237,.45);border-radius:4px;font-size:.875rem;font-weight:500;white-space:nowrap;transition:min-height .25s,padding .25s,background .2s}
+.header .header-store:hover{background:#2b5843}
+.header-compact .header-store{min-height:34px;padding:7px 17px}
+.header-compact .header-instagram{min-height:34px}
+.header-compact .header-instagram svg{width:26.4px;height:26.4px}
+@media(max-width:1100px){.header{padding:0 4vw;gap:18px}.header .desktop-nav{gap:18px}.header .header-store{padding:10px 16px}}
+@media(max-width:960px){.header .desktop-nav{display:none}}
+@media(max-width:760px){
+ :root{--header-height:80px}
+ :root.header-compact{--header-height:40px}
+ .header{padding:0 4vw;gap:8px}
+ .header .brand-logo{height:58px}
+ .header-compact .header .brand-logo{height:30px}
+ .header .header-actions{gap:6px}
+ .header .header-instagram{min-width:34px;min-height:37px}
+ .header-compact .header-instagram{min-height:30px}
+ .header .header-store{min-height:37px;padding:9px 13px;font-size:.8125rem}
+ .header-compact .header-store{min-height:28px;padding:4px 10px}
+}
+@media(max-width:520px){.header .header-store{padding:9px 10px}}
+@media(max-width:370px){.header .brand-logo{height:47px}.header-compact .header .brand-logo{height:28px}.header .header-store{font-size:.75rem;padding:8px}.header .header-actions{gap:2px}}
+@media(prefers-reduced-motion:reduce){.header,.header .brand-logo,.header .header-instagram svg,.header .header-store{transition:none}}
