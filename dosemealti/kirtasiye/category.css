@@ -31,3 +31,12 @@
 /* White version of the existing transparent logo for the dark header and footer. */
 .header .brand img,.footer .footer-logo img{filter:brightness(0) invert(1)}
 @media(max-width:760px){.faq-list summary{padding:14px 0;gap:12px;line-height:1.3}.faq-list details p{padding-bottom:16px;line-height:1.55}}
+
+/* Scroll-linked star accents: subtle motion, reversed automatically on upward scroll. */
+.twinkle{transform:rotate(var(--twinkle-rotation,0deg));transform-origin:center;will-change:transform}
+.note-star{display:inline-block;transform:rotate(var(--note-star-rotation,0deg));transform-origin:center;will-change:transform}
+.chapter-line span:last-child{transform:rotate(var(--chapter-star-rotation,0deg));transform-origin:center;will-change:transform}
+.visit-photo-stamp span{display:inline-block;transform:rotate(var(--stamp-star-rotation,0deg));transform-origin:center;will-change:transform}
+/* The first line is white, the second (emphasized) line is gold. */
+.visit-copy h2{color:#fff}
+.visit-copy h2 em{color:var(--gold)}
