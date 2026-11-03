@@ -25,9 +25,10 @@
         : star.matches('.twinkle') ? '--twinkle-rotation'
         : star.matches('.visit-photo-stamp span') ? '--stamp-star-rotation'
         : '--chapter-star-rotation';
-      const extent = property === '--note-star-rotation' ? -32
-        : property === '--stamp-star-rotation' ? 26
-        : property === '--twinkle-rotation' ? 24 : 30;
+      // Make the smaller decorative stars visibly rotate during their passage.
+      const extent = property === '--note-star-rotation' ? -160
+        : property === '--stamp-star-rotation' ? 135
+        : property === '--twinkle-rotation' ? 110 : 150;
       star.style.setProperty(property, (motion * extent).toFixed(2) + 'deg');
     });
   }
@@ -36,11 +37,11 @@
   function onScroll() {
     raf = 0;
     const y = window.scrollY;
-    // Rotate the information badge gently 3 degrees counterclockwise over the hero.
-    // Its angle follows the scroll position, so scrolling up rotates it back.
+    // Make the info badge visibly tilt left as the hero is scrolled.
+    // It turns back on upward scroll and respects reduced-motion settings.
     if (heroBadge && heroSection) {
       const fraction = Math.min(1, Math.max(0, y / Math.max(1, heroSection.offsetHeight)));
-      const degrees = reducedMotion.matches ? 0 : -3 * fraction;
+      const degrees = reducedMotion.matches ? 0 : -15 * fraction;
       heroBadge.style.setProperty('--hero-label-angle', `${degrees.toFixed(2)}deg`);
     }
     // Scroll position controls the angle: down turns clockwise, up reverses.
