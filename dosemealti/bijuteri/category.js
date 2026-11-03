@@ -36,17 +36,18 @@
   function onScroll() {
     raf = 0;
     const y = window.scrollY;
-    // Subtle badge tilt between 4° and 10° as the hero scrolls past.
-    // Scrolling up reverses the movement, reduced-motion keeps it still.
+    // Rotate the information badge gently 3 degrees counterclockwise over the hero.
+    // Its angle follows the scroll position, so scrolling up rotates it back.
     if (heroBadge && heroSection) {
       const fraction = Math.min(1, Math.max(0, y / Math.max(1, heroSection.offsetHeight)));
-      const degrees = reducedMotion.matches ? 4 : 4 + fraction * 6;
+      const degrees = reducedMotion.matches ? 0 : -3 * fraction;
       heroBadge.style.setProperty('--hero-label-angle', `${degrees.toFixed(2)}deg`);
     }
     // Scroll position controls the angle: down turns clockwise, up reverses.
     // Respect reduced-motion settings and do not animate independently.
-    if (heroStar) heroStar.style.setProperty('--hero-star-rotation', reducedMotion.matches ? '0deg' : `${(Math.max(0, y) * 0.21).toFixed(2)}deg`);
+    if (heroStar) heroStar.style.setProperty('--hero-star-rotation', reducedMotion.matches ? '0deg' : `${(Math.max(0, y) * 0.105).toFixed(2)}deg`);
     updateSmallStars();
+    updateVisualChapter();
     if (y > 180 && y > lastY + 7) header.classList.add('is-hidden');
     else if (y < lastY - 7 || y < 80) header.classList.remove('is-hidden');
     lastY = y;
@@ -54,7 +55,6 @@
   window.addEventListener('scroll', () => { if (!raf) raf = requestAnimationFrame(onScroll); }, { passive: true });
   reducedMotion.addEventListener?.('change', onScroll);
   window.addEventListener('resize', () => { if (!raf) raf = requestAnimationFrame(onScroll); }, { passive: true });
-  onScroll();
   if (toggle && menu) {
     toggle.addEventListener('click', () => {
       const open = toggle.getAttribute('aria-expanded') === 'true';
@@ -72,17 +72,44 @@
   const chapters = Array.from(document.querySelectorAll('[data-chapter]'));
   const images = Array.from(document.querySelectorAll('[data-visual]'));
   const counter = document.getElementById('visual-counter');
-  if ('IntersectionObserver' in window && chapters.length && images.length) {
-    const observer = new IntersectionObserver(entries => {
-      const candidates = entries.filter(entry => entry.isIntersecting).sort((a,b) => b.intersectionRatio - a.intersectionRatio);
-      if (!candidates.length) return;
-      const index = Number(candidates[0].target.dataset.chapter);
-      images.forEach(image => image.classList.toggle('active', Number(image.dataset.visual) === index));
-      counter.innerHTML = String(index+1).padStart(2,'0') + ' <span>/ 03</span>';
-    }, { rootMargin: '-24% 0px -24% 0px', threshold: [0,.1,.3,.5,.7] });
-    chapters.forEach(chapter => observer.observe(chapter));
+  let activeChapter = -1;
+  function updateVisualChapter() {
+    if (!chapters.length || !images.length || !counter) return;
+    const viewHeight = Math.max(1, window.innerHeight);
+    const focusLine = viewHeight * 0.5;
+    const tolerance = Math.min(72, Math.max(28, viewHeight * 0.06));
+    const firstPass = activeChapter < 0;
+    let index = firstPass ? 0 : activeChapter;
+
+    if (firstPass) {
+      // First view: determine which chapter contains the viewport focal point.
+      for (let i = 1; i < chapters.length; i++) {
+        if (chapters[i].getBoundingClientRect().top <= focusLine) index = i;
+      }
+    } else {
+      // Forward scroll: change only after the next chapter passes the focus
+      // line by a margin. Backward scroll uses the symmetrical threshold.
+      while (index < chapters.length - 1 &&
+             chapters[index + 1].getBoundingClientRect().top < focusLine - tolerance) {
+        index++;
+      }
+      while (index > 0 &&
+             chapters[index].getBoundingClientRect().top > focusLine + tolerance) {
+        index--;
+      }
+    }
+    // Avoid repainting the images and counter when the section hasn't changed.
+    if (index === activeChapter) return;
+    activeChapter = index;
+    images.forEach(image => {
+      image.classList.toggle('active', Number(image.dataset.visual) === index);
+    });
+    const value = String(index + 1).padStart(2, '0');
+    counter.firstChild.textContent = value + ' ';
   }
   const year = document.getElementById('year');
   if (year) year.textContent = String(new Date().getFullYear());
+  window.addEventListener('pageshow', onScroll);
+  onScroll();
 })();
 
