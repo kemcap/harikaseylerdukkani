@@ -8,6 +8,29 @@
   const heroBadge = document.querySelector('.hero .float-label');
   const heroSection = document.querySelector('.hero');
   const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+  const smallStars = [
+    ...document.querySelectorAll('.twinkle, .note-star, .chapter-line span:last-child, .visit-photo-stamp span')
+  ];
+  const clamp = n => Math.max(0, Math.min(1, n));
+  // Each small star rotates only while its own section passes through the viewport.
+  // The angle is a function of scroll position, so upward scrolling reverses it.
+  function updateSmallStars() {
+    const vh = Math.max(1, window.innerHeight);
+    smallStars.forEach(star => {
+      const rect = star.getBoundingClientRect();
+      if (rect.top > vh + 100 || rect.bottom < -100) return;
+      const progress = clamp((vh - rect.top) / (vh + Math.max(1, rect.height)));
+      const motion = reducedMotion.matches ? 0 : progress;
+      const property = star.matches('.note-star') ? '--note-star-rotation'
+        : star.matches('.twinkle') ? '--twinkle-rotation'
+        : star.matches('.visit-photo-stamp span') ? '--stamp-star-rotation'
+        : '--chapter-star-rotation';
+      const extent = property === '--note-star-rotation' ? -32
+        : property === '--stamp-star-rotation' ? 26
+        : property === '--twinkle-rotation' ? 24 : 30;
+      star.style.setProperty(property, (motion * extent).toFixed(2) + 'deg');
+    });
+  }
   let lastY = window.scrollY;
   let raf = 0;
   function onScroll() {
@@ -22,13 +45,15 @@
     }
     // Scroll position controls the angle: down turns clockwise, up reverses.
     // Respect reduced-motion settings and do not animate independently.
-    if (heroStar) heroStar.style.setProperty('--hero-star-rotation', reducedMotion.matches ? '0deg' : `${(Math.max(0, y) * 0.42).toFixed(2)}deg`);
+    if (heroStar) heroStar.style.setProperty('--hero-star-rotation', reducedMotion.matches ? '0deg' : `${(Math.max(0, y) * 0.21).toFixed(2)}deg`);
+    updateSmallStars();
     if (y > 180 && y > lastY + 7) header.classList.add('is-hidden');
     else if (y < lastY - 7 || y < 80) header.classList.remove('is-hidden');
     lastY = y;
   }
   window.addEventListener('scroll', () => { if (!raf) raf = requestAnimationFrame(onScroll); }, { passive: true });
   reducedMotion.addEventListener?.('change', onScroll);
+  window.addEventListener('resize', () => { if (!raf) raf = requestAnimationFrame(onScroll); }, { passive: true });
   onScroll();
   if (toggle && menu) {
     toggle.addEventListener('click', () => {
