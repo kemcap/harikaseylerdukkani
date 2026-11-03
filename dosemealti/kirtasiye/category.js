@@ -4,16 +4,23 @@
   const header = document.querySelector('.header');
   const toggle = document.querySelector('.menu-toggle');
   const menu = document.getElementById('mobile-menu');
+  const heroStar = document.querySelector('.hero-asterisk');
+  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
   let lastY = window.scrollY;
   let raf = 0;
   function onScroll() {
     raf = 0;
     const y = window.scrollY;
+    // Scroll position controls the angle: down turns clockwise, up reverses.
+    // Respect reduced-motion settings and do not animate independently.
+    if (heroStar) heroStar.style.setProperty('--hero-star-rotation', reducedMotion.matches ? '0deg' : `${(Math.max(0, y) * 0.42).toFixed(2)}deg`);
     if (y > 180 && y > lastY + 7) header.classList.add('is-hidden');
     else if (y < lastY - 7 || y < 80) header.classList.remove('is-hidden');
     lastY = y;
   }
   window.addEventListener('scroll', () => { if (!raf) raf = requestAnimationFrame(onScroll); }, { passive: true });
+  reducedMotion.addEventListener?.('change', onScroll);
+  onScroll();
   if (toggle && menu) {
     toggle.addEventListener('click', () => {
       const open = toggle.getAttribute('aria-expanded') === 'true';
