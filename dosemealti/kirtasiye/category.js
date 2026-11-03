@@ -5,12 +5,21 @@
   const toggle = document.querySelector('.menu-toggle');
   const menu = document.getElementById('mobile-menu');
   const heroStar = document.querySelector('.hero-asterisk');
+  const heroBadge = document.querySelector('.hero .float-label');
+  const heroSection = document.querySelector('.hero');
   const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
   let lastY = window.scrollY;
   let raf = 0;
   function onScroll() {
     raf = 0;
     const y = window.scrollY;
+    // Subtle badge tilt between 4° and 10° as the hero scrolls past.
+    // Scrolling up reverses the movement, reduced-motion keeps it still.
+    if (heroBadge && heroSection) {
+      const fraction = Math.min(1, Math.max(0, y / Math.max(1, heroSection.offsetHeight)));
+      const degrees = reducedMotion.matches ? 4 : 4 + fraction * 6;
+      heroBadge.style.setProperty('--hero-label-angle', `${degrees.toFixed(2)}deg`);
+    }
     // Scroll position controls the angle: down turns clockwise, up reverses.
     // Respect reduced-motion settings and do not animate independently.
     if (heroStar) heroStar.style.setProperty('--hero-star-rotation', reducedMotion.matches ? '0deg' : `${(Math.max(0, y) * 0.42).toFixed(2)}deg`);
