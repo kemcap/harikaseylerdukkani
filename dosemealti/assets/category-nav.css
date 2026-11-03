@@ -64,9 +64,12 @@ html{scroll-padding-top:calc(var(--header-height) + 16px)}
 .category-menu-wrap .category-menu .category-menu-separator{border-top:1px solid #d9dece;margin:9px 0 2px}
 .category-menu-wrap .category-menu .category-menu-minor{font-weight:550;font-size:.83rem;min-height:37px;padding-block:8px}
 
+/* Keep the hero offset stable as the fixed header contracts on scroll. */
+:root{--hero-header-offset:100px}
+@media(max-width:760px){:root{--hero-header-offset:80px}}
 /* Each category's first screen fills the viewport, not a tall 780px mobile stack. */
 .hero{height:100vh;height:100svh;min-height:0}
-.hero-grid{height:100%;min-height:0;padding-top:var(--header-height)}
+.hero-grid{height:100%;min-height:0;padding-top:var(--hero-header-offset)}
 .hero-copy{padding-top:clamp(12px,3.2vh,42px);padding-bottom:clamp(12px,3vh,42px)}
 .hero-topline{margin-bottom:clamp(18px,5vh,62px)}
 .hero .hero-display{font-size:clamp(3.5rem,7.4vw,8.3rem)}
@@ -75,7 +78,7 @@ html{scroll-padding-top:calc(var(--header-height) + 16px)}
  .header .category-menu-toggle{min-height:40px;padding:8px 12px;font-size:.81rem}
  .category-menu-wrap .category-menu{padding:14px;top:calc(100% + 12px)}
  .hero,.hero-grid{height:100vh;height:100svh;min-height:0}
- .hero-grid{display:flex;flex-direction:column;padding-top:var(--header-height);padding-bottom:26px}
+ .hero-grid{display:flex;flex-direction:column;padding-top:var(--hero-header-offset);padding-bottom:26px}
  .hero-copy{flex:0 0 auto;align-self:stretch;padding:clamp(10px,2svh,22px) 23px clamp(8px,1.5svh,19px)}
  .hero-topline{margin:0 0 clamp(9px,2.1svh,23px);font-size:.58rem;gap:10px;white-space:normal}
  .hero .hero-display{font-size:clamp(2.65rem,10.6vw,4.2rem);line-height:.97;margin:9px 0 12px;white-space:normal}
