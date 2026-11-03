@@ -1,30 +1,29 @@
-# Harika Şeyler Dükkanı — Döşemealtı Kategori Sayfaları
+# Harika Şeyler Dükkânı – Döşemealtı yerel mağaza kategorileri
 
-Bu dizin, fiziksel mağazaya ait statik ve Türkçe kategori alt sayfalarını içerir. WooCommerce mağazası değildir.
+Fiziksel mağaza için statik HTML/CSS/JavaScript kategori sayfaları. WooCommerce veya online sipariş sistemi değildir.
 
-## Kategori sırası
-1. /dosemealti/bijuteri/ — Bijuteri & Aksesuar
-2. /dosemealti/kirtasiye/ — Kırtasiye
-3. Oyuncak — henüz ayrı sayfa hazırlanmadı
-4. Hediyelik Eşya — henüz ayrı sayfa hazırlanmadı
+## Kategori hiyerarşisi
 
-İlk iki kategori her birinde index.html, category.css ve category.js dosyalarını kullanır. Görseller /dosemealti/assets/ içinde yer alır.
+1. [Bijuteri & Aksesuar](./bijuteri/)
+2. [Kırtasiye](./kirtasiye/)
+3. [Oyuncak](./oyuncak/)
+4. [Hediyelik Eşya](./hediyelik-esya/)
 
-## Yerel SEO ve indeksleme
+Her kategoride `index.html`, `category.css`, `category.js` bulunur. Görseller `assets/` içinde tutulur. Ortak üst menü görünümü `assets/category-nav.css` dosyasındadır.
 
-- Birincil hedef: “Döşemealtı Bijuteri”, “Döşemealtı Kırtasiye”.
-- İkincil hedef: “Antalya Bijuteri”, “Antalya Kırtasiye” (Türkçe metinde “Antalya'da bijuteri/kırtasiye” doğal biçimde geçer).
-- Title, açıklama, görünen tek H1, iç metinler, canonical, Open Graph, BreadcrumbList ve CollectionPage verileri güncellendi.
-- Turhost'ta yayınlandığında HTML robots meta etiketi: **index, follow, max-image-preview:large**.
-- **Yalnızca** hostname `*.github.io` ise yinelenen önizleme sayfalarının dizine eklenmesini önlemek için küçük bir script robots meta'yı `noindex` yapar. Turhost üzerinde bunu yapmaz.
-- /dosemealti/sitemap.xml anasayfayı ve ilk iki kategori adresini içerir. Yayında halihazırda sitemap varsa bununla **birleştirilmeli**, başka sayfalar silinmemelidir.
+## Üst menü
 
-## Yayına alma kontrol listesi
+Yayımlanan Döşemealtı ana sayfasındaki menü esas alındı: Harika Şeyler Dükkanı logosu, **Dört dünya**, **Yakından bak**, **Sık sorulanlar**, Instagram ve **Online-Mağazamız**. Kategori sayfalarında ikinci ve üçüncü bağlantı, sayfanın kendi keşif ve SSS bölümlerine gider. Koyu Hero üzerinde logo beyaz; aşağı kaydırıldıktan sonra yarı saydam açık renk menüde logo koyudur. Mobil düzen de ana sayfayı takip eder.
 
-- Mevcut Turhost /dosemealti/ ana sayfası, robots.txt, HTTP X-Robots-Tag ve mevcut sitemap kontrol edilmeli.
-- Ana sayfadaki kategori bağlantıları ilk iki gerçek kategori URL'sine güncellenmeli. Bu değişiklik henüz yapılmadı.
-- Yeni dosyalar Turhost'a yüklenip 200/robots/canonical/asset yolları doğrulanmalı.
-- Google Search Console'da URL Denetimi ve sitemap gönderimi yapılmalı. İndeksleme garanti değildir.
-- Ürünlerin görseli, çeşidi veya stoku günlük olarak doğrulanmadı; sayfalar örnek görseller ve mağaza ziyaretine davet içerir.
+## Yerel SEO ve indexleme
 
-Henüz Turhost'a dosya yüklemesi yapılmadı; GitHub'daki bu sürüm geliştirme kaynağıdır.
+- Birincil kelimeler: Döşemealtı Bijuteri, Döşemealtı Kırtasiye, Döşemealtı Oyuncak, Döşemealtı Hediyelik Eşya.
+- İkincil odak: Antalya'da bijuteri/kırtasiye/oyuncak/hediyelik eşya.
+- Her sayfada özgün title, meta açıklama, H1, canonical, BreadcrumbList ve CollectionPage yapılandırılmış verisi var.
+- Gerçek yayın alanında `robots: index, follow`, GitHub Pages önizlemesinde yinelenen sayfayı önlemek için dinamik `noindex` kullanılır.
+- Her kategoride önceliklendirilmiş sekiz soru-cevap bulunur. Fiyat, stok veya hizmet konusunda doğrulanmamış garanti verilmez.
+- `sitemap.xml` fiziksel mağaza anasayfasını ve dört kategori URL'sini içerir. Canlı sunucuda mevcut sitemap varsa **birleştirilmelidir**, körlemesine üzerine yazılmamalıdır.
+
+## Yayın notu
+
+Bu GitHub deposundaki kategori dosyalarını değiştirmek Turhost üzerinde otomatik yayın yapmak **anlamına gelmez**. Ana sayfa (`/dosemealti/`) Turhost üzerindedir ve bu işlemde değiştirilmemiştir. Yayına alma sırasında ana sayfanın dört kategori bağlantısını bu yeni URL'lere yönlendirmek, Turhost'taki dosya/başlık/robots/sitemap kontrollerini yapmak gerekir.
