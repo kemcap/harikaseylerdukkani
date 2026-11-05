@@ -19,7 +19,7 @@ permissions:
   contents: read
 
 concurrency:
-  group: turhost-dosemealti-category-deploy
+  group: turhost-dosemealti-homepage-deploy
   cancel-in-progress: false
 
 jobs:
