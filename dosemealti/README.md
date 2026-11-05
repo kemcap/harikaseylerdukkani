@@ -13,11 +13,11 @@ Her kategoride `index.html` ve `category.js` bulunur. **Tüm kategori stilleri, 
 
 ## Üst menü ve mobil kategori gezinmesi
 
-Döşemealtı canlı ana sayfasının başlık düzeni korunur: Harika Şeyler Dükkanı logosu, **Dört dünya**, **Yakından bak**, **Sık sorulanlar**, Instagram ve **Online-Mağazamız**. Kategori sayfalarında ikinci ve üçüncü bağlantı, sayfanın kendi keşif ve SSS bölümlerine gider. Koyu Hero üzerinde logo beyaz; aşağı kaydırıldıktan sonra yarı saydam açık renk menüde logo koyudur.
+Döşemealtı ana sayfası ve dört kategori alt sayfası aynı navigasyon yapısını kullanır. Harika Şeyler Dükkanı logosu ana sayfaya bağlanmaya devam eder. Eski üst menü öğeleri (`Dört dünya` ana masaüstü menüsü, `Yakından bak`, `Sık sorulanlar`, `Döşemealtı Ana Sayfa`, Instagram ve online mağaza bağlantıları) üst menüden çıkarıldı. Gerekli sayfa içi bağlantılar ve footer ayrı olarak korunur.
 
-- **Desktop / tablet (761 px ve üzeri):** `Dört dünya` başlığı dört kategoriyi ve Döşemealtı ana sayfasını içeren bir alt menü açar. Diğer canlı ana sayfa menü öğeleri değişmez.
-- **Telefon (760 px ve altı):** canlı ana sayfadaki üst menü korunur. İlk kaydırmanın ardından altta dört kategoriye ve ana sayfaya giden beş öğeli, aktif sayfayı vurgulayan sabit bir kategori gezintisi belirir; güvenli ekran alt boşluğu desteklenir.
-- Kod: `assets/site.css` (üst menü, 100svh hero, mobil kategori gezinmesi, footer, tipografi) ve `assets/category-navigation.js` (menü ve kaydırma görünürlüğü).
+- **Desktop / tablet (761 px ve üzeri):** doğrudan dört kategori bağlantısı: Bijuteri & Aksesuar, Kırtasiye, Oyuncak, Hediyelik Eşya. Alt menü veya ana sayfa bağlantısı yoktur.
+- **Telefon (760 px ve altı):** üst başlıkta `Dört dünya` adlı doğal HTML `details` açılır menüsü bulunur. Tam olarak dört kategori listelenir. Eski alttaki sabit kategori gezintisi kaldırıldı.
+- Kod: `assets/site.css` (kategori sayfaları), `assets/category-navigation.js` (açılır menüyü kapatma davranışı), `scripts/update_homepage_navigation.py` ve `.github/workflows/update-homepage-links.yml` (Turhost'taki var olan ana sayfayı yedekleyip yerinde güncelleme). Ana sayfanın diğer içerikleri, sticky hikâye animasyonları, CSS ve SEO özellikleri korunur.
 
 ## Ana sayfayla ortak footer ve tipografi
 
