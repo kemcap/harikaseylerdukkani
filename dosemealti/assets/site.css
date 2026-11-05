@@ -345,3 +345,27 @@ h1.category-seo-h1,.eyebrow{font-family:var(--sans)}
  .header .header-instagram svg{width:24px;height:24px}
  .header .mobile-worlds-menu summary{gap:6px;padding:6px 9px;font-size:.79rem}
 }
+
+
+/* Slim evergreen Dört dünya trigger. Keep 6px+ vertical breathing room in the 40px compact header. */
+@media(max-width:1060px){
+ .header .mobile-worlds-menu summary{
+   gap:7px;min-height:34px;padding:7px 11px;
+   border:0;border-radius:5px;box-shadow:none;
+   background:#132F25;color:#fff;
+   font-size:.82rem;font-weight:650;line-height:1.2;
+   transition:background-color .2s ease;
+ }
+ .header .mobile-worlds-menu summary:hover{background:#1b4032}
+ .header .mobile-worlds-menu summary:focus-visible{outline:2px solid #c2a268;outline-offset:3px}
+ .header .mobile-worlds-menu .mobile-chevron{color:inherit;font-size:1rem}
+ .header-compact .header .mobile-worlds-menu summary{
+   min-height:28px;padding:4px 9px;font-size:.77rem;
+ }
+ .header-compact .header .header-instagram{min-height:28px}
+}
+@media(max-width:420px){
+ .header .mobile-worlds-menu summary{padding:6px 9px;gap:5px}
+ .header-compact .header .mobile-worlds-menu summary{padding:4px 8px;min-height:28px}
+}
+@media(prefers-reduced-motion:reduce){.header .mobile-worlds-menu summary{transition:none}}
