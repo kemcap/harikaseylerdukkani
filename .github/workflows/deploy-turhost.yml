@@ -37,7 +37,7 @@ jobs:
           FTP_HOST: ${{ secrets.TURHOST_FTP_HOST }}
           FTP_USER: ${{ secrets.TURHOST_FTP_USER }}
           FTP_PASSWORD: ${{ secrets.TURHOST_FTP_PASSWORD }}
-          FTP_REMOTE_DIR: ${{ vars.TURHOST_REMOTE_DIR }}
+          FTP_REMOTE_DIR: ${{ vars.TURHOST_REMOTE_DIR || secrets.TURHOST_REMOTE_DIR }}
         shell: bash
         run: |
           set -euo pipefail
@@ -55,7 +55,7 @@ jobs:
             missing=1
           fi
           if [[ -z "$FTP_REMOTE_DIR" ]]; then
-            echo "::error title=Missing GitHub variable::TURHOST_REMOTE_DIR is missing or empty."
+            echo "::error title=Missing GitHub variable::TURHOST_REMOTE_DIR is missing or empty. Create it as a repository Variable or Secret (Settings > Secrets and variables > Actions)."
             missing=1
           fi
           if [[ "$missing" != 0 ]]; then
@@ -85,7 +85,7 @@ jobs:
           user: ${{ secrets.TURHOST_FTP_USER }}
           password: ${{ secrets.TURHOST_FTP_PASSWORD }}
           local_dir: "./deploy/dosemealti/"
-          remote_dir: ${{ vars.TURHOST_REMOTE_DIR }}
+          remote_dir: ${{ vars.TURHOST_REMOTE_DIR || secrets.TURHOST_REMOTE_DIR }}
           delete: "false"
           ftp_ssl_allow: "true"
           ssl_verify_certificate: "true"
