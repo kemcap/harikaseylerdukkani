@@ -16,6 +16,8 @@ CATEGORIES = (
     ("hediyelik-esya", "Hediyelik Eşya"),
 )
 
+ACTIONS = """<div class="header-actions"><a class="header-instagram" href="https://www.instagram.com/_harikaseylerdukkani/" target="_blank" rel="noopener noreferrer" aria-label="Harika Şeyler Dükkanı – Instagram"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true" focusable="false"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg></a></div>"""
+
 STYLE = """<style id="main-category-header-menu">
 /* Harika unified primary navigation: 4 links on desktop; dropdown on mobile. */
 .header .desktop-nav{margin-left:auto;justify-content:flex-end;gap:clamp(14px,2vw,38px)}
@@ -39,6 +41,31 @@ STYLE = """<style id="main-category-header-menu">
  .story-dock{display:none!important}
 }
 @media(prefers-reduced-motion:reduce){.mobile-worlds-menu .mobile-chevron{transition:none!important}}
+
+/* Center category menu; restore verified Instagram social link to the right. */
+@media(min-width:1061px){
+ .header{display:grid;grid-template-columns:minmax(120px,1fr) max-content minmax(120px,1fr);align-items:center;gap:16px}
+ .header .brand{grid-column:1;justify-self:start}
+ .header .desktop-nav{grid-column:2;justify-self:center;margin:0;justify-content:center;gap:clamp(15px,1.65vw,32px)}
+ .header .header-actions{grid-column:3;justify-self:end;display:flex;align-items:center}
+ .header .mobile-worlds-menu{display:none!important}
+}
+@media(max-width:1060px){
+ .header{display:grid;grid-template-columns:minmax(80px,1fr) auto auto;align-items:center;gap:clamp(6px,2vw,15px)}
+ .header .brand{grid-column:1;justify-self:start;min-width:0}
+ .header .desktop-nav{display:none!important}
+ .header .mobile-worlds-menu{display:block!important;grid-column:2;margin:0;justify-self:end}
+ .header .header-actions{display:flex;grid-column:3;justify-self:end;align-items:center;margin:0}
+ .header .header-instagram{display:inline-flex;width:40px;min-width:40px;min-height:40px;align-items:center;justify-content:center}
+ .header .mobile-worlds-panel{right:0}
+}
+@media(max-width:420px){
+ .header{gap:6px}
+ .header .header-instagram{width:34px;min-width:34px;min-height:36px}
+ .header .header-instagram svg{width:24px;height:24px}
+ .header .mobile-worlds-menu summary{gap:6px;padding:6px 9px;font-size:.79rem}
+}
+
 </style>"""
 
 BEHAVIOR = """<script id="main-category-header-behavior">
@@ -57,7 +84,7 @@ BEHAVIOR = """<script id="main-category-header-behavior">
   menu.querySelectorAll('a').forEach(link => {
     link.addEventListener('click', () => { menu.open = false; });
   });
-  window.matchMedia('(min-width: 761px)').addEventListener?.('change', event => {
+  window.matchMedia('(min-width: 1061px)').addEventListener?.('change', event => {
     if (event.matches) menu.open = false;
   });
 })();
@@ -94,7 +121,7 @@ def apply(source):
         + '<details class="mobile-worlds-menu"><summary>Dört dünya '
         + '<span class="mobile-chevron" aria-hidden="true">⌄</span></summary>'
         + '<nav class="mobile-worlds-panel" aria-label="Ürün kategorileri">'
-        + mobile + '</nav></details></header>'
+        + mobile + '</nav></details>' + ACTIONS + '</header>'
     )
     html = source[:header_match.start()] + new_header + source[header_match.end():]
     if 'id="main-category-header-menu"' in html:
@@ -117,6 +144,8 @@ def apply(source):
     assert result_header.count('<nav class="desktop-nav"') == 1
     assert result_header.count('<details class="mobile-worlds-menu"') == 1
     assert result_header.count('<a href="/dosemealti/') == 8
+    assert result_header.count('class="header-instagram"') == 1
+    assert result_header.count('https://www.instagram.com/_harikaseylerdukkani/') == 1
     assert "Yakından bak" not in result_header
     assert "Sık sorulanlar" not in result_header
     assert "Döşemealtı Ana Sayfa" not in result_header
@@ -124,7 +153,7 @@ def apply(source):
     assert 'href="#dunyalar"' not in result_header
     for slug, _ in CATEGORIES:
         assert result_header.count(f'href="/dosemealti/{slug}/"') == 2
-    print("Validated: 4 desktop links, 4 mobile links, preserved brand and story.")
+    print("Validated: 4 centered desktop links, 4 mobile links, Instagram right; brand and story preserved.")
     return html
 
 if __name__ == "__main__":
