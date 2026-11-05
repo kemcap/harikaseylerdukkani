@@ -1,0 +1,79 @@
+name: Deploy Döşemealtı categories to Turhost (FTPS)
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "dosemealti/**"
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: "Test mode: connect and list planned uploads without changing files"
+        type: boolean
+        required: true
+        default: true
+
+permissions:
+  contents: read
+
+concurrency:
+  group: turhost-dosemealti-category-deploy
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    # Deliberate activation: configure FTP secrets, verify destination path,
+    # then set TURHOST_DEPLOY_ENABLED=true under GitHub Actions Variables.
+    if: ${{ vars.TURHOST_DEPLOY_ENABLED == 'true' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - name: Check out main
+        uses: actions/checkout@v4
+
+      - name: Validate Turhost settings
+        env:
+          FTP_HOST: ${{ secrets.TURHOST_FTP_HOST }}
+          FTP_USER: ${{ secrets.TURHOST_FTP_USER }}
+          FTP_PASSWORD: ${{ secrets.TURHOST_FTP_PASSWORD }}
+          FTP_REMOTE_DIR: ${{ vars.TURHOST_REMOTE_DIR }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [[ -z "$FTP_HOST" || -z "$FTP_USER" || -z "$FTP_PASSWORD" || -z "$FTP_REMOTE_DIR" ]]; then
+            echo "::error::Set TURHOST_FTP_HOST, TURHOST_FTP_USER, TURHOST_FTP_PASSWORD secrets and TURHOST_REMOTE_DIR variable first."
+            exit 1
+          fi
+          if [[ "$FTP_REMOTE_DIR" == *..* || "$FTP_REMOTE_DIR" == *'$'* || "$FTP_REMOTE_DIR" == *';'* ]]; then
+            echo "::error::Remote directory contains disallowed characters."
+            exit 1
+          fi
+          echo "FTP settings present. The remote directory must point to the existing /dosemealti/ folder (or a restricted FTP account's root)."
+
+      - name: Stage category files only — keep existing Turhost homepage and sitemap untouched
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p deploy/dosemealti
+          cp -R dosemealti/assets dosemealti/bijuteri dosemealti/kirtasiye dosemealti/oyuncak dosemealti/hediyelik-esya deploy/dosemealti/
+          test -f deploy/dosemealti/assets/site.css
+          test ! -e deploy/dosemealti/index.html
+          test ! -e deploy/dosemealti/sitemap.xml
+          find deploy/dosemealti -type f | sort
+
+      - name: Upload via encrypted explicit FTPS (no server-side deletes)
+        uses: airvzxf/ftp-deployment-action@v3.1.0
+        with:
+          server: ftp://${{ secrets.TURHOST_FTP_HOST }}:21
+          user: ${{ secrets.TURHOST_FTP_USER }}
+          password: ${{ secrets.TURHOST_FTP_PASSWORD }}
+          local_dir: "./deploy/dosemealti/"
+          remote_dir: ${{ vars.TURHOST_REMOTE_DIR }}
+          delete: "false"
+          ftp_ssl_allow: "true"
+          ssl_verify_certificate: "true"
+          ssl_check_hostname: "true"
+          lftp_settings: "set ftp:ssl-force true;"
+          dry_run: ${{ github.event_name == 'workflow_dispatch' && inputs.dry_run && 'true' || 'false' }}
+          upload_log_on_failure: "false"
