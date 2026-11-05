@@ -13,11 +13,12 @@ Her kategoride `index.html` ve `category.js` bulunur. **Tüm kategori stilleri, 
 
 ## Üst menü ve mobil kategori gezinmesi
 
-Döşemealtı ana sayfası ve dört kategori alt sayfası aynı navigasyon yapısını kullanır. Harika Şeyler Dükkanı logosu ana sayfaya bağlanmaya devam eder. Eski üst menü öğeleri (`Dört dünya` ana masaüstü menüsü, `Yakından bak`, `Sık sorulanlar`, `Döşemealtı Ana Sayfa`, Instagram ve online mağaza bağlantıları) üst menüden çıkarıldı. Gerekli sayfa içi bağlantılar ve footer ayrı olarak korunur.
+Döşemealtı ana sayfası ve dört kategori alt sayfası aynı üst menü yapısını kullanır. Logo, Döşemealtı ana sayfasına bağlantı olarak korunur.
 
-- **Desktop / tablet (761 px ve üzeri):** doğrudan dört kategori bağlantısı: Bijuteri & Aksesuar, Kırtasiye, Oyuncak, Hediyelik Eşya. Alt menü veya ana sayfa bağlantısı yoktur.
-- **Telefon (760 px ve altı):** üst başlıkta `Dört dünya` adlı doğal HTML `details` açılır menüsü bulunur. Tam olarak dört kategori listelenir. Eski alttaki sabit kategori gezintisi kaldırıldı.
-- Kod: `assets/site.css` (kategori sayfaları), `assets/category-navigation.js` (açılır menüyü kapatma davranışı), `scripts/update_homepage_navigation.py` ve `.github/workflows/update-homepage-links.yml` (Turhost'taki var olan ana sayfayı yedekleyip yerinde güncelleme). Ana sayfanın diğer içerikleri, sticky hikâye animasyonları, CSS ve SEO özellikleri korunur.
+- **Geniş ekran / masaüstü (1061 px ve üzeri):** logo solda, doğrudan dört kategori bağlantısı tam ortada (Bijuteri & Aksesuar, Kırtasiye, Oyuncak, Hediyelik Eşya), sağda orijinal `@_harikaseylerdukkani` Instagram simgesi ve bağlantısı. Eski `Yakından bak` ve `Sık sorulanlar` bağlantıları üst menüden kaldırılmıştır.
+- **Tablet ve telefon (1060 px ve altı):** logo solda, `Dört dünya` adlı açılır menü ve Instagram simgesi sağ tarafta. Açılır menüde sadece dört kategori bulunur; ayrı bir ana sayfa bağlantısı veya sabit alt kategori çubuğu yoktur.
+- Instagram için yalnızca doğrulanmış profil kullanılır; doğrulanmamış sosyal ağ bağlantıları eklenmez.
+- Menü kodu: `assets/site.css` ve `assets/category-navigation.js` (kategori sayfaları); `scripts/update_homepage_navigation.py` ve `.github/workflows/update-homepage-links.yml` (Turhost'taki canlı ana sayfanın mevcut dosyasını yedekleyip yerinde güncelleme). Ana sayfa tasarımı, sticky hikâye animasyonları, diğer içerikler ve SEO korunur.
 
 ## Ana sayfayla ortak footer ve tipografi
 
