@@ -1,6 +1,6 @@
 # Harika Şeyler Dükkânı — GitHub → Turhost otomatik yayın (FTPS)
 
-> **Durum:** İş akışı hazırlanmıştır ama varsayılan olarak kapalıdır. Turhost'a henüz hiçbir dosya yüklenmemiştir. İş akışı `.github/workflows/deploy-turhost.yml` dosyasındadır.
+> **Durum:** Başarılı FTPS dry-run testinden sonra kategori dosyaları için otomatik yayımlama etkinleştirildi. `main` dalındaki kategori dosyaları değişince Turhost'a FTPS ile yüklenir; gerçek yüklemeleri durdurmak için GitHub Actions Variables altında `TURHOST_DEPLOY_ENABLED=false` ayarla. İş akışı `.github/workflows/deploy-turhost.yml` dosyasındadır.
 
 ## 1. Turhost'ta ayrı bir FTP hesabı oluştur
 
@@ -33,9 +33,9 @@ Aynı ekranda **Variables → New repository variable**:
 | Variable adı | Değer |
 | --- | --- |
 | `TURHOST_REMOTE_DIR` | FTP hesabının `dosemealti` yayın klasörüne göre doğruladığın hedef yol. Sadece `public_html/dosemealti` dizinine kısıtlı hesabın kökünde `./` olabilir. Genel FTP hesabında yol farklı olabilir; tahmin etme. |
-| `TURHOST_DEPLOY_ENABLED` | Hazır olduktan sonra `true` |
+| `TURHOST_DEPLOY_ENABLED` | İsteğe bağlı: gerçek yüklemeleri geçici durdurmak için `false`; ayarlanmadıysa otomatik yayımlama etkindir |
 
-Bu iki değerden özellikle `TURHOST_REMOTE_DIR` hatalı verilirse dosyalar yanlış klasöre yüklenebilir. FTP hesabını yalnızca `dosemealti` dizinine kısıtlamak en güvenli çözümdür.
+Özellikle `TURHOST_REMOTE_DIR` hatalı verilirse dosyalar yanlış klasöre yüklenebilir. FTP hesabını yalnızca `dosemealti` dizinine kısıtlamak en güvenli çözümdür.
 
 ## 4. Önce zararsız Dry-run (otomatik yayın kapalıyken de çalışır)
 
@@ -48,7 +48,7 @@ GitHub → **Actions** → **Deploy Döşemealtı categories to Turhost (FTPS)**
 
 ## 5. Gerçek yayın
 
-Üç FTP secret'ı ve `TURHOST_REMOTE_DIR` doğrulandıktan, dry-run sorunsuz bittikten ve FTP hedef klasörünün doğru olduğundan emin olduktan sonra `TURHOST_DEPLOY_ENABLED` değişkenini `true` yap.
+Üç FTP secret'ı, `TURHOST_REMOTE_DIR` ve başarılı dry-run testinden sonra kategori dosyalarına yapılan `main` değişiklikleri otomatik gerçek yüklemeyi başlatır. İşlem durdurulmuşsa `TURHOST_DEPLOY_ENABLED` değerini sil veya `true` olarak değiştir.
 
 Aynı workflow'u yeniden çalıştır ve **dry_run: false** seç. Başarılıysa şu adresleri kontrol et:
 
@@ -57,7 +57,7 @@ Aynı workflow'u yeniden çalıştır ve **dry_run: false** seç. Başarılıysa
 - `https://harikaseylerdukkani.com/dosemealti/oyuncak/`
 - `https://harikaseylerdukkani.com/dosemealti/hediyelik-esya/`
 
-Daha sonra `main` dalında `dosemealti/**` altında yapılan her değişiklik workflow'u otomatik başlatır (`TURHOST_DEPLOY_ENABLED=true` kaldığı sürece).
+Daha sonra `main` dalında `dosemealti/assets/**` veya dört kategori klasöründe yapılan değişiklikler workflow'u otomatik başlatır. `TURHOST_DEPLOY_ENABLED=false` gerçek yüklemeleri durdurur; dry-run testleri çalışabilir.
 
 ## Güvenlik ve kapsam
 
@@ -65,5 +65,5 @@ Daha sonra `main` dalında `dosemealti/**` altında yapılan her değişiklik wo
 - Dosya silme (`delete`) **kapalı**. Sunucuda yalnızca yüklenen isimlerle eşleşen dosyalar güncellenir.
 - Hazırlık aşamasında sadece `dosemealti/assets/`, `dosemealti/bijuteri/`, `dosemealti/kirtasiye/`, `dosemealti/oyuncak/` ve `dosemealti/hediyelik-esya/` alınır.
 - **Mevcut `dosemealti/index.html`, `sitemap.xml` ve diğer sunucu dosyaları upload paketinde yoktur.** Canlı ana sayfanın navigasyon bağlantıları daha sonra, onaylı kaynakla ayrıca güncellenmelidir.
-- `TURHOST_DEPLOY_ENABLED=false` yaparak otomatik yayını anında durdurabilirsin.
+- `TURHOST_DEPLOY_ENABLED=false` yaparak gelecekteki gerçek yüklemeleri durdurabilirsin.
 - Turhost `public_html` yerine başka bir yayın kökü kullanıyorsa paneldeki **gerçek** dosya yolunu esas al.
