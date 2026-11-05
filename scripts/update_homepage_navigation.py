@@ -23,8 +23,8 @@ STYLE = """<style id="main-category-header-menu">
 .header .desktop-nav{margin-left:auto;justify-content:flex-end;gap:clamp(14px,2vw,38px)}
 .header .desktop-nav a{font-size:clamp(.77rem,.95vw,.89rem);font-weight:600;letter-spacing:.012em}
 .mobile-worlds-menu{display:none}
-@media(min-width:761px){.header .desktop-nav{display:flex!important}}
-@media(max-width:760px){
+@media(min-width:1061px){.header .desktop-nav{display:flex!important}}
+@media(max-width:1060px){
  .header .desktop-nav{display:none!important}
  .header .mobile-worlds-menu{display:block;position:relative;margin-left:auto;color:inherit;z-index:90}
  .header .mobile-worlds-menu summary{display:inline-flex;align-items:center;justify-content:center;gap:10px;min-height:40px;padding:6px 12px;list-style:none;cursor:pointer;white-space:nowrap;font-size:.9rem;font-weight:700;letter-spacing:.01em;border:1px solid currentColor;border-radius:4px}
@@ -38,8 +38,8 @@ STYLE = """<style id="main-category-header-menu">
  .header .mobile-worlds-panel a+a{border-top:1px solid rgba(19,47,37,.10)}
  .header .mobile-worlds-panel a:hover,.header .mobile-worlds-panel a:focus-visible{background:#e9ebe1}
  .header .mobile-worlds-panel .world-index{font-size:.72rem;letter-spacing:.09em;color:#a58852;font-weight:700}
- .story-dock{display:none!important}
 }
+@media(max-width:760px){.story-dock{display:none!important}}
 @media(prefers-reduced-motion:reduce){.mobile-worlds-menu .mobile-chevron{transition:none!important}}
 
 /* Center category menu; restore verified Instagram social link to the right. */
