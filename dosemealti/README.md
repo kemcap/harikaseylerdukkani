@@ -9,7 +9,7 @@ Fiziksel mağaza için statik HTML/CSS/JavaScript kategori sayfaları. WooCommer
 3. [Oyuncak](./oyuncak/)
 4. [Hediyelik Eşya](./hediyelik-esya/)
 
-Her kategoride `index.html`, `category.css`, `category.js` bulunur. Görseller `assets/` içinde tutulur. Ortak üst menü görünümü `assets/category-nav.css` dosyasındadır; mobil kategori gezintisi `assets/category-navigation.css` ve `assets/category-navigation.js` dosyalarını kullanır.
+Her kategoride `index.html` ve `category.js` bulunur. **Tüm kategori stilleri, menü ve footer için tek bir CSS dosyası kullanılır:** `assets/site.css`. Kategoriye özgü renk ve resim ayarları bu dosyada `.category-kirtasiye`, `.category-oyuncak` vb. seçicilerle ayrılmıştır. Görseller `assets/` içindedir. Mobil kategori gezinmesi `assets/category-navigation.js` kullanır.
 
 ## Üst menü ve mobil kategori gezinmesi
 
@@ -17,11 +17,11 @@ Döşemealtı canlı ana sayfasının başlık düzeni korunur: Harika Şeyler D
 
 - **Desktop / tablet (761 px ve üzeri):** `Dört dünya` başlığı dört kategoriyi ve Döşemealtı ana sayfasını içeren bir alt menü açar. Diğer canlı ana sayfa menü öğeleri değişmez.
 - **Telefon (760 px ve altı):** canlı ana sayfadaki üst menü korunur. İlk kaydırmanın ardından altta dört kategoriye ve ana sayfaya giden beş öğeli, aktif sayfayı vurgulayan sabit bir kategori gezintisi belirir; güvenli ekran alt boşluğu desteklenir.
-- Kod: `assets/category-nav.css` (mevcut üst menü ve 100svh hero), `assets/category-navigation.css` (yeni gezinme düzeni), `assets/category-navigation.js` (menü ve kaydırma görünürlüğü).
+- Kod: `assets/site.css` (üst menü, 100svh hero, mobil kategori gezinmesi, footer, tipografi) ve `assets/category-navigation.js` (menü ve kaydırma görünürlüğü).
 
 ## Ana sayfayla ortak footer ve tipografi
 
-Alt kategori sayfalarının footer HTML yapısı, yayımdaki Döşemealtı ana sayfası için kullanılan `sticky-discovery/index.html` kaynak footer'ından doğrudan alınmıştır: dört sütun, logo, Instagram, kategori bağlantıları, mağaza bağlantıları, konum, iletişim ve telif satırı. Sadece kategori bağlantıları alt sayfalara ve iç bağlantılar uygun hedefe uyarlanmıştır. `assets/category-footer.css` ana sayfanın footer tasarımını ve tipografi düzenini ortak olarak uygular: başlıklarda Georgia, normal metinlerde Inter / Segoe UI / Arial. Mevcut çevrimiçi font indirme bağımlılığı eklenmedi.
+Alt kategori sayfalarının footer HTML yapısı, yayımdaki Döşemealtı ana sayfası için kullanılan `sticky-discovery/index.html` kaynak footer'ından doğrudan alınmıştır: dört sütun, logo, Instagram, kategori bağlantıları, mağaza bağlantıları, konum, iletişim ve telif satırı. Sadece kategori bağlantıları alt sayfalara ve iç bağlantılar uygun hedefe uyarlanmıştır. `assets/site.css` ana sayfanın footer tasarımını ve tipografi düzenini ortak olarak uygular: başlıklarda Georgia, normal metinlerde Inter / Segoe UI / Arial. Mevcut çevrimiçi font indirme bağımlılığı eklenmedi.
 
 ## Yerel SEO ve indexleme
 
@@ -34,4 +34,4 @@ Alt kategori sayfalarının footer HTML yapısı, yayımdaki Döşemealtı ana s
 
 ## Yayın notu
 
-Bu GitHub deposundaki kategori dosyalarını değiştirmek Turhost üzerinde otomatik yayın yapmak **anlamına gelmez**. Ana sayfa (`/dosemealti/`) Turhost üzerindedir ve bu işlemde değiştirilmemiştir. Yayına alma sırasında ana sayfanın dört kategori bağlantısını bu yeni URL'lere yönlendirmek, Turhost'taki dosya/başlık/robots/sitemap kontrollerini yapmak gerekir.
+GitHub Actions iş akışı `.github/workflows/deploy-turhost.yml` dosyasındadır. **TURHOST_DEPLOY_ENABLED** değişkeni `true` yapılmadan yayın başlamaz. Etkinleştirildikten sonra `main` dalındaki `dosemealti/**` değişiklikleri FTPS üzerinden yalnızca dört kategori klasörünü ve `assets/` klasörünü yükler; **ana sayfa index.html, README ve mevcut Turhost sitemap.xml dosyası korunur**, uzak dosya silme kapalıdır. Önce Actions üzerinden `dry_run: true` ile test et. FTP kurulum yönergeleri: [`DEPLOYMENT.md`](./DEPLOYMENT.md). Canlı sunucudaki ana sayfa kategori bağlantılarını daha sonra ayrıca güncellemek, Turhost robots ve sitemap kontrollerini yapmak gerekir.
