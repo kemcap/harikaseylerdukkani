@@ -19,6 +19,10 @@ Döşemealtı canlı ana sayfasının başlık düzeni korunur: Harika Şeyler D
 - **Telefon (760 px ve altı):** canlı ana sayfadaki üst menü korunur. İlk kaydırmanın ardından altta dört kategoriye ve ana sayfaya giden beş öğeli, aktif sayfayı vurgulayan sabit bir kategori gezintisi belirir; güvenli ekran alt boşluğu desteklenir.
 - Kod: `assets/category-nav.css` (mevcut üst menü ve 100svh hero), `assets/category-navigation.css` (yeni gezinme düzeni), `assets/category-navigation.js` (menü ve kaydırma görünürlüğü).
 
+## Ana sayfayla ortak footer ve tipografi
+
+Alt kategori sayfalarının footer HTML yapısı, yayımdaki Döşemealtı ana sayfası için kullanılan `sticky-discovery/index.html` kaynak footer'ından doğrudan alınmıştır: dört sütun, logo, Instagram, kategori bağlantıları, mağaza bağlantıları, konum, iletişim ve telif satırı. Sadece kategori bağlantıları alt sayfalara ve iç bağlantılar uygun hedefe uyarlanmıştır. `assets/category-footer.css` ana sayfanın footer tasarımını ve tipografi düzenini ortak olarak uygular: başlıklarda Georgia, normal metinlerde Inter / Segoe UI / Arial. Mevcut çevrimiçi font indirme bağımlılığı eklenmedi.
+
 ## Yerel SEO ve indexleme
 
 - Birincil kelimeler: Döşemealtı Bijuteri, Döşemealtı Kırtasiye, Döşemealtı Oyuncak, Döşemealtı Hediyelik Eşya.
