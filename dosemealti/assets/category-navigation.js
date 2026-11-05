@@ -15,7 +15,7 @@
   menu.querySelectorAll('a').forEach(link => {
     link.addEventListener('click', () => { menu.open = false; });
   });
-  window.matchMedia('(min-width: 761px)').addEventListener?.('change', event => {
+  window.matchMedia('(min-width: 1061px)').addEventListener?.('change', event => {
     if (event.matches) menu.open = false;
   });
 })();
