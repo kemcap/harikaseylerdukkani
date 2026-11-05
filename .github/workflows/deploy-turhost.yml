@@ -4,7 +4,11 @@ on:
   push:
     branches: [main]
     paths:
-      - "dosemealti/**"
+      - "dosemealti/assets/**"
+      - "dosemealti/bijuteri/**"
+      - "dosemealti/kirtasiye/**"
+      - "dosemealti/oyuncak/**"
+      - "dosemealti/hediyelik-esya/**"
   workflow_dispatch:
     inputs:
       dry_run:
@@ -22,9 +26,10 @@ concurrency:
 
 jobs:
   deploy:
-    # Manual dry runs are permitted before activation and never upload files.
-    # Real deployments (manual or automatic) require an explicit enable flag.
-    if: ${{ vars.TURHOST_DEPLOY_ENABLED == 'true' || (github.event_name == 'workflow_dispatch' && inputs.dry_run == true) }}
+    # After successful FTPS dry-run, live push deployment is enabled by default.
+    # To pause real uploads, set TURHOST_DEPLOY_ENABLED=false in Actions Variables.
+    # Manual dry runs remain available even while live uploads are paused.
+    if: ${{ vars.TURHOST_DEPLOY_ENABLED != 'false' || (github.event_name == 'workflow_dispatch' && inputs.dry_run == true) }}
     runs-on: ubuntu-latest
     timeout-minutes: 20
 
