@@ -6,6 +6,7 @@ on:
     paths:
       - ".github/workflows/update-homepage-links.yml"
       - "scripts/update_homepage_categories.py"
+      - "scripts/update_homepage_navigation.py"
   workflow_dispatch:
     inputs:
       dry_run:
@@ -74,14 +75,15 @@ jobs:
           retention-days: 14
           if-no-files-found: error
 
-      - name: Add visible category links while preserving layout and scroll links
+      - name: Preserve homepage design and install unified 4-category navigation
         shell: bash
         run: |
           set -euo pipefail
           python3 scripts/update_homepage_categories.py original/index.html deploy/dosemealti/index.html
+          python3 scripts/update_homepage_navigation.py deploy/dosemealti/index.html deploy/dosemealti/index.html
           test -s deploy/dosemealti/index.html
           test "$(find deploy -type f | wc -l)" -eq 1
-          echo "Prepared only homepage index.html; no CSS, JS or sitemap replacement."
+          echo "Only the original homepage index.html is patched (navigation + styles); no separate CSS, JS or sitemap file is replaced."
 
       - name: Update homepage via verified FTPS (no deletion)
         if: ${{ github.event_name == 'push' || inputs.dry_run == false }}
