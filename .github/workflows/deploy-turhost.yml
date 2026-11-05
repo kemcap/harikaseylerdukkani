@@ -22,9 +22,9 @@ concurrency:
 
 jobs:
   deploy:
-    # Deliberate activation: configure FTP secrets, verify destination path,
-    # then set TURHOST_DEPLOY_ENABLED=true under GitHub Actions Variables.
-    if: ${{ vars.TURHOST_DEPLOY_ENABLED == 'true' }}
+    # Manual dry runs are permitted before activation and never upload files.
+    # Real deployments (manual or automatic) require an explicit enable flag.
+    if: ${{ vars.TURHOST_DEPLOY_ENABLED == 'true' || (github.event_name == 'workflow_dispatch' && inputs.dry_run == true) }}
     runs-on: ubuntu-latest
     timeout-minutes: 20
 
