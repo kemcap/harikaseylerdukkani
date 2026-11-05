@@ -1,0 +1,101 @@
+name: Link homepage to category pages (Turhost FTPS)
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/update-homepage-links.yml"
+      - "scripts/update_homepage_categories.py"
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: "Preview changes without uploading homepage"
+        type: boolean
+        required: true
+        default: true
+
+permissions:
+  contents: read
+
+concurrency:
+  group: turhost-dosemealti-category-deploy
+  cancel-in-progress: false
+
+jobs:
+  update-homepage:
+    # Paused only when TURHOST_DEPLOY_ENABLED=false.
+    if: ${{ vars.TURHOST_DEPLOY_ENABLED != 'false' || (github.event_name == 'workflow_dispatch' && inputs.dry_run == true) }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v5
+
+      - name: Validate destination and install lftp
+        env:
+          FTP_HOST: ${{ secrets.TURHOST_FTP_HOST }}
+          FTP_USER: ${{ secrets.TURHOST_FTP_USER }}
+          FTP_PASSWORD: ${{ secrets.TURHOST_FTP_PASSWORD }}
+          FTP_REMOTE_DIR: ${{ vars.TURHOST_REMOTE_DIR || secrets.TURHOST_REMOTE_DIR }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -n "$FTP_HOST" && test -n "$FTP_USER" && test -n "$FTP_PASSWORD"
+          if [[ "$FTP_REMOTE_DIR" != "./" ]]; then
+            echo "::error::For homepage safety, TURHOST_REMOTE_DIR must be ./ (FTP user rooted in /home/harikase/public_html/dosemealti)."
+            exit 1
+          fi
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq lftp
+
+      - name: Download existing live homepage over verified FTPS
+        env:
+          FTP_HOST: ${{ secrets.TURHOST_FTP_HOST }}
+          FTP_USER: ${{ secrets.TURHOST_FTP_USER }}
+          FTP_PASSWORD: ${{ secrets.TURHOST_FTP_PASSWORD }}
+          FTP_REMOTE_DIR: ${{ vars.TURHOST_REMOTE_DIR || secrets.TURHOST_REMOTE_DIR }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p original
+          timeout 120s lftp -u "$FTP_USER","$FTP_PASSWORD" \
+            -e "set ftp:ssl-force true; set ssl:verify-certificate true; set ssl:check-hostname true; set net:max-retries 2; cd $FTP_REMOTE_DIR; get index.html -o $GITHUB_WORKSPACE/original/index.html; bye" \
+            "ftp://$FTP_HOST:21"
+          test -s original/index.html
+          echo "Downloaded existing homepage; preserving current content and markup."
+          sha256sum original/index.html
+
+      - name: Keep an untouched copy of the original homepage
+        uses: actions/upload-artifact@v4
+        with:
+          name: turhost-homepage-original-${{ github.run_id }}
+          path: original/index.html
+          retention-days: 14
+          if-no-files-found: error
+
+      - name: Add visible category links while preserving layout and scroll links
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 scripts/update_homepage_categories.py original/index.html deploy/dosemealti/index.html
+          test -s deploy/dosemealti/index.html
+          test "$(find deploy -type f | wc -l)" -eq 1
+          echo "Prepared only homepage index.html; no CSS, JS or sitemap replacement."
+
+      - name: Update homepage via verified FTPS (no deletion)
+        if: ${{ github.event_name == 'push' || inputs.dry_run == false }}
+        uses: airvzxf/ftp-deployment-action@v3.1.0
+        with:
+          server: ftp://${{ secrets.TURHOST_FTP_HOST }}:21
+          user: ${{ secrets.TURHOST_FTP_USER }}
+          password: ${{ secrets.TURHOST_FTP_PASSWORD }}
+          local_dir: "./deploy/dosemealti/"
+          remote_dir: ${{ vars.TURHOST_REMOTE_DIR || secrets.TURHOST_REMOTE_DIR }}
+          delete: "false"
+          max_retries: "2"
+          ftp_ssl_allow: "true"
+          ssl_verify_certificate: "true"
+          ssl_check_hostname: "true"
+          lftp_settings: "set ftp:ssl-force true;"
+          dry_run: "false"
