@@ -37,16 +37,18 @@ Aynı ekranda **Variables → New repository variable**:
 
 Bu iki değerden özellikle `TURHOST_REMOTE_DIR` hatalı verilirse dosyalar yanlış klasöre yüklenebilir. FTP hesabını yalnızca `dosemealti` dizinine kısıtlamak en güvenli çözümdür.
 
-## 4. Önce zararsız Dry-run
+## 4. Önce zararsız Dry-run (otomatik yayın kapalıyken de çalışır)
 
 GitHub → **Actions** → **Deploy Döşemealtı categories to Turhost (FTPS)** → **Run workflow**.
 
 - Branch: `main`
-- **dry_run: true**
+- **dry_run: true** (bu test için `TURHOST_DEPLOY_ENABLED` değerini `true` yapmana gerek yok; değişkeni boş veya `false` bırak)
 - Çalıştır ve log'u kontrol et. Bağlantı kurulmalı; dosyalar yüklenmemeli.
 - Hata varsa hostname, FTP yetkisi, sunucu sertifikası ve uzak dizini doğrula. `ssl_verify_certificate` ayarını kapatma; doğru hostname kullan.
 
 ## 5. Gerçek yayın
+
+Üç FTP secret'ı ve `TURHOST_REMOTE_DIR` doğrulandıktan, dry-run sorunsuz bittikten ve FTP hedef klasörünün doğru olduğundan emin olduktan sonra `TURHOST_DEPLOY_ENABLED` değişkenini `true` yap.
 
 Aynı workflow'u yeniden çalıştır ve **dry_run: false** seç. Başarılıysa şu adresleri kontrol et:
 
