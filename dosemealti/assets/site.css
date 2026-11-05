@@ -284,3 +284,5 @@ h1.category-seo-h1,.eyebrow{font-family:var(--sans)}
 }
 /* The bottom category dock should not obscure the copied homepage footer. */
 @media(max-width:760px){.site-footer{padding-bottom:calc(95px + env(safe-area-inset-bottom,0px))}}
+
+/* Turhost FTPS deployment marker 2026-11-05: category styles, dark green #132F25. */
