@@ -286,3 +286,36 @@ h1.category-seo-h1,.eyebrow{font-family:var(--sans)}
 @media(max-width:760px){.site-footer{padding-bottom:calc(95px + env(safe-area-inset-bottom,0px))}}
 
 /* Turhost FTPS deployment marker 2026-11-05: category styles, dark green #132F25. */
+
+
+/* Unified four-category header navigation — 2026-11-05.
+   Desktop: four direct links only. Mobile: Dört dünya disclosure, four links.
+   Logo continues to link to the landing page; it is not an extra menu item. */
+.header .desktop-nav{margin-left:auto;justify-content:flex-end;gap:clamp(14px,2vw,38px)}
+.header .desktop-nav a{font-size:clamp(.77rem,.95vw,.89rem);font-weight:600;letter-spacing:.012em}
+.header .desktop-nav a[aria-current="page"]{color:#e4c998}
+.header.scrolled .desktop-nav a[aria-current="page"]{color:#132F25}
+.header .desktop-nav a[aria-current="page"]::after{right:0}
+.mobile-worlds-menu{display:none}
+@media(min-width:761px){
+ .header .desktop-nav{display:flex!important}
+}
+@media(max-width:760px){
+ .header .desktop-nav{display:none!important}
+ .header .mobile-worlds-menu{display:block;position:relative;margin-left:auto;color:inherit;z-index:90}
+ .header .mobile-worlds-menu summary{display:inline-flex;align-items:center;justify-content:center;gap:10px;min-height:40px;padding:6px 12px;list-style:none;cursor:pointer;white-space:nowrap;font-size:.9rem;font-weight:700;letter-spacing:.01em;border:1px solid currentColor;border-radius:4px}
+ .header .mobile-worlds-menu summary::-webkit-details-marker{display:none}
+ .header .mobile-worlds-menu summary::marker{content:""}
+ .header .mobile-worlds-menu summary:focus-visible{outline:2px solid #c2a268;outline-offset:4px}
+ .header .mobile-worlds-menu .mobile-chevron{display:inline-block;font-size:1.2rem;line-height:1;transition:transform .2s ease}
+ .header .mobile-worlds-menu[open] .mobile-chevron{transform:rotate(180deg)}
+ .header .mobile-worlds-panel{display:flex;flex-direction:column;position:absolute;right:0;top:calc(100% + 10px);width:min(330px,calc(100vw - 28px));padding:10px;background:#faf6ed;color:#132F25;border:1px solid #d7c5a4;border-radius:9px;box-shadow:0 18px 46px rgba(9,29,21,.26);z-index:100}
+ .header .mobile-worlds-panel a{display:flex;align-items:center;gap:14px;padding:14px 12px;min-height:48px;font-size:.93rem;font-weight:600;border-radius:5px;text-decoration:none}
+ .header .mobile-worlds-panel a+a{border-top:1px solid rgba(19,47,37,.10)}
+ .header .mobile-worlds-panel a:hover,.header .mobile-worlds-panel a:focus-visible{background:#e9ebe1}
+ .header .mobile-worlds-panel a[aria-current="page"]{background:#132F25;color:#faf6ed}
+ .header .mobile-worlds-panel .world-index{font-size:.72rem;letter-spacing:.09em;color:#a58852;font-weight:700}
+ .mobile-world-dock{display:none!important}
+ .site-footer{padding-bottom:25px}
+}
+@media(prefers-reduced-motion:reduce){.mobile-worlds-menu .mobile-chevron{transition:none!important}}
