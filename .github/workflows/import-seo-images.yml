@@ -1,0 +1,79 @@
+name: Import Turkish SEO WebP images
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "harika-seo-import.zip"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  actions: write
+
+concurrency:
+  group: harika-seo-image-import
+  cancel-in-progress: false
+
+jobs:
+  import:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - name: Checkout current main
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+
+      - name: Validate ZIP and extract WebP images to categories
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -f harika-seo-import.zip
+          python3 - <<'PY'
+          from pathlib import Path, PurePosixPath
+          from zipfile import ZipFile
+          root=Path(".")
+          allowed=("dosemealti/assets/seo/taki-ve-aksesuar/",
+                   "dosemealti/assets/seo/canta-ve-kirtasiye/")
+          with ZipFile("harika-seo-import.zip") as z:
+              entries=[i for i in z.infolist() if not i.is_dir() and i.filename.endswith(".webp")]
+              if len(entries)!=19:
+                  raise SystemExit(f"Expected 19 distinct WebP images, got {len(entries)}")
+              for i in entries:
+                  p=PurePosixPath(i.filename)
+                  if p.is_absolute() or ".." in p.parts or not str(p).startswith(allowed):
+                      raise SystemExit(f"Forbidden ZIP path: {i.filename}")
+                  if i.file_size>2_000_000 or i.file_size<1000:
+                      raise SystemExit(f"Unexpected file size: {i.filename}")
+                  data=z.read(i)
+                  if not (data[:4]==b"RIFF" and data[8:12]==b"WEBP"):
+                      raise SystemExit(f"Not a WebP image: {i.filename}")
+                  out=root.joinpath(*p.parts)
+                  out.parent.mkdir(parents=True,exist_ok=True)
+                  out.write_bytes(data)
+                  print("Imported",out)
+          PY
+
+      - name: Commit image files to main and remove temporary ZIP
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add dosemealti/assets/seo
+          git rm -- harika-seo-import.zip
+          git diff --cached --stat
+          if ! git diff --cached --quiet; then
+            git commit -m "assets: publish 19 SEO-named Turkish WebP images"
+            git push origin HEAD:main
+          fi
+
+      - name: Trigger existing Turhost category deployment
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          gh workflow run deploy-turhost.yml --repo "${{ github.repository }}" --ref main -f dry_run=false
+          echo "Turhost deployment requested; review its separate Actions run for completion."
