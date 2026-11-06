@@ -371,3 +371,25 @@ h1.category-seo-h1,.eyebrow{font-family:var(--sans)}
  .header-compact .header .mobile-worlds-menu summary{padding:4px 8px;min-height:28px}
 }
 @media(prefers-reduced-motion:reduce){.header .mobile-worlds-menu summary{transition:none}}
+
+
+/* 2026-11-06: SEO görsel seçkisi — yatay, kaydırılabilir, responsive. */
+.seo-gallery{padding-top:clamp(54px,7vw,105px);padding-bottom:clamp(56px,8vw,118px);overflow:hidden}
+.seo-gallery-heading{display:flex;justify-content:space-between;align-items:end;gap:24px;margin-bottom:28px}
+.seo-gallery-heading .eyebrow{color:var(--muted);letter-spacing:.14em}
+.seo-gallery-heading h2{font:400 clamp(2.15rem,4.5vw,4.4rem)/1.08 var(--serif);letter-spacing:-.045em;margin-top:13px;max-width:720px}
+.seo-gallery-heading p{font-size:.82rem;color:var(--muted);white-space:nowrap;margin-bottom:6px}
+.seo-gallery-rail{display:flex;gap:clamp(12px,1.8vw,22px);overflow-x:auto;overscroll-behavior-inline:contain;scroll-snap-type:x mandatory;scrollbar-width:thin;scrollbar-color:var(--gold) transparent;padding:3px 0 18px;outline-offset:4px}
+.seo-gallery-rail:focus-visible{outline:2px solid var(--gold)}
+.seo-gallery-card{flex:0 0 clamp(212px,27vw,332px);scroll-snap-align:start;min-width:0;margin:0}
+.seo-gallery-card img{width:100%;height:auto;aspect-ratio:1;object-fit:cover;border-radius:10px;box-shadow:0 9px 24px rgba(25,57,42,.12)}
+.seo-gallery-card figcaption{font:600 .91rem/1.4 var(--sans);color:var(--ink);margin-top:12px}
+.seo-gallery-note{font-size:.8rem;line-height:1.65;color:var(--muted);margin-top:5px}
+@media(max-width:700px){
+  .seo-gallery{padding-top:54px;padding-bottom:64px}
+  .seo-gallery-heading{display:block;margin-bottom:18px}
+  .seo-gallery-heading h2{font-size:clamp(2.1rem,8vw,3rem)}
+  .seo-gallery-heading p{margin-top:13px;white-space:normal}
+  .seo-gallery-card{flex-basis:min(73vw,270px)}
+  .seo-gallery-rail{scroll-padding-inline:0}
+}
