@@ -34,7 +34,6 @@
   }
   let headerAnchor = window.scrollY;
   let headerDirection = 0;
-  let lastY = window.scrollY;
   let raf = 0;
   function onScroll() {
     raf = 0;
@@ -63,7 +62,6 @@
       document.documentElement.classList.toggle('header-compact', direction > 0 && y > 80);
       headerAnchor = y;
     }
-    lastY = y;
   }
   window.addEventListener('scroll', () => { if (!raf) raf = requestAnimationFrame(onScroll); }, { passive: true });
   reducedMotion.addEventListener?.('change', onScroll);

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
-"""Replace only the header navigation of the existing Turhost homepage.
+"""Update the header navigation and hero accents of the existing Turhost homepage.
 
-Preserves all other content/animations and supports repeated idempotent runs.
+Preserves the homepage structure and supports repeated idempotent runs.
 Desktop shows four direct category links; mobile uses the "Dört dünya"
 disclosure with only four category links.
 """
@@ -90,6 +90,12 @@ STYLE = """<style id="main-category-header-menu">
 }
 @media(prefers-reduced-motion:reduce){.header .mobile-worlds-menu summary{transition:none}}
 
+.hero-stamp span{
+  display:inline-block;color:#93703b;
+  transform:rotate(var(--home-star-angle,0deg));
+}
+@media(prefers-reduced-motion:reduce){.hero-stamp span{transform:none}}
+
 </style>"""
 
 BEHAVIOR = """<script id="main-category-header-behavior">
@@ -111,6 +117,23 @@ BEHAVIOR = """<script id="main-category-header-behavior">
   window.matchMedia('(min-width: 1061px)').addEventListener?.('change', event => {
     if (event.matches) menu.open = false;
   });
+})();
+(() => {
+  const star = document.querySelector('.hero-stamp span');
+  if (!star) return;
+  const motion = window.matchMedia('(prefers-reduced-motion: reduce)');
+  let frame = 0;
+  const update = () => {
+    frame = 0;
+    const angle = motion.matches ? 0 : Math.min(Math.max(window.scrollY, 0), window.innerHeight) * .105;
+    star.style.setProperty('--home-star-angle', angle + 'deg');
+  };
+  const schedule = () => { if (!frame) frame = requestAnimationFrame(update); };
+  window.addEventListener('scroll', schedule, { passive: true });
+  window.addEventListener('resize', schedule);
+  window.addEventListener('pageshow', schedule);
+  motion.addEventListener?.('change', schedule);
+  schedule();
 })();
 </script>"""
 
@@ -162,6 +185,12 @@ def apply(source):
             raise ValueError("Cannot replace existing menu JS")
     else:
         html = html.replace("</body>", BEHAVIOR + "\n</body>", 1)
+
+    # CSS hides these photos on narrow screens. Lazy loading avoids fetching
+    # them there while leaving the main hero image high-priority.
+    html = re.sub(r'(<figure class="hero-float float-(?:one|two)"[^>]*><img )(?!loading=)',
+                  r'\1loading="lazy" ', html)
+    html = html.replace("Bir dükkan, dört dünya.", "Bir dükkân, dört dünya.")
 
     match = re.search(r'<header\b[^>]*class="header"[^>]*>.*?</header>', html, re.S)
     result_header = match.group(0)
