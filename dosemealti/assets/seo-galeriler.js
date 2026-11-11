@@ -11,8 +11,6 @@ window.HarikaSeoImages={"bijuteri":{"folder":"taki-ve-aksesuar","items":[["altin
   var base="../assets/seo/"+config.folder+"/";
   var url=function(item){return base+item[0]};
   var images=config.items;
-  var hero=document.querySelector(".hero-photo-frame img");
-  if(!hero)return;
   function replaceImg(img,item){
     if(!img||!item)return;
     img.src=url(item);
@@ -67,17 +65,9 @@ window.HarikaSeoImages={"bijuteri":{"folder":"taki-ve-aksesuar","items":[["altin
     section.append(header,rail,note);
     discovery.insertAdjacentElement("afterend",section);
   }
-  /* Önce ana görseli yokla: henüz yüklenmeyen medya için mevcut tasarımı koru. */
-  var probe=new Image();
-  probe.onload=function(){
-    if(match[1]!=="bijuteri" && match[1]!=="kirtasiye")replaceImg(hero,images[0]);
-    for(var i=0;i<3;i++){
-      replaceImg(document.querySelector('.visual-layer[data-visual="'+i+'"] img'),images[i+1]);
-      replaceImg(document.querySelector('.discovery-chapter[data-chapter="'+i+'"] .chapter-mobile-photo img'),images[i+1]);
-    }
-    var og=document.querySelector('meta[property="og:image"]');
-    if(og && match[1]!=="bijuteri" && match[1]!=="kirtasiye")og.setAttribute("content",new URL(url(images[0]),location.href).href);
-    renderGallery();
-  };
-  probe.src=url(images[0]);
+  for(var i=0;i<3;i++){
+    replaceImg(document.querySelector('.visual-layer[data-visual="'+i+'"] img'),images[i+1]);
+    replaceImg(document.querySelector('.discovery-chapter[data-chapter="'+i+'"] .chapter-mobile-photo img'),images[i+1]);
+  }
+  renderGallery();
 })();

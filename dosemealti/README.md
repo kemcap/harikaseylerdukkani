@@ -9,7 +9,7 @@ Fiziksel mağaza için statik HTML/CSS/JavaScript kategori sayfaları. WooCommer
 3. [Oyuncak](./oyuncak/)
 4. [Hediyelik Eşya](./hediyelik-esya/)
 
-Her kategoride `index.html` ve `category.js` bulunur. **Tüm kategori stilleri, menü ve footer için tek bir CSS dosyası kullanılır:** `assets/site.css`. Kategoriye özgü renk ve resim ayarları bu dosyada `.category-kirtasiye`, `.category-oyuncak` vb. seçicilerle ayrılmıştır. Görseller `assets/` içindedir. Mobil kategori gezinmesi `assets/category-navigation.js` kullanır.
+Her kategoride bir `index.html` bulunur. Ortak kaydırma ve bölüm animasyonları `assets/category.js` dosyasından yüklenir. **Tüm kategori stilleri, menü ve footer için tek bir CSS dosyası kullanılır:** `assets/site.css`. Hero çerçevesi ve renk paleti ortaktır. Kırtasiye görselinin odak noktası `.category-kirtasiye` seçicisiyle ayarlanır. Görseller `assets/` içindedir. Mobil kategori gezinmesi `assets/category-navigation.js` kullanır.
 
 ## Üst menü ve mobil kategori gezinmesi
 
