@@ -1,4 +1,4 @@
-name: Deploy Döşemealtı categories to Turhost (FTPS)
+name: Deploy Döşemealtı categories and blog to Turhost (FTPS)
 
 on:
   push:
@@ -9,6 +9,7 @@ on:
       - "dosemealti/kirtasiye/**"
       - "dosemealti/oyuncak/**"
       - "dosemealti/hediyelik-esya/**"
+      - "dosemealti/blog/**"
   workflow_dispatch:
     inputs:
       dry_run:
@@ -76,13 +77,14 @@ jobs:
           fi
           echo "FTP settings present. The remote directory must point to the existing /dosemealti/ folder (or a restricted FTP account's root)."
 
-      - name: Stage category files only — keep existing Turhost homepage and sitemap untouched
+      - name: Stage category and blog files only — keep existing Turhost homepage and sitemap untouched
         shell: bash
         run: |
           set -euo pipefail
           mkdir -p deploy/dosemealti
-          cp -R dosemealti/assets dosemealti/bijuteri dosemealti/kirtasiye dosemealti/oyuncak dosemealti/hediyelik-esya deploy/dosemealti/
+          cp -R dosemealti/assets dosemealti/bijuteri dosemealti/kirtasiye dosemealti/oyuncak dosemealti/hediyelik-esya dosemealti/blog deploy/dosemealti/
           test -f deploy/dosemealti/assets/site.css
+          test -f deploy/dosemealti/blog/index.html
           test ! -e deploy/dosemealti/index.html
           test ! -e deploy/dosemealti/sitemap.xml
           find deploy/dosemealti -type f | sort
