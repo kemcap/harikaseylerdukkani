@@ -36,3 +36,13 @@ Alt kategori sayfalarının footer HTML yapısı, yayımdaki Döşemealtı ana s
 ## Yayın notu
 
 GitHub Actions iş akışı `.github/workflows/deploy-turhost.yml` dosyasındadır. Başarılı FTPS testinden sonra `main` dalındaki kategori dosyaları için otomatik gerçek FTP yüklemesi etkinleştirildi. İstenirse **TURHOST_DEPLOY_ENABLED** değişkenini `false` yaparak gerçek yüklemeler durdurulabilir; `dry_run: true` testleri yine çalışır. `main` dalındaki kategori dosyası veya `assets/` değişiklikleri FTPS üzerinden yalnızca dört kategori klasörünü ve `assets/` klasörünü yükler; **ana sayfa index.html, README ve mevcut Turhost sitemap.xml dosyası korunur**, uzak dosya silme kapalıdır. Önce Actions üzerinden `dry_run: true` ile test et. FTP kurulum yönergeleri: [`DEPLOYMENT.md`](./DEPLOYMENT.md). Canlı sunucudaki ana sayfa kategori bağlantılarını daha sonra ayrıca güncellemek, Turhost robots ve sitemap kontrollerini yapmak gerekir.
+
+## Harika Fikirler – blog (taslak inceleme)
+
+- `blog/index.html`: marka çizgisinde, mobil uyumlu editoryal blog arşivi.
+- Üç özgün Türkçe rehber: `blog/dogum-gunu-hediyesi-nasil-secilir/`, `blog/cocuklar-icin-oyuncak-secerken/`, `blog/kucuk-butceyle-anlamli-hediyeler/`.
+- `assets/blog.css` yalnızca blog tasarımına aittir; ortak üst menü ve footer `assets/site.css` üzerinden gelir. Mevcut kategori sayfalarındaki Blog bağlantısı ürün dünyalarından ayrı tutulur.
+- Blog sayfaları canonical/OG meta, uygun Article veya CollectionPage yapılandırılmış veri ve kategori iç bağlantıları içerir. Gerçek ürünlerin mevcut olduğu veya fiyatının sabit olduğu iddia edilmez.
+- FTPS iş akışı artık `blog/` klasörünü de gönderir, fakat Turhost ana sayfasını ve uzaktaki `sitemap.xml` dosyasını korur. Yeni URL'leri canlı `sitemap.xml` içine güvenle **birleştir**, mevcut site haritasının üzerine yazma.
+- Canlı ana sayfa navigasyonuna blog bağlantısı eklemek için Turhost'taki ana sayfa şablonunu ayrıca kontrollü şekilde güncelle. Ana sayfaya bu daldaki değişikliklerle otomatik müdahale edilmez.
+- Yayından önce editoryal kontrol yap: metin, görsel-ürün uyumu, mobil görünüm, iç bağlantılar, güncel stok/kampanya iddiaları.
