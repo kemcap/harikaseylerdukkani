@@ -383,3 +383,10 @@ h1.category-seo-h1,.eyebrow{font-family:var(--sans)}
   .seo-gallery-card{flex-basis:min(73vw,270px)}
   .seo-gallery-rail{scroll-padding-inline:0}
 }
+
+/* Harika Fikirler blog link: separate from the four product worlds. */
+.header .header-actions{gap:clamp(8px,1.1vw,17px)}
+.header .header-blog-link{color:inherit;display:inline-flex;align-items:center;justify-content:center;min-height:40px;font-size:.84rem;font-weight:700;letter-spacing:.012em;white-space:nowrap;transition:color .2s}
+.header .header-blog-link:hover,.header .header-blog-link:focus-visible{color:#e4c998}
+.header.scrolled .header-blog-link:hover{color:#987644}
+@media(max-width:420px){.header .header-blog-link{font-size:.75rem;min-height:34px}.header .header-actions{gap:3px}.header .brand{width:96px}}
