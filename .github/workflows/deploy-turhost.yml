@@ -4,6 +4,7 @@ on:
   push:
     branches: [main]
     paths:
+      - ".github/workflows/deploy-turhost.yml"
       - "dosemealti/assets/**"
       - "dosemealti/bijuteri/**"
       - "dosemealti/kirtasiye/**"
@@ -103,6 +104,29 @@ jobs:
           python3 scripts/render_shared_components.py --site-root deploy/dosemealti --min-pages 8
           python3 scripts/render_shared_components.py --site-root deploy/dosemealti --min-pages 8 --check
 
+      - name: Version the blog stylesheet by content
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PYTHON'
+          import hashlib
+          import re
+          from pathlib import Path
+
+          site = Path("deploy/dosemealti")
+          version = hashlib.sha256((site / "assets/blog.css").read_bytes()).hexdigest()
+          for page in sorted((site / "blog").rglob("index.html")):
+              html = page.read_bytes()
+              updated, count = re.subn(
+                  rb'(href="(?:\.\./)+assets/blog\.css)(?:\?[^"]*)?"',
+                  rb'\g<1>?v=' + version.encode("ascii") + b'"',
+                  html,
+              )
+              if count != 1:
+                  raise SystemExit(f"{page}: expected one blog stylesheet link, found {count}")
+              page.write_bytes(updated)
+          PYTHON
+
       - name: Upload via encrypted explicit FTPS (no server-side deletes)
         uses: airvzxf/ftp-deployment-action@v3.1.0
         with:
@@ -118,3 +142,31 @@ jobs:
           ssl_check_hostname: "true"
           lftp_settings: "set ftp:ssl-force true;"
           dry_run: ${{ github.event_name == 'workflow_dispatch' && inputs.dry_run && 'true' || 'false' }}
+
+      - name: Verify the public blog matches the deployed files
+        if: ${{ github.event_name != 'workflow_dispatch' || inputs.dry_run != true }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd deploy/dosemealti
+          version=$(sha256sum assets/blog.css | cut -d ' ' -f 1)
+          downloaded=$(mktemp)
+          trap 'rm -f "$downloaded"' EXIT
+          verify() {
+            local file="$1" url="$2"
+            for attempt in 1 2 3; do
+              if curl --fail --silent --show-error --compressed --max-time 20 \
+                  "https://harikaseylerdukkani.com/dosemealti/$url" -o "$downloaded" &&
+                  cmp -s "$file" "$downloaded"; then
+                echo "Verified $url"
+                return 0
+              fi
+              if [[ "$attempt" != 3 ]]; then sleep 5; fi
+            done
+            echo "::error::Public response does not match staged file: $url"
+            return 1
+          }
+          verify assets/blog.css "assets/blog.css?v=$version"
+          while IFS= read -r -d '' page; do
+            verify "$page" "${page%index.html}"
+          done < <(find blog -name index.html -print0)
