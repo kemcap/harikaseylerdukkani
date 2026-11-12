@@ -180,3 +180,16 @@
  .blog-page .blog-pillar-footnote{gap:5px}
 }
 @media(prefers-reduced-motion:reduce){.blog-page .blog-pillar-grid a{transition:none}}
+
+.blog-archive-controls{display:grid;grid-template-columns:minmax(0,2fr) minmax(0,1fr);gap:16px;margin-bottom:12px}
+.blog-archive-field{display:grid;gap:6px;min-width:0}
+.blog-archive-field label{color:var(--blog-green);font-size:.88rem;font-weight:700}
+.blog-archive-field input,.blog-archive-field select,.blog-archive-pagination button{box-sizing:border-box;min-width:0;min-height:46px;padding:10px 14px;border:1px solid #879389;border-radius:6px;background:#fffcf6;color:var(--blog-green);font:inherit}
+.blog-archive-field input::placeholder{color:#54675b}
+.blog-archive-field :focus-visible,.blog-archive-pagination button:focus-visible{outline:2px solid var(--blog-green);outline-offset:3px}
+.blog-archive-status{margin:0 0 20px;color:#465c4d;font-size:.9rem;scroll-margin-top:100px}
+.blog-archive-pagination{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:12px;margin-top:32px;color:var(--blog-green);font-size:.9rem}
+.blog-archive-pagination button:enabled{cursor:pointer}
+.blog-archive-pagination button:disabled{opacity:.55}
+.blog-archive-controls[hidden],.blog-post-grid .blog-card[hidden],.blog-archive-pagination[hidden]{display:none}
+@media(max-width:580px){.blog-archive-controls{grid-template-columns:minmax(0,1fr);gap:12px}}
