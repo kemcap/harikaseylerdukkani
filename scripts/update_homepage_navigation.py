@@ -1,22 +1,13 @@
 #!/usr/bin/env python3
-"""Update the header navigation and hero accents of the existing Turhost homepage.
+"""Preserve homepage navigation behavior and styling before global shell rendering.
 
-Preserves the homepage structure and supports repeated idempotent runs.
-Desktop shows four direct category links; mobile uses the "Dört dünya"
-disclosure with only four category links.
+The header and footer markup is exclusively authored in dosemealti/components/.
+This script adds the existing responsive navigation CSS and interactions to the
+downloaded live homepage, while the final build stage injects canonical markup.
 """
 import argparse
 import re
 from pathlib import Path
-
-CATEGORIES = (
-    ("bijuteri", "Bijuteri & Aksesuar"),
-    ("kirtasiye", "Kırtasiye"),
-    ("oyuncak", "Oyuncak"),
-    ("hediyelik-esya", "Hediyelik Eşya"),
-)
-
-ACTIONS = """<div class="header-actions"><a class="header-instagram" href="https://www.instagram.com/_harikaseylerdukkani/" target="_blank" rel="noopener noreferrer" aria-label="Harika Şeyler Dükkanı – Instagram"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true" focusable="false"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg></a></div>"""
 
 STYLE = """<style id="main-category-header-menu">
 /* Harika unified primary navigation: 4 links on desktop; dropdown on mobile. */
@@ -137,40 +128,22 @@ BEHAVIOR = """<script id="main-category-header-behavior">
 })();
 </script>"""
 
-def apply(source):
+def apply(source: str) -> str:
     if not all(x in source for x in ("<html", "</head>", "</body>", "</html>")):
-        raise ValueError("Not a complete HTML page: upload blocked")
+        raise ValueError("Not a complete homepage: upload blocked")
     if "harikaseylerdukkani.com/dosemealti/" not in source:
         raise ValueError("Unexpected canonical: upload blocked")
     if '<nav class="story-dock"' not in source:
         raise ValueError("Unrecognized homepage: upload blocked")
-    header_match = re.search(r'<header\b[^>]*class="header"[^>]*>.*?</header>', source, re.S)
-    if header_match is None:
-        raise ValueError("Existing header not found: upload blocked")
-    old_header = header_match.group(0)
-    brand_match = re.search(r'<a class="brand"[^>]*>.*?</a>', old_header, re.S)
-    if not brand_match:
-        raise ValueError("Original brand/logo link not found: upload blocked")
-    brand = brand_match.group(0)
-    desktop = "".join(
-        f'<a href="/dosemealti/{slug}/">{label}</a>'
-        for slug, label in CATEGORIES
-    )
-    mobile = "".join(
-        f'<a href="/dosemealti/{slug}/"><span class="world-index">{idx:02d}</span>{label}</a>'
-        for idx, (slug, label) in enumerate(CATEGORIES, 1)
-    )
-    new_header = (
-        '<header class="header">'
-        + brand
-        + '<nav class="desktop-nav" aria-label="Ürün kategorileri">'
-        + desktop + '</nav>'
-        + '<details class="mobile-worlds-menu"><summary>Dört dünya '
-        + '<span class="mobile-chevron" aria-hidden="true">⌄</span></summary>'
-        + '<nav class="mobile-worlds-panel" aria-label="Ürün kategorileri">'
-        + mobile + '</nav></details>' + ACTIONS + '</header>'
-    )
-    html = source[:header_match.start()] + new_header + source[header_match.end():]
+    original_header = re.search(
+        r'<header\b[^>]*class="header"[^>]*>.*?</header>', source, flags=re.S)
+    if original_header is None or 'class="brand"' not in original_header.group(0):
+        raise ValueError("Original homepage header/brand not found")
+    if not re.search(r'<footer\b[^>]*class="site-footer"[^>]*>.*?</footer>',
+                     source, flags=re.S):
+        raise ValueError("Original homepage footer not found")
+
+    html = source
     if 'id="main-category-header-menu"' in html:
         html, count = re.subn(r'<style id="main-category-header-menu">.*?</style>',
                               lambda _: STYLE, html, count=1, flags=re.S)
@@ -186,28 +159,13 @@ def apply(source):
     else:
         html = html.replace("</body>", BEHAVIOR + "\n</body>", 1)
 
-    # CSS hides these photos on narrow screens. Lazy loading avoids fetching
-    # them there while leaving the main hero image high-priority.
+    # Preserve the live story, add lazy loading to decorative floating photos.
     html = re.sub(r'(<figure class="hero-float float-(?:one|two)"[^>]*><img )(?!loading=)',
                   r'\1loading="lazy" ', html)
     html = html.replace("Bir dükkan, dört dünya.", "Bir dükkân, dört dünya.")
-
-    match = re.search(r'<header\b[^>]*class="header"[^>]*>.*?</header>', html, re.S)
-    result_header = match.group(0)
-    assert result_header.count('<nav class="desktop-nav"') == 1
-    assert result_header.count('<details class="mobile-worlds-menu"') == 1
-    assert result_header.count('<a href="/dosemealti/') == 8
-    assert result_header.count('class="header-instagram"') == 1
-    assert result_header.count('https://www.instagram.com/_harikaseylerdukkani/') == 1
-    assert "Yakından bak" not in result_header
-    assert "Sık sorulanlar" not in result_header
-    assert "Döşemealtı Ana Sayfa" not in result_header
-    assert "Online-Mağazamız" not in result_header
-    assert 'href="#dunyalar"' not in result_header
-    for slug, _ in CATEGORIES:
-        assert result_header.count(f'href="/dosemealti/{slug}/"') == 2
-    print("Validated: 4 centered desktop links, 4 mobile links, Instagram right; brand and story preserved.")
+    print("Homepage nav CSS/behavior ready; global renderer supplies all markup.")
     return html
+
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
