@@ -43,6 +43,42 @@ jobs:
           python3 scripts/render_shared_components.py --site-root preview/dosemealti --page preview/dosemealti/index.html --expect-pages 1
           python3 scripts/render_shared_components.py --site-root preview/dosemealti --page preview/dosemealti/index.html --expect-pages 1 --check
 
+      - name: Provide complete local assets and real homepage base stylesheet
+        shell: bash
+        run: |
+          set -euo pipefail
+          cp -R dosemealti/assets preview/dosemealti/assets
+          cp sticky-discovery/style.css preview/dosemealti/style.css
+
+      - name: Set up Python for browser-based responsive audit
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install Playwright for Chrome rendering
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m pip install --disable-pip-version-check playwright==1.55.0
+          if ! command -v google-chrome >/dev/null && ! command -v google-chrome-stable >/dev/null && ! command -v chromium >/dev/null; then
+            python3 -m playwright install --with-deps chromium
+          fi
+
+      - name: Real browser responsive UI/UX audit (320–1440px)
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 tests/visual_audit_blog.py
+
+      - name: Keep screenshots and per-viewport UI diagnostics
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: harika-blog-responsive-preview
+          path: ui-audit/
+          if-no-files-found: warn
+          retention-days: 7
+
       - name: Verify all public-page shells and important references
         shell: bash
         run: |
