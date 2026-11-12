@@ -1,0 +1,65 @@
+name: Validate Harika shared page components
+
+on:
+  pull_request:
+    paths:
+      - "dosemealti/**"
+      - "sticky-discovery/index.html"
+      - "scripts/**"
+      - "tests/**"
+      - ".github/workflows/test-shared-components.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build-check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - name: Check out branch
+        uses: actions/checkout@v5
+
+      - name: Test component renderer and homepage safety
+        run: python3 -m unittest discover -s tests -p 'test_shared_components.py' -v
+
+      - name: Assemble static category and blog preview (no FTP)
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p preview/dosemealti
+          cp -R dosemealti/bijuteri dosemealti/kirtasiye dosemealti/oyuncak dosemealti/hediyelik-esya dosemealti/blog preview/dosemealti/
+          python3 scripts/render_shared_components.py --site-root preview/dosemealti --expect-pages 8
+          python3 scripts/render_shared_components.py --site-root preview/dosemealti --expect-pages 8 --check
+
+      - name: Safely assemble homepage from existing design snapshot (no FTP)
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 scripts/update_homepage_categories.py sticky-discovery/index.html preview/dosemealti/index.html
+          python3 scripts/update_homepage_navigation.py preview/dosemealti/index.html preview/dosemealti/index.html
+          python3 scripts/update_homepage_blog.py preview/dosemealti/index.html preview/dosemealti/index.html
+          python3 scripts/render_shared_components.py --site-root preview/dosemealti --page preview/dosemealti/index.html --expect-pages 1
+          python3 scripts/render_shared_components.py --site-root preview/dosemealti --page preview/dosemealti/index.html --expect-pages 1 --check
+
+      - name: Verify all public-page shells and important references
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          from pathlib import Path
+          import re
+          root = Path("preview/dosemealti")
+          pages = sorted(root.rglob("index.html"))
+          assert len(pages) == 9, [str(p) for p in pages]
+          for page in pages:
+              html = page.read_text(encoding="utf-8")
+              assert len(re.findall(r'<header class="header"', html)) == 1, page
+              assert len(re.findall(r'<footer class="site-footer"', html)) == 1, page
+              assert html.count('class="header-blog-link"') == 1, page
+              assert html.count('class="footer-blog-link"') == 1, page
+              assert "harika-seyler-dukkani-logo.webp" in html, page
+              assert "https://www.instagram.com/_harikaseylerdukkani/" in html, page
+          print(f"{len(pages)} complete pages with canonical header and footer")
+          PY
