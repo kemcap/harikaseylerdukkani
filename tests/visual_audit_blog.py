@@ -51,7 +51,12 @@ def main():
                     response = page.goto(url, wait_until="load", timeout=30000)
                     if not response or response.status >= 400:
                         raise AssertionError(f"HTTP {response.status if response else 'none'}")
-                    page.wait_for_timeout(80)
+                    # Lazy images below the fold are legitimately incomplete at load.
+                    # Force their loading before measuring *failed* images.
+                    page.evaluate("document.querySelectorAll('main img').forEach(img => img.loading = 'eager')")
+                    page.wait_for_function(
+                        "() => [...document.querySelectorAll('main img')].every(img => img.complete)",
+                        timeout=4000)
                     row.update(page.evaluate("""() => {
                       const bb = sel => {
                         const el=document.querySelector(sel);
@@ -67,7 +72,7 @@ def main():
                       };
                       const images = [...document.querySelectorAll('main img')].filter(img=>{
                         const r=img.getBoundingClientRect();
-                        return r.width>0&&r.height>0&&!img.complete || (r.width>0&&r.height>0&&img.naturalWidth===0);
+                        return r.width>0 && r.height>0 && img.complete && img.naturalWidth===0;
                       }).map(img=>img.getAttribute('src'));
                       return {
                         screen: innerWidth,
