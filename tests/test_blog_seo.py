@@ -15,8 +15,8 @@ CATEGORIES = ("bijuteri", "kirtasiye", "oyuncak", "hediyelik-esya")
 ARTICLES = ("dogum-gunu-hediyesi-nasil-secilir",
             "cocuklar-icin-oyuncak-secerken",
             "kucuk-butceyle-anlamli-hediyeler")
-ANCHORS = re.compile(r'<a\\s+[^>]*href="([^"]+)"[^>]*>', re.I)
-SCRIPT = re.compile(r'<script\\s+type="application/ld\\+json"[^>]*>([\\s\\S]*?)</script>', re.I)
+ANCHORS = re.compile(r'<a\s+[^>]*href="([^"]+)"[^>]*>', re.I)
+SCRIPT = re.compile(r'<script\s+type="application/ld\+json"[^>]*>([\s\S]*?)</script>', re.I)
 
 
 def local_links(section: str, page: Path):
@@ -90,7 +90,7 @@ class BlogSEOTests(unittest.TestCase):
             page = SITE / "blog" / slug / "index.html"
             html = page.read_text(encoding="utf-8")
             self.assertEqual(html.count('rel="canonical"'), 1, slug)
-            self.assertEqual(len(re.findall(r"<h1\\b", html)), 1, slug)
+            self.assertEqual(len(re.findall(r"<h1\b", html)), 1, slug)
 
 
 if __name__ == "__main__":
