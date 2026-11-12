@@ -22,7 +22,7 @@ jobs:
         uses: actions/checkout@v5
 
       - name: Test component renderer and homepage safety
-        run: python3 -m unittest discover -s tests -p 'test_shared_components.py' -v
+        run: python3 -m unittest discover -s tests -p 'test_*.py' -v
 
       - name: Assemble static category and blog preview (no FTP)
         shell: bash
