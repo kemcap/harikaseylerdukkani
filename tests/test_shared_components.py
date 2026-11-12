@@ -29,7 +29,7 @@ class SharedComponentsTests(unittest.TestCase):
         cls.footer = shared.template(
             shared.COMPONENT_ROOT / "footer.html", shared.SHELL_FOOTER)
 
-    def test_eight_pages_have_one_identical_shell(self):
+    def test_nine_pages_have_one_identical_shell(self):
         self.assertEqual(len(SAMPLES), 9)  # homepage + 4 categories + 4 blog pages
         for relative, path in SAMPLES.items():
             with self.subTest(page=str(relative)):
@@ -47,12 +47,13 @@ class SharedComponentsTests(unittest.TestCase):
                 after = shared.SHELL_FOOTER.sub(
                     "<SHARED_FOOTER>", shared.SHELL_HEADER.sub("<SHARED_HEADER>", result))
                 self.assertEqual(before, after, "Page content outside shell must not change")
+                rendered_header = shared.SHELL_HEADER.search(result).group(0)
                 if relative.parts[0] in shared.CATEGORY_SLUGS:
-                    self.assertEqual(result.count('aria-current="page"'), 2)
+                    self.assertEqual(rendered_header.count('aria-current="page"'), 2)
                 elif relative.parts[0] == "blog":
-                    self.assertEqual(result.count('aria-current="page"'), 1)
+                    self.assertEqual(rendered_header.count('aria-current="page"'), 1)
                 else:
-                    self.assertNotIn('aria-current="page"', result)
+                    self.assertNotIn('aria-current="page"', rendered_header)
 
     def test_fails_on_unknown_or_incomplete_page(self):
         with self.assertRaises(ValueError):
