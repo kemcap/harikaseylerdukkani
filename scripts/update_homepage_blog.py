@@ -63,4 +63,4 @@ if __name__ == "__main__":
     updated = apply(args.source.read_text(encoding="utf-8"))
     args.destination.parent.mkdir(parents=True, exist_ok=True)
     args.destination.write_text(updated, encoding="utf-8")
-    print("Harika Fikirler: verified header link, mobile label and footer link.")
+    print("Harika Fikirler: shared navigation styles prepared (markup via component renderer).")
