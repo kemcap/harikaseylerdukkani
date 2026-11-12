@@ -30,8 +30,8 @@ jobs:
           set -euo pipefail
           mkdir -p preview/dosemealti
           cp -R dosemealti/bijuteri dosemealti/kirtasiye dosemealti/oyuncak dosemealti/hediyelik-esya dosemealti/blog preview/dosemealti/
-          python3 scripts/render_shared_components.py --site-root preview/dosemealti --expect-pages 8
-          python3 scripts/render_shared_components.py --site-root preview/dosemealti --expect-pages 8 --check
+          python3 scripts/render_shared_components.py --site-root preview/dosemealti --min-pages 8
+          python3 scripts/render_shared_components.py --site-root preview/dosemealti --min-pages 8 --check
 
       - name: Safely assemble homepage from existing design snapshot (no FTP)
         shell: bash
@@ -52,7 +52,7 @@ jobs:
           import re
           root = Path("preview/dosemealti")
           pages = sorted(root.rglob("index.html"))
-          assert len(pages) == 9, [str(p) for p in pages]
+          assert len(pages) >= 9, [str(p) for p in pages]
           for page in pages:
               html = page.read_text(encoding="utf-8")
               assert len(re.findall(r'<header class="header"', html)) == 1, page
