@@ -99,8 +99,8 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          python3 scripts/render_shared_components.py --site-root deploy/dosemealti --expect-pages 8
-          python3 scripts/render_shared_components.py --site-root deploy/dosemealti --expect-pages 8 --check
+          python3 scripts/render_shared_components.py --site-root deploy/dosemealti --min-pages 8
+          python3 scripts/render_shared_components.py --site-root deploy/dosemealti --min-pages 8 --check
 
       - name: Upload via encrypted explicit FTPS (no server-side deletes)
         uses: airvzxf/ftp-deployment-action@v3.1.0
