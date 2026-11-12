@@ -113,6 +113,23 @@ def main():
                     if width in (320,375,768,1440):
                         shot = f"{(slug[:-1] if slug else 'archive')}-{width}.png"
                         page.screenshot(path=str(OUT/shot), full_page=True, animations="disabled")
+                    if width == 375:
+                        if not slug:
+                            # Real navigation from editorial archive to a category.
+                            page.locator(".blog-pillar-grid a").first.click()
+                            if not page.url.endswith("/dosemealti/bijuteri/"):
+                                errors.append("375px: category card failed to open Bijuteri pillar")
+                            page.go_back(wait_until="load")
+                            page.locator(".blog-card").first.click()
+                            if not page.url.endswith("/dosemealti/blog/dogum-gunu-hediyesi-nasil-secilir/"):
+                                errors.append("375px: blog card did not open its article")
+                        else:
+                            # Real in-page navigation in each article.
+                            toc = page.locator(".post-toc a").first
+                            expected = toc.get_attribute("href")
+                            toc.click()
+                            if not page.url.endswith(expected):
+                                errors.append(f"{slug} 375px: table of contents anchor failed: {page.url}")
                 except Exception as e:
                     errors.append(f"{slug or 'archive'} {width}px: {type(e).__name__}: {e}")
                 results.append(row)
