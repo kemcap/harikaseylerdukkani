@@ -10,6 +10,8 @@ on:
       - "dosemealti/oyuncak/**"
       - "dosemealti/hediyelik-esya/**"
       - "dosemealti/blog/**"
+      - "dosemealti/components/**"
+      - "scripts/render_shared_components.py"
   workflow_dispatch:
     inputs:
       dry_run:
@@ -88,6 +90,13 @@ jobs:
           test ! -e deploy/dosemealti/index.html
           test ! -e deploy/dosemealti/sitemap.xml
           find deploy/dosemealti -type f | sort
+
+      - name: Render global header/footer into all eight category and blog pages
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 scripts/render_shared_components.py --site-root deploy/dosemealti --expect-pages 8
+          python3 scripts/render_shared_components.py --site-root deploy/dosemealti --expect-pages 8 --check
 
       - name: Upload via encrypted explicit FTPS (no server-side deletes)
         uses: airvzxf/ftp-deployment-action@v3.1.0
