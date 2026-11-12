@@ -66,3 +66,14 @@
 .blog-page .site-footer{margin:0}
 @media(max-width:1000px){.blog-post-grid{gap:18px}.blog-card h3{font-size:1.8rem}.post-layout{grid-template-columns:155px minmax(0,1fr);gap:45px}}
 @media(max-width:760px){.blog-hero{padding:118px 22px 50px;min-height:0}.blog-hero-inner,.post-hero-inner{display:block}.blog-hero h1{font-size:clamp(3.5rem,14vw,5.8rem)}.blog-hero-photo{margin-top:46px;aspect-ratio:1.2;max-height:370px}.blog-hero-photo img{border-radius:40% 40% 8px 8px / 35% 35% 8px 8px}.blog-hero-photo figcaption{left:8px;bottom:8px;font-size:1.18rem;padding:12px}.blog-journal{padding-top:65px;padding-bottom:80px}.blog-heading{display:block}.blog-heading p{margin-top:17px;max-width:520px}.blog-post-grid{grid-template-columns:1fr;gap:45px}.blog-card-cover{aspect-ratio:1.6}.blog-card h3{font-size:2.2rem}.blog-local{padding:65px 0}.blog-local-inner{display:block}.blog-local p{margin-top:22px}.post-hero{padding:115px 22px 50px}.post-hero h1{font-size:clamp(2.8rem,11vw,4.8rem)}.post-hero-image{margin-top:34px;aspect-ratio:1.6;border-radius:40% 40% 6px 6px / 30% 30% 6px 6px}.post-layout{display:block;width:calc(100% - 42px);padding:62px 0 80px}.post-toc{position:static;margin-bottom:48px;display:flex;gap:15px;flex-wrap:wrap;border-top:0}.post-toc strong{flex-basis:100%;margin-bottom:0}.post-toc a{margin:0;font-size:.78rem;border:1px solid #c4c8b7;padding:9px 12px;border-radius:25px}.post-content{font-size:1rem}.post-content h2{margin-top:46px}.post-footer .wrap{display:block}.post-footer .blog-category-link{margin-top:20px}}
+
+/* Homepage brand shell: same top-bar background, logo and fonts as Döşemealtı. */
+.blog-page{--blog-paper:#faf6ed;--blog-green:#132f25;--blog-gold:#b08b4b;background:#faf6ed;font-family:var(--sans,Inter,'Segoe UI',Arial,sans-serif)}
+.blog-page .header{background:#faf6ed;color:#132f25;border-bottom:1px solid rgba(33,66,53,.13);z-index:90}
+.blog-page .header .header-blog-link[aria-current="page"]{color:#987244;text-decoration:underline;text-decoration-color:#c2a268;text-underline-offset:5px}
+.blog-page .header .header-instagram{color:#132f25}
+.blog-page .header .desktop-nav a:hover{color:#977342}
+.blog-page .header .brand-logo{filter:none}
+.blog-page .site-footer{background:var(--forest,#132f25);color:var(--cream,#faf6ed)}
+@media(max-width:1060px){.blog-page .header .mobile-worlds-menu{color:#132f25}}
+@media(max-width:760px){.blog-page .header{min-height:72px}}
