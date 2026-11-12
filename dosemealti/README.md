@@ -60,7 +60,7 @@ Header ve footer içeriği artık sadece iki dosyadan yönetilir:
 
 `scripts/render_shared_components.py` tüm kategori ve blog sayfalarına bu şablonları **yayına hazırlarken** ekler. Böylece ziyaretçiye gönderilen HTML tamdır; JavaScript ile sonradan header/footer çağrısı yapılmaz. Aktif kategori veya Harika Fikirler sayfasının `aria-current="page"` işareti otomatik oluşturulur.
 
-Kullanılan site, bağımsız iki FTPS iş akışına sahiptir. `deploy-turhost.yml` mevcut sekiz alt sayfayı (4 kategori + 4 blog) derler ve yalnızca bu klasörleri ve asset'leri yükler. `update-homepage-links.yml`, **canlı** anasayfa HTML'sini güvenli FTPS ile indirip yedekler, kategori CTA/CSS güncellemelerini uygular, ardından **aynı global header ve footer'ı** final dosyaya ekleyerek sadece anasayfayı yükler. Şablon dosyalarının değiştirilmesi iki iş akışını da tetikler. Hiçbiri Turhost'taki mevcut `sitemap.xml` dosyasını değiştirmez.
+Kullanılan site, bağımsız iki FTPS iş akışına sahiptir. `deploy-turhost.yml` en az sekiz alt sayfayı (4 kategori + 4 mevcut blog; yeni blog yazıları otomatik dahil) derler ve yalnızca bu klasörleri ve asset'leri yükler. `update-homepage-links.yml`, **canlı** anasayfa HTML'sini güvenli FTPS ile indirip yedekler, kategori CTA/CSS güncellemelerini uygular, ardından **aynı global header ve footer'ı** final dosyaya ekleyerek sadece anasayfayı yükler. Şablon dosyalarının değiştirilmesi iki iş akışını da tetikler. Hiçbiri Turhost'taki mevcut `sitemap.xml` dosyasını değiştirmez.
 
 ### Kontrollü yerel doğrulama
 
@@ -68,8 +68,8 @@ Kullanılan site, bağımsız iki FTPS iş akışına sahiptir. `deploy-turhost.
 python3 -m unittest discover -s tests -p 'test_shared_components.py' -v
 mkdir -p preview/dosemealti
 cp -R dosemealti/bijuteri dosemealti/kirtasiye dosemealti/oyuncak dosemealti/hediyelik-esya dosemealti/blog preview/dosemealti/
-python3 scripts/render_shared_components.py --site-root preview/dosemealti --expect-pages 8
-python3 scripts/render_shared_components.py --site-root preview/dosemealti --expect-pages 8 --check
+python3 scripts/render_shared_components.py --site-root preview/dosemealti --min-pages 8
+python3 scripts/render_shared_components.py --site-root preview/dosemealti --min-pages 8 --check
 ```
 
 `.github/workflows/test-shared-components.yml` führt dieselben Tests ohne FTP bei Pull Requests aus. Vor einem Merge immer PR/Workflow prüfen. Änderungen am `main` Branch können bei aktivem `TURHOST_DEPLOY_ENABLED` die Livesite aktualisieren.
