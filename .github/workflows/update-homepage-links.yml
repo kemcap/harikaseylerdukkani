@@ -10,6 +10,7 @@ on:
       - "scripts/update_homepage_blog.py"
       - "scripts/render_shared_components.py"
       - "tests/test_shared_components.py"
+      - "tests/test_blog_seo.py"
       - "dosemealti/components/**"
   workflow_dispatch:
     inputs:
@@ -38,7 +39,7 @@ jobs:
         uses: actions/checkout@v5
 
       - name: Test global Header/Footer rendering and idempotence
-        run: python3 -m unittest discover -s tests -p 'test_shared_components.py'
+        run: python3 -m unittest discover -s tests -p 'test_*.py'
 
       - name: Validate destination and install lftp
         env:
