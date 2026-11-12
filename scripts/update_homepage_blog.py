@@ -1,19 +1,14 @@
 #!/usr/bin/env python3
-"""Add Harika Fikirler to the *existing* Döşemealtı homepage without rebuilding it.
+"""Preserve homepage blog link styling before global shell rendering.
 
-This stage runs AFTER update_homepage_navigation.py, against the downloaded live
-index.html. It is deliberately idempotent and edits only header actions, one
-footer navigation link, and an isolated style block.
+The component templates in dosemealti/components/ define the canonical
+header and footer. This step only prepares the matching CSS on the downloaded
+live homepage; scripts/render_shared_components.py inserts shared HTML.
 """
 import argparse
 import re
 from pathlib import Path
 
-BLOG_URL = "/dosemealti/blog/"
-LINK = ('<a class="header-blog-link" href="' + BLOG_URL
-        + '" aria-label="Harika Fikirler"><span class="blog-full">Harika Fikirler</span>'
-        + '<span class="blog-short" aria-hidden="true">Blog</span></a>')
-FOOTER_LINK = '<a class="footer-blog-link" href="' + BLOG_URL + '">Harika Fikirler</a>'
 STYLE = """<style id="harika-fikirler-nav">
 /* Local blog link sits next to the verified Instagram icon, separate from
    Dört dünya. The existing four-product navigation is untouched. */
@@ -45,30 +40,10 @@ def apply(source: str) -> str:
     if '<nav class="story-dock"' not in source:
         raise ValueError("Homepage story layout missing: refusing update")
 
-    header_match = re.search(r'<header\b[^>]*class="header"[^>]*>.*?</header>', source, re.S)
-    footer_match = re.search(r'<footer\b[^>]*class="site-footer"[^>]*>.*?</footer>', source, re.S)
-    if not header_match or not footer_match:
-        raise ValueError("Expected homepage header/footer missing")
-    header = header_match.group(0)
-    footer = footer_match.group(0)
-    if header.count('class="header-actions"') != 1 or header.count('class="header-instagram"') != 1:
-        raise ValueError("Unexpected header controls")
-    if header.count('class="desktop-nav"') != 1 or header.count('class="mobile-worlds-menu"') != 1:
-        raise ValueError("Expected category navigation missing")
-    if "Harika Fikirler" not in header:
-        header = header.replace('<div class="header-actions">',
-                                '<div class="header-actions">' + LINK, 1)
-    if "Harika Fikirler" not in footer:
-        if footer.count('<h3>Mağazamız</h3>') != 1:
-            raise ValueError("Expected Mağazamız footer column missing")
-        footer = footer.replace('<h3>Mağazamız</h3>',
-                                '<h3>Mağazamız</h3>' + FOOTER_LINK, 1)
-
-    # Replace from right to left to preserve original match offsets.
-    edits = [(header_match.start(), header_match.end(), header),
-             (footer_match.start(), footer_match.end(), footer)]
-    for start, end, new in sorted(edits, reverse=True):
-        source = source[:start] + new + source[end:]
+    if not re.search(r'<header\b[^>]*class="header"[^>]*>.*?</header>', source, re.S):
+        raise ValueError("Original homepage header missing")
+    if not re.search(r'<footer\b[^>]*class="site-footer"[^>]*>.*?</footer>', source, re.S):
+        raise ValueError("Original homepage footer missing")
     if 'id="harika-fikirler-nav"' in source:
         source, n = re.subn(r'<style id="harika-fikirler-nav">.*?</style>',
                             lambda _: STYLE, source, count=1, flags=re.S)
@@ -76,9 +51,7 @@ def apply(source: str) -> str:
             raise ValueError("Failed to update existing blog link styles")
     else:
         source = source.replace("</head>", STYLE + "\n</head>", 1)
-    assert source.count('class="header-blog-link"') == 1
-    assert source.count('class="footer-blog-link"') == 1
-    assert source.count('class="header-instagram"') == 1
+    print("Blog navigation CSS prepared; shared renderer inserts the single link.")
     return source
 
 
