@@ -12,6 +12,7 @@ on:
       - "dosemealti/blog/**"
       - "dosemealti/components/**"
       - "scripts/render_shared_components.py"
+      - "tests/test_blog_seo.py"
       - "tests/test_shared_components.py"
   workflow_dispatch:
     inputs:
@@ -42,7 +43,7 @@ jobs:
         uses: actions/checkout@v5
 
       - name: Test global Header/Footer rendering and idempotence
-        run: python3 -m unittest discover -s tests -p 'test_shared_components.py'
+        run: python3 -m unittest discover -s tests -p 'test_*.py'
 
       - name: Validate Turhost settings
         env:

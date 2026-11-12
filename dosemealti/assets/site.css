@@ -394,3 +394,20 @@ h1.category-seo-h1,.eyebrow{font-family:var(--sans)}
 /* Consistent Harika Fikirler label; mobile uses compact Blog while retaining aria-label. */
 .header .header-blog-link .blog-short{display:none}
 @media(max-width:520px){.header .header-blog-link .blog-full{display:none}.header .header-blog-link .blog-short{display:inline}.header .header-blog-link{font-size:.8rem}}
+
+/* Contextual links from pillar category pages to Harika Fikirler guides. */
+.category-reading{padding-block:clamp(55px,6vw,100px) clamp(65px,7vw,110px);border-top:1px solid rgba(25,55,37,.14)}
+.category-reading-header{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,360px);gap:36px;align-items:end;margin-bottom:30px}
+.category-reading .eyebrow{font-size:.71rem;color:#9b7a46;letter-spacing:.12em}
+.category-reading h2{font:400 clamp(2.25rem,4.5vw,4.6rem)/1.06 var(--serif,Georgia,serif);letter-spacing:-.048em;color:#183b2c;margin:15px 0 0}
+.category-reading-header p{font-size:.98rem;line-height:1.75;color:#607265;margin:0}
+.category-reading-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
+.category-reading-grid a{position:relative;display:flex;flex-direction:column;gap:12px;min-width:0;padding:26px 58px 25px 26px;border:1px solid rgba(40,76,51,.22);background:#f2ede2;border-radius:8px;transition:transform .2s,border-color .2s}
+.category-reading-grid a:hover,.category-reading-grid a:focus-visible{transform:translateY(-3px);border-color:#ae8a56}
+.category-reading-grid a strong{font:400 clamp(1.4rem,2.2vw,2rem)/1.16 var(--serif,Georgia,serif);letter-spacing:-.025em;color:#183b2c}
+.category-reading-grid a span:not(.category-reading-arrow){font-size:.86rem;line-height:1.6;color:#66786b}
+.category-reading-arrow{position:absolute;right:26px;top:22px;color:#ab8c5d;font-size:1.3rem}
+.category-reading-all{display:inline-flex;gap:16px;align-items:center;margin-top:24px;border-bottom:1px solid #c3a87d;padding:9px 0;font-weight:700;font-size:.86rem;color:#183b2c}
+.category-reading-all:hover{color:#976d39}
+@media(max-width:760px){.category-reading-header{grid-template-columns:1fr;gap:15px}.category-reading-grid{grid-template-columns:1fr}.category-reading-grid a{padding:22px 50px 23px 20px}}
+@media(prefers-reduced-motion:reduce){.category-reading-grid a{transition:none}}
