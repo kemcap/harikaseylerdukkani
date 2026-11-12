@@ -7,9 +7,9 @@ only the rendered deployment copy is authoritative. All replacement happens
 before FTPS, so bots and visitors get complete HTML without client-side fetches.
 
 Examples:
-    python3 scripts/render_shared_components.py --site-root deploy/dosemealti --expect-pages 8
+    python3 scripts/render_shared_components.py --site-root deploy/dosemealti --min-pages 8
     python3 scripts/render_shared_components.py --site-root deploy/dosemealti --page deploy/dosemealti/index.html
-    python3 scripts/render_shared_components.py --site-root deploy/dosemealti --expect-pages 8 --check
+    python3 scripts/render_shared_components.py --site-root deploy/dosemealti --min-pages 8 --check
 """
 from __future__ import annotations
 
@@ -44,7 +44,7 @@ def page_type(relative: Path) -> str:
         return "home"
     if len(parts) == 2 and parts[1] == "index.html" and parts[0] in CATEGORY_SLUGS:
         return parts[0]
-    if parts in BLOG_SLUGS:
+    if parts[0] == "blog" and parts[-1] == "index.html" and len(parts) in (2, 3):
         return "blog"
     raise ValueError(f"Unapproved target (no shell replacement): {relative}")
 
@@ -109,11 +109,12 @@ def target_paths(root: Path, explicit: Path | None) -> list[Path]:
         if not path.is_relative_to(root) or not path.is_file():
             raise ValueError("Explicit page must exist below --site-root")
         return [path]
-    return sorted(p for p in root.rglob("index.html")
-                  if p.is_file() and p.relative_to(root).parts in (
-                      (("index.html",),)
-                      + tuple((slug, "index.html") for slug in CATEGORY_SLUGS)
-                      + BLOG_SLUGS))
+    targets = sorted(p for p in root.rglob("index.html") if p.is_file())
+    # Every staged page is validated. New blog articles are discovered
+    # automatically, with no need to update a list of slugs.
+    for path in targets:
+        page_type(path.relative_to(root))
+    return targets
 
 
 def main() -> None:
@@ -123,6 +124,8 @@ def main() -> None:
                      help="Only render this exact page (for the protected homepage workflow)")
     cli.add_argument("--expect-pages", type=int,
                      help="Abort if the count is not exactly this number")
+    cli.add_argument("--min-pages", type=int,
+                     help="At least this many pages must be present (supports new posts)")
     cli.add_argument("--check", action="store_true",
                      help="Fail when checked-in/deployed markup differs; do not write")
     cli.add_argument("--dry-run", action="store_true",
@@ -135,8 +138,18 @@ def main() -> None:
     header = template(COMPONENT_ROOT / "header.html", SHELL_HEADER)
     footer = template(COMPONENT_ROOT / "footer.html", SHELL_FOOTER)
     targets = target_paths(root, args.page)
-    if not targets or (args.expect_pages is not None and len(targets) != args.expect_pages):
+    if not targets:
+        cli.error("No pages selected for rendering")
+    if args.expect_pages is not None and len(targets) != args.expect_pages:
         cli.error(f"Expected {args.expect_pages} pages; found {len(targets)}")
+    if args.min_pages is not None and len(targets) < args.min_pages:
+        cli.error(f"Expected at least {args.min_pages} pages; found {len(targets)}")
+    if args.page is None:
+        required = {Path(slug) / "index.html" for slug in CATEGORY_SLUGS}
+        required.add(Path("blog/index.html"))
+        present = {p.relative_to(root) for p in targets}
+        if not required.issubset(present):
+            cli.error(f"Missing mandatory category/blog archive pages: {required - present}")
 
     rendered: list[tuple[Path, str, str]] = []
     for path in targets:
