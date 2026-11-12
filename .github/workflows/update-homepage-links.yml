@@ -7,6 +7,7 @@ on:
       - ".github/workflows/update-homepage-links.yml"
       - "scripts/update_homepage_categories.py"
       - "scripts/update_homepage_navigation.py"
+      - "scripts/update_homepage_blog.py"
   workflow_dispatch:
     inputs:
       dry_run:
@@ -75,15 +76,16 @@ jobs:
           retention-days: 14
           if-no-files-found: error
 
-      - name: Preserve homepage design and install unified 4-category navigation
+      - name: Preserve homepage design; install category navigation and Harika Fikirler link
         shell: bash
         run: |
           set -euo pipefail
           python3 scripts/update_homepage_categories.py original/index.html deploy/dosemealti/index.html
           python3 scripts/update_homepage_navigation.py deploy/dosemealti/index.html deploy/dosemealti/index.html
+          python3 scripts/update_homepage_blog.py deploy/dosemealti/index.html deploy/dosemealti/index.html
           test -s deploy/dosemealti/index.html
           test "$(find deploy -type f | wc -l)" -eq 1
-          echo "Only the original homepage index.html is patched (navigation + styles); no separate CSS, JS or sitemap file is replaced."
+          echo "Only the downloaded homepage index.html is patched (four categories, Harika Fikirler link, footer); no separate CSS, JS or sitemap file is replaced."
 
       - name: Update homepage via verified FTPS (no deletion)
         if: ${{ github.event_name == 'push' || inputs.dry_run == false }}
