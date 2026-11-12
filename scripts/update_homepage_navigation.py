@@ -136,10 +136,10 @@ def apply(source: str) -> str:
     if '<nav class="story-dock"' not in source:
         raise ValueError("Unrecognized homepage: upload blocked")
     original_header = re.search(
-        r'<header\\b[^>]*class="header"[^>]*>.*?</header>', source, flags=re.S)
+        r'<header\b[^>]*class="header"[^>]*>.*?</header>', source, flags=re.S)
     if original_header is None or 'class="brand"' not in original_header.group(0):
         raise ValueError("Original homepage header/brand not found")
-    if not re.search(r'<footer\\b[^>]*class="site-footer"[^>]*>.*?</footer>',
+    if not re.search(r'<footer\b[^>]*class="site-footer"[^>]*>.*?</footer>',
                      source, flags=re.S):
         raise ValueError("Original homepage footer not found")
 
@@ -150,18 +150,18 @@ def apply(source: str) -> str:
         if count != 1:
             raise ValueError("Cannot replace existing menu CSS")
     else:
-        html = html.replace("</head>", STYLE + "\\n</head>", 1)
+        html = html.replace("</head>", STYLE + "\n</head>", 1)
     if 'id="main-category-header-behavior"' in html:
         html, count = re.subn(r'<script id="main-category-header-behavior">.*?</script>',
                               lambda _: BEHAVIOR, html, count=1, flags=re.S)
         if count != 1:
             raise ValueError("Cannot replace existing menu JS")
     else:
-        html = html.replace("</body>", BEHAVIOR + "\\n</body>", 1)
+        html = html.replace("</body>", BEHAVIOR + "\n</body>", 1)
 
     # Preserve the live story, add lazy loading to decorative floating photos.
     html = re.sub(r'(<figure class="hero-float float-(?:one|two)"[^>]*><img )(?!loading=)',
-                  r'\\1loading="lazy" ', html)
+                  r'\1loading="lazy" ', html)
     html = html.replace("Bir dükkan, dört dünya.", "Bir dükkân, dört dünya.")
     print("Homepage nav CSS/behavior ready; global renderer supplies all markup.")
     return html
