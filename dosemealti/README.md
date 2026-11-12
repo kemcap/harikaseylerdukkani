@@ -44,5 +44,9 @@ GitHub Actions iş akışı `.github/workflows/deploy-turhost.yml` dosyasındad�
 - `assets/blog.css` yalnızca blog tasarımına aittir; ortak üst menü ve footer `assets/site.css` üzerinden gelir. Mevcut kategori sayfalarındaki Blog bağlantısı ürün dünyalarından ayrı tutulur.
 - Blog sayfaları canonical/OG meta, uygun Article veya CollectionPage yapılandırılmış veri ve kategori iç bağlantıları içerir. Gerçek ürünlerin mevcut olduğu veya fiyatının sabit olduğu iddia edilmez.
 - FTPS iş akışı artık `blog/` klasörünü de gönderir, fakat Turhost ana sayfasını ve uzaktaki `sitemap.xml` dosyasını korur. Yeni URL'leri canlı `sitemap.xml` içine güvenle **birleştir**, mevcut site haritasının üzerine yazma.
-- Canlı ana sayfa navigasyonuna blog bağlantısı eklemek için Turhost'taki ana sayfa şablonunu ayrıca kontrollü şekilde güncelle. Ana sayfaya bu daldaki değişikliklerle otomatik müdahale edilmez.
+- Canlı ana sayfaya **Harika Fikirler** bağlantısı eklemek için mevcut Turhost `index.html` dosyası FTPS üzerinden indirilir, özgün logo/header/ana içerik korunur ve `scripts/update_homepage_blog.py` üst menüye (ürün dünyalarından ayrı) ve footer'a tek bağlantı ekler. Bu adım `.github/workflows/update-homepage-links.yml` içinde mevcut navigasyon yamasından **sonra** uygulanır. `main` dalına merge, otomatik canlı yükleme başlatabilir; öncesinde workflow `dry_run: true` ile denenmelidir.
 - Yayından önce editoryal kontrol yap: metin, görsel-ürün uyumu, mobil görünüm, iç bağlantılar, güncel stok/kampanya iddiaları.
+
+## Harika Fikirler tasarım eşleştirmesi
+
+Blog ve üç makale sayfasında anasayfanın **gerçek header/footer HTML yapısı** ve `/dosemealti/style.css?v=20` stili kullanılır. Logo dosyası `/dosemealti/assets/harika-seyler-dukkani-logo.webp` değişmez. Ek `assets/blog.css` yalnızca blog editoryal bölümlerinin stillerini yönetir; sitedeki Georgia/Inter fontları, `#132F25` orman yeşili, `#faf6ed` krem ve altın tonları korunur. Dört ürün kategorisi ayrı kalır; `Harika Fikirler` menü bağlantısı dar ekranlarda erişilebilir tam adı korunarak `Blog` etiketiyle görünür. Blog, mağaza ürün stokları veya fiyatları için garanti vermez.
