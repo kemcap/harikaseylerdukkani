@@ -70,6 +70,7 @@ class SharedComponentsTests(unittest.TestCase):
         paths = [Path(slug) / "index.html" for slug in shared.CATEGORY_SLUGS]
         paths.extend(Path(*parts) for parts in shared.BLOG_SLUGS)
         self.assertEqual(len(paths), 8)
+        self.assertEqual(shared.page_type(Path("blog/yeni-yazi/index.html")), "blog")
         for path in paths:
             self.assertIn(shared.page_type(path),
                           (*shared.CATEGORY_SLUGS, "blog"))
