@@ -8,6 +8,8 @@ on:
       - "scripts/update_homepage_categories.py"
       - "scripts/update_homepage_navigation.py"
       - "scripts/update_homepage_blog.py"
+      - "scripts/render_shared_components.py"
+      - "dosemealti/components/**"
   workflow_dispatch:
     inputs:
       dry_run:
@@ -83,6 +85,8 @@ jobs:
           python3 scripts/update_homepage_categories.py original/index.html deploy/dosemealti/index.html
           python3 scripts/update_homepage_navigation.py deploy/dosemealti/index.html deploy/dosemealti/index.html
           python3 scripts/update_homepage_blog.py deploy/dosemealti/index.html deploy/dosemealti/index.html
+          python3 scripts/render_shared_components.py --site-root deploy/dosemealti --page deploy/dosemealti/index.html --expect-pages 1
+          python3 scripts/render_shared_components.py --site-root deploy/dosemealti --page deploy/dosemealti/index.html --expect-pages 1 --check
           test -s deploy/dosemealti/index.html
           test "$(find deploy -type f | wc -l)" -eq 1
           echo "Only the downloaded homepage index.html is patched (four categories, Harika Fikirler link, footer); no separate CSS, JS or sitemap file is replaced."
