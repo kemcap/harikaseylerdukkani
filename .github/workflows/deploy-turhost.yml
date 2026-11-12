@@ -12,6 +12,8 @@ on:
       - "dosemealti/blog/**"
       - "dosemealti/components/**"
       - "scripts/render_shared_components.py"
+      - "scripts/version_blog_assets.py"
+      - "scripts/verify_live_blog.py"
       - "tests/test_blog_seo.py"
       - "tests/test_shared_components.py"
   workflow_dispatch:
@@ -103,6 +105,13 @@ jobs:
           python3 scripts/render_shared_components.py --site-root deploy/dosemealti --min-pages 8
           python3 scripts/render_shared_components.py --site-root deploy/dosemealti --min-pages 8 --check
 
+      - name: Version blog stylesheet by actual CSS contents (cache-proof)
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 scripts/version_blog_assets.py --site-root deploy/dosemealti
+          test "$(find deploy/dosemealti/assets -name 'blog-????????????.css' | wc -l)" -eq 1
+
       - name: Upload via encrypted explicit FTPS (no server-side deletes)
         uses: airvzxf/ftp-deployment-action@v3.1.0
         with:
@@ -118,3 +127,10 @@ jobs:
           ssl_check_hostname: "true"
           lftp_settings: "set ftp:ssl-force true;"
           dry_run: ${{ github.event_name == 'workflow_dispatch' && inputs.dry_run && 'true' || 'false' }}
+
+      - name: Verify publicly served live blog HTML and CSS over HTTPS
+        if: ${{ github.event_name == 'push' || inputs.dry_run == false }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 scripts/verify_live_blog.py --site-root deploy/dosemealti --sha "$GITHUB_SHA"
