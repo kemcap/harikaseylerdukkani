@@ -49,6 +49,19 @@ jobs:
           set -euo pipefail
           cp -R dosemealti/assets preview/dosemealti/assets
           cp sticky-discovery/style.css preview/dosemealti/style.css
+          python3 scripts/version_blog_assets.py --site-root preview/dosemealti
+          python3 - <<'PY'
+          import hashlib
+          from pathlib import Path
+          r = Path("preview/dosemealti")
+          digest = hashlib.sha256((r/"assets/blog.css").read_bytes()).hexdigest()[:12]
+          assert (r/f"assets/blog-{digest}.css").is_file()
+          for path in (r/"blog").rglob("index.html"):
+              text=path.read_text(encoding="utf-8")
+              assert text.count(f"blog-{digest}.css") == 1, str(path)
+          print("All preview pages use content-addressed blog CSS")
+          PY
+
 
       - name: Set up Python for browser-based responsive audit
         uses: actions/setup-python@v5
