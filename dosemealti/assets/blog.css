@@ -193,3 +193,10 @@
 .blog-archive-pagination button:disabled{opacity:.55}
 .blog-archive-controls[hidden],.blog-post-grid .blog-card[hidden],.blog-archive-pagination[hidden]{display:none}
 @media(max-width:580px){.blog-archive-controls{grid-template-columns:minmax(0,1fr);gap:12px}}
+
+
+.post-content .post-faq details{border-top:1px solid #c9cfc4}
+.post-content .post-faq details:last-child{border-bottom:1px solid #c9cfc4}
+.post-content .post-faq summary{cursor:pointer;padding:14px 4px;color:var(--blog-green);font-weight:700;line-height:1.5}
+.post-content .post-faq summary:focus-visible{outline:2px solid var(--blog-green);outline-offset:2px}
+.post-content .post-faq details p{margin:0;padding:0 4px 16px}

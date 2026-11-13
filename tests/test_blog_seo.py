@@ -14,7 +14,8 @@ SITE = ROOT / "dosemealti"
 CATEGORIES = ("bijuteri", "kirtasiye", "oyuncak", "hediyelik-esya")
 ARTICLES = ("dogum-gunu-hediyesi-nasil-secilir",
             "cocuklar-icin-oyuncak-secerken",
-            "kucuk-butceyle-anlamli-hediyeler")
+            "kucuk-butceyle-anlamli-hediyeler", "okul-kirtasiye-listesi",
+            "gunluk-taki-kombinleri", "yeni-ev-hediyesi-fikirleri")
 ANCHORS = re.compile(r'<a\s+[^>]*href="([^"]+)"[^>]*>', re.I)
 SCRIPT = re.compile(r'<script\s+type="application/ld\+json"[^>]*>([\s\S]*?)</script>', re.I)
 
@@ -52,6 +53,7 @@ class BlogSEOTests(unittest.TestCase):
             self.assertIn('name="description"', html, slug)
             self.assertIn('class="post-intro"', article, slug)
             self.assertGreaterEqual(article.count('<h2 '), 5, slug)
+            self.assertGreaterEqual(article.count('<summary>'), 5, slug)
 
             structured = [json.loads(block) for block in SCRIPT.findall(html)]
             article_types = [s.get("@type") for s in structured]
@@ -95,3 +97,4 @@ class BlogSEOTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+

@@ -16,7 +16,8 @@ REPO = Path(__file__).resolve().parents[1]
 SITE = REPO / "preview"
 OUT = REPO / "ui-audit"
 SLUGS = ("", "dogum-gunu-hediyesi-nasil-secilir/",
-         "cocuklar-icin-oyuncak-secerken/", "kucuk-butceyle-anlamli-hediyeler/")
+         "cocuklar-icin-oyuncak-secerken/", "kucuk-butceyle-anlamli-hediyeler/",
+         "okul-kirtasiye-listesi/", "gunluk-taki-kombinleri/", "yeni-ev-hediyesi-fikirleri/")
 WIDTHS = (320, 375, 390, 430, 768, 1024, 1440)
 MIN_GUTTER = 19
 
@@ -120,7 +121,7 @@ def main():
                             if not page.url.endswith("/dosemealti/bijuteri/"):
                                 errors.append("375px: category card failed to open Bijuteri pillar")
                             page.go_back(wait_until="load")
-                            page.locator(".blog-card").first.click()
+                            page.locator('.blog-card[href="./dogum-gunu-hediyesi-nasil-secilir/"]').click()
                             if not page.url.endswith("/dosemealti/blog/dogum-gunu-hediyesi-nasil-secilir/"):
                                 errors.append("375px: blog card did not open its article")
                         else:
@@ -150,3 +151,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
