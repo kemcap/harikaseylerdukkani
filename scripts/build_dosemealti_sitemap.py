@@ -25,12 +25,15 @@ class Metadata(HTMLParser):
         self.canonicals = []
         self.indexable = True
         self.image = None
+        self.inline_images = []
         self.feed(source)
 
     def handle_starttag(self, tag, attributes):
         attrs = dict(attributes)
         if tag == "link" and attrs.get("rel") == "canonical":
             self.canonicals.append(attrs.get("href"))
+        if tag == "img" and attrs.get("src", "").startswith("../../assets/blog/"):
+            self.inline_images.append(attrs["src"])
         if tag == "meta":
             if attrs.get("name", "").lower() in ("robots", "googlebot"):
                 self.indexable &= "noindex" not in attrs.get("content", "").lower()
@@ -59,7 +62,8 @@ def build(site):
         if not meta.indexable or meta.canonicals != [expected]:
             raise ValueError(f"Expected indexable page with canonical {expected}: {page}")
         images = [meta.image] if meta.image and meta.image.startswith(BASE + "assets/") else []
-        add(expected, images)
+        images.extend(urljoin(expected, src) for src in meta.inline_images)
+        add(expected, dict.fromkeys(images))
 
     XML.indent(root, space="  ")
     XML.ElementTree(root).write(site / "sitemap.xml", encoding="utf-8", xml_declaration=True)
@@ -69,3 +73,4 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("site", type=Path)
     build(parser.parse_args().site)
+

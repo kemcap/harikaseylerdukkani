@@ -71,11 +71,17 @@
     <image:image>
       <image:loc>https://harikaseylerdukkani.com/dosemealti/assets/blog/cocuklar-icin-oyuncak-secimi.webp</image:loc>
     </image:image>
+    <image:image>
+      <image:loc>https://harikaseylerdukkani.com/dosemealti/assets/blog/yas-ve-oyun-ahsap-oyuncaklar.webp</image:loc>
+    </image:image>
   </url>
   <url>
     <loc>https://harikaseylerdukkani.com/dosemealti/blog/defter-boyutlari/</loc>
     <image:image>
       <image:loc>https://harikaseylerdukkani.com/dosemealti/assets/blog/defter-boyutlari.webp</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>https://harikaseylerdukkani.com/dosemealti/assets/blog/defter-canta-olcu-kontrolu.webp</image:loc>
     </image:image>
   </url>
   <url>
@@ -83,11 +89,17 @@
     <image:image>
       <image:loc>https://harikaseylerdukkani.com/dosemealti/assets/blog/dogum-gunu-hediyesi.webp</image:loc>
     </image:image>
+    <image:image>
+      <image:loc>https://harikaseylerdukkani.com/dosemealti/assets/blog/dogum-gunu-hediyesi-not-karti.webp</image:loc>
+    </image:image>
   </url>
   <url>
     <loc>https://harikaseylerdukkani.com/dosemealti/blog/gunluk-taki-kombinleri/</loc>
     <image:image>
       <image:loc>https://harikaseylerdukkani.com/dosemealti/assets/blog/gunluk-taki-kombinleri.webp</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>https://harikaseylerdukkani.com/dosemealti/assets/blog/gunluk-kombin-farkli-zincirler.webp</image:loc>
     </image:image>
   </url>
   <url>
@@ -95,11 +107,17 @@
     <image:image>
       <image:loc>https://harikaseylerdukkani.com/dosemealti/assets/blog/hediye-paketi-yapimi.webp</image:loc>
     </image:image>
+    <image:image>
+      <image:loc>https://harikaseylerdukkani.com/dosemealti/assets/blog/kupa-hediye-kutusu-detay.webp</image:loc>
+    </image:image>
   </url>
   <url>
     <loc>https://harikaseylerdukkani.com/dosemealti/blog/kolye-uzunlugu/</loc>
     <image:image>
       <image:loc>https://harikaseylerdukkani.com/dosemealti/assets/blog/kolye-uzunlugu.webp</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>https://harikaseylerdukkani.com/dosemealti/assets/blog/kolye-mezura-olcum-detayi.webp</image:loc>
     </image:image>
   </url>
   <url>
@@ -107,17 +125,26 @@
     <image:image>
       <image:loc>https://harikaseylerdukkani.com/dosemealti/assets/blog/kucuk-butceli-hediye.webp</image:loc>
     </image:image>
+    <image:image>
+      <image:loc>https://harikaseylerdukkani.com/dosemealti/assets/blog/az-butceyle-sade-hediye-sunumu.webp</image:loc>
+    </image:image>
   </url>
   <url>
     <loc>https://harikaseylerdukkani.com/dosemealti/blog/okul-kirtasiye-listesi/</loc>
     <image:image>
       <image:loc>https://harikaseylerdukkani.com/dosemealti/assets/blog/okul-kirtasiye-listesi.webp</image:loc>
     </image:image>
+    <image:image>
+      <image:loc>https://harikaseylerdukkani.com/dosemealti/assets/blog/okul-listesi-defter-boylari.webp</image:loc>
+    </image:image>
   </url>
   <url>
     <loc>https://harikaseylerdukkani.com/dosemealti/blog/yeni-ev-hediyesi-fikirleri/</loc>
     <image:image>
       <image:loc>https://harikaseylerdukkani.com/dosemealti/assets/blog/yeni-ev-hediyesi.webp</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>https://harikaseylerdukkani.com/dosemealti/assets/blog/yeni-ev-fincan-kutusu-detay.webp</image:loc>
     </image:image>
   </url>
 </urlset>
