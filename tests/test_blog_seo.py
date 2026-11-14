@@ -12,10 +12,7 @@ from urllib.parse import urlsplit
 ROOT = Path(__file__).resolve().parents[1]
 SITE = ROOT / "dosemealti"
 CATEGORIES = ("bijuteri", "kirtasiye", "oyuncak", "hediyelik-esya")
-ARTICLES = ("dogum-gunu-hediyesi-nasil-secilir",
-            "cocuklar-icin-oyuncak-secerken",
-            "kucuk-butceyle-anlamli-hediyeler", "okul-kirtasiye-listesi",
-            "gunluk-taki-kombinleri", "yeni-ev-hediyesi-fikirleri")
+ARTICLES = tuple(path.parent.name for path in sorted((SITE / "blog").glob("*/index.html")))
 ANCHORS = re.compile(r'<a\s+[^>]*href="([^"]+)"[^>]*>', re.I)
 SCRIPT = re.compile(r'<script\s+type="application/ld\+json"[^>]*>([\s\S]*?)</script>', re.I)
 
@@ -97,4 +94,5 @@ class BlogSEOTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
 

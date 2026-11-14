@@ -17,7 +17,8 @@ SITE = REPO / "preview"
 OUT = REPO / "ui-audit"
 SLUGS = ("", "dogum-gunu-hediyesi-nasil-secilir/",
          "cocuklar-icin-oyuncak-secerken/", "kucuk-butceyle-anlamli-hediyeler/",
-         "okul-kirtasiye-listesi/", "gunluk-taki-kombinleri/", "yeni-ev-hediyesi-fikirleri/")
+         "okul-kirtasiye-listesi/", "gunluk-taki-kombinleri/", "yeni-ev-hediyesi-fikirleri/",
+         "hediye-paketi-yapimi/", "kolye-uzunlugu/", "defter-boyutlari/")
 WIDTHS = (320, 375, 390, 430, 768, 1024, 1440)
 MIN_GUTTER = 19
 
@@ -151,4 +152,5 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
