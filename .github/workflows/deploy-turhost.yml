@@ -13,6 +13,8 @@ on:
       - "dosemealti/blog/**"
       - "dosemealti/components/**"
       - "scripts/render_shared_components.py"
+      - "scripts/build_dosemealti_sitemap.py"
+      - "dosemealti/sitemap.xml"
       - "tests/test_blog_seo.py"
       - "tests/test_shared_components.py"
   workflow_dispatch:
@@ -85,7 +87,7 @@ jobs:
           fi
           echo "FTP settings present. The remote directory must point to the existing /dosemealti/ folder (or a restricted FTP account's root)."
 
-      - name: Stage category and blog files only — keep existing Turhost homepage and sitemap untouched
+      - name: Stage categories and blog without replacing the homepage
         shell: bash
         run: |
           set -euo pipefail
@@ -94,10 +96,9 @@ jobs:
           test -f deploy/dosemealti/assets/site.css
           test -f deploy/dosemealti/blog/index.html
           test ! -e deploy/dosemealti/index.html
-          test ! -e deploy/dosemealti/sitemap.xml
           find deploy/dosemealti -type f | sort
 
-      - name: Render global header/footer into all eight category and blog pages
+      - name: Render global header/footer into the category and blog pages
         shell: bash
         run: |
           set -euo pipefail
@@ -127,6 +128,10 @@ jobs:
               page.write_bytes(updated)
           PYTHON
 
+      - name: Build the Döşemealtı sitemap from the staged pages
+        run: |
+          python3 scripts/build_dosemealti_sitemap.py deploy/dosemealti
+
       - name: Upload via encrypted explicit FTPS (no server-side deletes)
         uses: airvzxf/ftp-deployment-action@v3.1.0
         with:
@@ -143,7 +148,7 @@ jobs:
           lftp_settings: "set ftp:ssl-force true;"
           dry_run: ${{ github.event_name == 'workflow_dispatch' && inputs.dry_run && 'true' || 'false' }}
 
-      - name: Verify the public blog matches the deployed files
+      - name: Verify the public categories, blog and sitemap
         if: ${{ github.event_name != 'workflow_dispatch' || inputs.dry_run != true }}
         shell: bash
         run: |
@@ -166,7 +171,9 @@ jobs:
             echo "::error::Public response does not match staged file: $url"
             return 1
           }
+          verify sitemap.xml sitemap.xml
           verify assets/blog.css "assets/blog.css?v=$version"
           while IFS= read -r -d '' page; do
             verify "$page" "${page%index.html}"
-          done < <(find blog -name index.html -print0)
+          done < <(find bijuteri kirtasiye oyuncak hediyelik-esya blog -name index.html -print0)
+

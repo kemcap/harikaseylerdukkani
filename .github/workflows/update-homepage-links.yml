@@ -8,6 +8,7 @@ on:
       - "scripts/update_homepage_categories.py"
       - "scripts/update_homepage_navigation.py"
       - "scripts/update_homepage_blog.py"
+      - "scripts/update_homepage_seo.py"
       - "scripts/render_shared_components.py"
       - "tests/test_shared_components.py"
       - "dosemealti/components/**"
@@ -91,9 +92,10 @@ jobs:
           python3 scripts/update_homepage_blog.py deploy/dosemealti/index.html deploy/dosemealti/index.html
           python3 scripts/render_shared_components.py --site-root deploy/dosemealti --page deploy/dosemealti/index.html --expect-pages 1
           python3 scripts/render_shared_components.py --site-root deploy/dosemealti --page deploy/dosemealti/index.html --expect-pages 1 --check
+          python3 scripts/update_homepage_seo.py deploy/dosemealti/index.html
           test -s deploy/dosemealti/index.html
           test "$(find deploy -type f | wc -l)" -eq 1
-          echo "Only the downloaded homepage index.html is patched (four categories, Harika Fikirler link, footer); no separate CSS, JS or sitemap file is replaced."
+          echo "Only the downloaded homepage index.html is patched (category navigation, guide links, SEO metadata and shared footer); no separate CSS, JS or sitemap file is replaced."
 
       - name: Update homepage via verified FTPS (no deletion)
         if: ${{ github.event_name == 'push' || inputs.dry_run == false }}
@@ -111,3 +113,22 @@ jobs:
           ssl_check_hostname: "true"
           lftp_settings: "set ftp:ssl-force true;"
           dry_run: "false"
+
+
+      - name: Verify the public homepage matches the upload
+        if: ${{ github.event_name == 'push' || inputs.dry_run == false }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          downloaded=$(mktemp)
+          trap 'rm -f "$downloaded"' EXIT
+          for attempt in 1 2 3; do
+            if curl --fail --silent --show-error --compressed --max-time 20 \
+                https://harikaseylerdukkani.com/dosemealti/ -o "$downloaded" &&
+                cmp -s deploy/dosemealti/index.html "$downloaded"; then
+              exit 0
+            fi
+            if [[ "$attempt" != 3 ]]; then sleep 5; fi
+          done
+          echo "::error::Public homepage differs from the uploaded file"
+          exit 1
