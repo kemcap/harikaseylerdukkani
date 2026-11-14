@@ -42,16 +42,19 @@ class SharedComponentsTests(unittest.TestCase):
                 self.assertEqual(result.count('class="footer-blog-link"'), 1)
                 self.assertEqual(result.count('class="header-instagram"'), 1)
                 self.assertIn("/dosemealti/assets/harika-seyler-dukkani-logo.webp", result)
-                before = shared.SHELL_FOOTER.sub(
-                    "<SHARED_FOOTER>", shared.SHELL_HEADER.sub("<SHARED_HEADER>", source))
-                after = shared.SHELL_FOOTER.sub(
-                    "<SHARED_FOOTER>", shared.SHELL_HEADER.sub("<SHARED_HEADER>", result))
-                self.assertEqual(before, after, "Page content outside shell must not change")
+                def page_content(html):
+                    html = shared.SHARED_MENU.sub("", html)
+                    html = shared.BASE_MENU.sub("", html)
+                    html = shared.SHELL_HEADER.sub("<SHARED_HEADER>", html)
+                    return shared.SHELL_FOOTER.sub("<SHARED_FOOTER>", html)
+
+                self.assertEqual(page_content(source), page_content(result))
                 rendered_header = shared.SHELL_HEADER.search(result).group(0)
                 if relative.parts[0] in shared.CATEGORY_SLUGS:
                     self.assertEqual(rendered_header.count('aria-current="page"'), 2)
                 elif relative.parts[0] == "blog":
-                    self.assertEqual(rendered_header.count('aria-current="page"'), 1)
+                    self.assertEqual(rendered_header.count('aria-current="page"'), 2)
+                    self.assertIn('class="mobile-blog-link" aria-current="page"', rendered_header)
                 else:
                     self.assertNotIn('aria-current="page"', rendered_header)
 

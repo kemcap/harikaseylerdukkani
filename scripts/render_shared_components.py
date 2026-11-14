@@ -21,6 +21,113 @@ REPO_ROOT = Path(__file__).resolve().parent.parent
 COMPONENT_ROOT = REPO_ROOT / "dosemealti" / "components"
 SHELL_HEADER = re.compile(r'<header\b[^>]*\bclass="header"[^>]*>[\s\S]*?</header>', re.I)
 SHELL_FOOTER = re.compile(r'<footer\b[^>]*\bclass="site-footer"[^>]*>[\s\S]*?</footer>', re.I)
+HOMEPAGE_MENU_STYLE = """<style id="main-category-header-menu">
+/* Harika unified primary navigation: 4 links on desktop; dropdown on mobile. */
+.header .desktop-nav{margin-left:auto;justify-content:flex-end;gap:clamp(14px,2vw,38px)}
+.header .desktop-nav a{font-size:clamp(.77rem,.95vw,.89rem);font-weight:600;letter-spacing:.012em}
+.mobile-worlds-menu{display:none}
+@media(min-width:1061px){.header .desktop-nav{display:flex!important}}
+@media(max-width:1060px){
+ .header .desktop-nav{display:none!important}
+ .header .mobile-worlds-menu{display:block;position:relative;margin-left:auto;color:inherit;z-index:90}
+ .header .mobile-worlds-menu summary{display:inline-flex;align-items:center;justify-content:center;gap:10px;min-height:40px;padding:6px 12px;list-style:none;cursor:pointer;white-space:nowrap;font-size:.9rem;font-weight:700;letter-spacing:.01em;border:1px solid currentColor;border-radius:4px}
+ .header .mobile-worlds-menu summary::-webkit-details-marker{display:none}
+ .header .mobile-worlds-menu summary::marker{content:""}
+ .header .mobile-worlds-menu summary:focus-visible{outline:2px solid #c2a268;outline-offset:4px}
+ .header .mobile-worlds-menu .mobile-chevron{display:inline-block;font-size:1.2rem;line-height:1;transition:transform .2s ease}
+ .header .mobile-worlds-menu[open] .mobile-chevron{transform:rotate(180deg)}
+ .header .mobile-worlds-panel{display:flex;flex-direction:column;position:absolute;right:0;top:calc(100% + 10px);width:min(330px,calc(100vw - 28px));padding:10px;background:#faf6ed;color:#132F25;border:1px solid #d7c5a4;border-radius:9px;box-shadow:0 18px 46px rgba(9,29,21,.26);z-index:100}
+ .header .mobile-worlds-panel a{display:flex;align-items:center;gap:14px;padding:14px 12px;min-height:48px;font-size:.93rem;font-weight:600;border-radius:5px;text-decoration:none}
+ .header .mobile-worlds-panel a+a{border-top:1px solid rgba(19,47,37,.10)}
+ .header .mobile-worlds-panel a:hover,.header .mobile-worlds-panel a:focus-visible{background:#e9ebe1}
+ .header .mobile-worlds-panel .world-index{font-size:.72rem;letter-spacing:.09em;color:#a58852;font-weight:700}
+}
+@media(max-width:760px){.story-dock{display:none!important}}
+@media(prefers-reduced-motion:reduce){.mobile-worlds-menu .mobile-chevron{transition:none!important}}
+
+/* Center category menu; restore verified Instagram social link to the right. */
+@media(min-width:1061px){
+ .header{display:grid;grid-template-columns:minmax(120px,1fr) max-content minmax(120px,1fr);align-items:center;gap:16px}
+ .header .brand{grid-column:1;justify-self:start}
+ .header .desktop-nav{grid-column:2;justify-self:center;margin:0;justify-content:center;gap:clamp(15px,1.65vw,32px)}
+ .header .header-actions{grid-column:3;justify-self:end;display:flex;align-items:center}
+ .header .mobile-worlds-menu{display:none!important}
+}
+@media(max-width:1060px){
+ .header{display:grid;grid-template-columns:minmax(80px,1fr) auto auto;align-items:center;gap:clamp(6px,2vw,15px)}
+ .header .brand{grid-column:1;justify-self:start;min-width:0}
+ .header .desktop-nav{display:none!important}
+ .header .mobile-worlds-menu{display:block!important;grid-column:2;margin:0;justify-self:end}
+ .header .header-actions{display:flex;grid-column:3;justify-self:end;align-items:center;margin:0}
+ .header .header-instagram{display:inline-flex;width:40px;min-width:40px;min-height:40px;align-items:center;justify-content:center}
+ .header .mobile-worlds-panel{right:0}
+}
+@media(max-width:420px){
+ .header{gap:6px}
+ .header .header-instagram{width:34px;min-width:34px;min-height:36px}
+ .header .header-instagram svg{width:24px;height:24px}
+ .header .mobile-worlds-menu summary{gap:6px;padding:6px 9px;font-size:.79rem}
+}
+
+
+/* Slim evergreen Dört dünya trigger, with vertical breathing room in the compact header. */
+@media(max-width:1060px){
+ .header .mobile-worlds-menu summary{
+   gap:7px;min-height:34px;padding:7px 11px;
+   border:0;border-radius:5px;box-shadow:none;
+   background:#132F25;color:#fff;
+   font-size:.82rem;font-weight:650;line-height:1.2;
+   transition:background-color .2s ease;
+ }
+ .header .mobile-worlds-menu summary:hover{background:#1b4032}
+ .header .mobile-worlds-menu summary:focus-visible{outline:2px solid #c2a268;outline-offset:3px}
+ .header .mobile-worlds-menu .mobile-chevron{color:inherit;font-size:1rem}
+ .header-compact .header .mobile-worlds-menu summary{
+   min-height:28px;padding:4px 9px;font-size:.77rem;
+ }
+ .header-compact .header .header-instagram{min-height:28px}
+}
+@media(max-width:420px){
+ .header .mobile-worlds-menu summary{padding:6px 9px;gap:5px}
+ .header-compact .header .mobile-worlds-menu summary{padding:4px 8px;min-height:28px}
+}
+@media(prefers-reduced-motion:reduce){.header .mobile-worlds-menu summary{transition:none}}
+
+.hero-stamp span{
+  display:inline-block;color:#93703b;
+  transform:rotate(var(--home-star-angle,0deg));
+}
+@media(prefers-reduced-motion:reduce){.hero-stamp span{transform:none}}
+
+</style>"""
+BASE_MENU = re.compile(r'<style id="main-category-header-menu">.*?</style>', re.S)
+GLOBAL_MENU_STYLE = """<style id="shared-navigation-style">
+.header .mobile-worlds-panel .mobile-blog-link {
+    margin-top: 6px;
+    border-top: 1px solid #d7c5a4;
+    color: #132f25;
+    background: #f3eddf;
+}
+.header .mobile-worlds-panel .mobile-blog-link span {color: #93703b}
+.header .mobile-worlds-panel .mobile-blog-link[aria-current="page"] {
+    background: #132f25;
+    color: #faf6ed;
+}
+.header .mobile-worlds-panel .mobile-blog-link:hover,
+.header .mobile-worlds-panel .mobile-blog-link:focus-visible {text-decoration: underline}
+@media (max-width: 1060px) {
+    .header .header-actions .header-blog-link {display: none}
+    .header .mobile-worlds-menu {position: static}
+    .header .mobile-worlds-panel {
+        top: calc(100% + 8px);
+        inset-inline-end: clamp(12px, 4vw, 30px);
+        max-height: calc(100dvh - 100px);
+        overflow-y: auto;
+    }
+}
+</style>
+"""
+SHARED_MENU = re.compile(r'<style id="shared-navigation-style">.*?</style>\s*', re.S)
 CATEGORY_SLUGS = ("bijuteri", "kirtasiye", "oyuncak", "hediyelik-esya")
 BLOG_SLUGS = (
     ("blog", "index.html"),
@@ -74,10 +181,11 @@ def render(source: str, relative: Path, header_template: str, footer_template: s
             raise ValueError(f"Missing desktop/mobile destination for {kind}")
         header = header.replace(dest, dest + ' aria-current="page"')
     elif kind == "blog":
-        fragment = '<a class="header-blog-link"'
-        if header.count(fragment) != 1:
-            raise ValueError("Missing one Harika Fikirler top navigation link")
-        header = header.replace(fragment, fragment + ' aria-current="page"', 1)
+        for link_class in ("header-blog-link", "mobile-blog-link"):
+            fragment = f'<a class="{link_class}"'
+            if header.count(fragment) != 1:
+                raise ValueError(f"Missing blog navigation link: {link_class}")
+            header = header.replace(fragment, fragment + ' aria-current="page"', 1)
 
     if (header.count('class="desktop-nav"') != 1
         or header.count('class="mobile-worlds-menu"') != 1
@@ -86,14 +194,21 @@ def render(source: str, relative: Path, header_template: str, footer_template: s
         or header.count('class="brand-logo"') != 1
         or footer_template.count('class="footer-blog-link"') != 1):
         raise ValueError("Shared shell is missing required elements")
-    if header.count('href="/dosemealti/') != 10:
-        # 4 desktop + 4 mobile category destinations + brand + blog
+    if header.count('href="/dosemealti/') != 11:
+        # 4 desktop + 4 mobile category destinations + brand + 2 blog links
         raise ValueError("Unexpected navigation count in shared header")
 
     # Preserve every byte of page-specific content, metadata and JavaScript.
     output = (source[:headers[0].start()] + header
               + source[headers[0].end():footers[0].start()]
               + footer_template + source[footers[0].end():])
+
+    if kind in ("home", "blog"):
+        if BASE_MENU.search(output):
+            output = BASE_MENU.sub(lambda _: HOMEPAGE_MENU_STYLE, output, count=1)
+        else:
+            output = output.replace("</head>", HOMEPAGE_MENU_STYLE + "\n</head>", 1)
+    output = SHARED_MENU.sub("", output).replace("</head>", GLOBAL_MENU_STYLE + "</head>", 1)
 
     if (len(SHELL_HEADER.findall(output)) != 1
         or len(SHELL_FOOTER.findall(output)) != 1
