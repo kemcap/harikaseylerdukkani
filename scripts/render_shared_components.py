@@ -231,7 +231,13 @@ def ensure_social_metadata(source: str, relative: Path) -> str:
     # of them with one canonical link, without changing the visible page.
     if icons:
         for match in reversed(icons):
-            source = source[:match.start()] + source[match.end():]
+            end = match.end()
+            # Remove the line break with the old link, to stay idempotent.
+            if source.startswith("\r\n", end):
+                end += 2
+            elif source.startswith("\n", end):
+                end += 1
+            source = source[:match.start()] + source[end:]
     source = source.replace("</head>", SOCIAL_ICON + "\n</head>", 1)
     return source
 
