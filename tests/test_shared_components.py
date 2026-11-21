@@ -7,6 +7,7 @@ story interactions and never removes page-specific content.
 from __future__ import annotations
 
 from pathlib import Path
+import re
 import unittest
 
 from scripts import render_shared_components as shared
@@ -48,7 +49,7 @@ class SharedComponentsTests(unittest.TestCase):
                     html = shared.SHELL_HEADER.sub("<SHARED_HEADER>", html)
                     return shared.SHELL_FOOTER.sub("<SHARED_FOOTER>", html)
 
-                self.assertEqual(page_content(source), page_content(result))
+                self.assertEqual(page_content(shared.ensure_social_metadata(source, relative)), page_content(result))
                 rendered_header = shared.SHELL_HEADER.search(result).group(0)
                 if relative.parts[0] in shared.CATEGORY_SLUGS:
                     self.assertEqual(rendered_header.count('aria-current="page"'), 2)
@@ -57,6 +58,30 @@ class SharedComponentsTests(unittest.TestCase):
                     self.assertIn('class="mobile-blog-link" aria-current="page"', rendered_header)
                 else:
                     self.assertNotIn('aria-current="page"', rendered_header)
+
+    def test_all_public_pages_have_valid_social_previews_and_shared_favicon(self):
+        public_root = ROOT / "dosemealti"
+        pages = sorted((public_root / "blog").rglob("index.html"))
+        pages.extend(public_root / slug / "index.html" for slug in shared.CATEGORY_SLUGS)
+        pages.append(ROOT / "sticky-discovery" / "index.html")
+        self.assertEqual(len(pages), 15)  # 9 articles + blog index + 4 categories + homepage
+        for path in pages:
+            relative = (Path("index.html") if path.parent.name == "sticky-discovery"
+                        else path.relative_to(public_root))
+            with self.subTest(page=str(relative)):
+                source = path.read_text(encoding="utf-8")
+                updated = shared.ensure_social_metadata(source, relative)
+                self.assertEqual(updated, shared.ensure_social_metadata(updated, relative))
+                self.assertIn(shared.SOCIAL_ICON, updated)
+                self.assertEqual(updated.count('name="twitter:image"'), 1)
+                self.assertEqual(updated.count('name="twitter:card"'), 1)
+                image = shared._read_social(updated, "og:image")
+                self.assertEqual(image, shared._read_social(updated, "twitter:image"))
+                file_name = image.removeprefix(
+                    "https://harikaseylerdukkani.com/dosemealti/"
+                )
+                self.assertTrue((public_root / file_name).is_file(), image)
+        self.assertTrue((public_root / "assets/favicon.svg").is_file())
 
     def test_fails_on_unknown_or_incomplete_page(self):
         with self.assertRaises(ValueError):

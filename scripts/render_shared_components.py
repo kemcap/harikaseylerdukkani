@@ -156,6 +156,85 @@ def page_type(relative: Path) -> str:
     raise ValueError(f"Unapproved target (no shell replacement): {relative}")
 
 
+
+# Shared, server-rendered link previews and favicon for all public pages.
+SOCIAL_ICON = '<link rel="icon" type="image/svg+xml" href="/dosemealti/assets/favicon.svg">'
+SOCIAL_IMAGE_PREFIX = "https://harikaseylerdukkani.com/dosemealti/assets/"
+
+
+def _social_pattern(name: str) -> re.Pattern[str]:
+    return re.compile(
+        r'<meta\b(?=[^>]*\b(?:property|name)\s*=\s*["\']'
+        + re.escape(name) + r'["\'])[^>]*>', re.I
+    )
+
+
+def _read_social(source: str, name: str) -> str:
+    head = source.split("</head>", 1)[0]
+    matches = _social_pattern(name).findall(head)
+    if len(matches) != 1:
+        raise ValueError(f"Expected one {name} meta tag, found {len(matches)}")
+    value = re.search(r'\bcontent\s*=\s*"([^"]*)"', matches[0], re.I)
+    if not value:
+        raise ValueError(f"Missing content value for {name}")
+    return value.group(1)
+
+
+def _set_social(source: str, name: str, value: str) -> str:
+    pattern = _social_pattern(name)
+    matches = list(pattern.finditer(source.split("</head>", 1)[0]))
+    if len(matches) > 1:
+        raise ValueError(f"Duplicate {name} meta tags")
+    attr = "property" if name.startswith("og:") else "name"
+    tag = f'<meta {attr}="{name}" content="{value}">'
+    if matches:
+        match = matches[0]
+        return source[:match.start()] + tag + source[match.end():]
+    return source.replace("</head>", tag + "\n</head>", 1)
+
+
+def ensure_social_metadata(source: str, relative: Path) -> str:
+    """Normalize native OG/Twitter metadata without touching visible page content.
+
+    Requires each published page to have its own image, title, and description.
+    Runs at build time, so WhatsApp/Facebook crawlers see tags in raw HTML.
+    """
+    page_type(relative)  # Whitelist only homepage, categories and blog.
+    if source.count("</head>") != 1:
+        raise ValueError(f"Invalid HTML head on {relative}")
+    image = _read_social(source, "og:image")
+    title = _read_social(source, "og:title")
+    description = _read_social(source, "og:description")
+    if not (image.startswith(SOCIAL_IMAGE_PREFIX) and image.endswith(".webp")):
+        raise ValueError(f"Unapproved social preview image URL on {relative}: {image}")
+    existing_alt = _social_pattern("og:image:alt").search(source.split("</head>", 1)[0])
+    alt = _read_social(source, "og:image:alt") if existing_alt else title
+
+    for name, value in (
+        ("og:site_name", "Harika Şeyler Dükkanı"),
+        ("og:image:secure_url", image),
+        ("og:image:type", "image/webp"),
+        ("og:image:alt", alt),
+        ("twitter:card", "summary_large_image"),
+        ("twitter:title", title),
+        ("twitter:description", description),
+        ("twitter:image", image),
+        ("twitter:image:alt", alt),
+    ):
+        source = _set_social(source, name, value)
+
+    head = source.split("</head>", 1)[0]
+    icons = list(re.finditer(
+        r'<link\b(?=[^>]*\brel\s*=\s*["\']icon["\'])[^>]*>', head, re.I
+    ))
+    if len(icons) > 1:
+        raise ValueError(f"Duplicate favicon links on {relative}")
+    if icons:
+        source = source[:icons[0].start()] + SOCIAL_ICON + source[icons[0].end():]
+    else:
+        source = source.replace("</head>", SOCIAL_ICON + "\n</head>", 1)
+    return source
+
 def render(source: str, relative: Path, header_template: str, footer_template: str) -> str:
     kind = page_type(relative)
     if not all(token in source for token in ("<html", "</head>", "</body>", "</html>")):
@@ -215,7 +294,7 @@ def render(source: str, relative: Path, header_template: str, footer_template: s
         or output.count('class="header-blog-link"') != 1
         or output.count('class="footer-blog-link"') != 1):
         raise ValueError(f"Shared shell verification failed: {relative}")
-    return output
+    return ensure_social_metadata(output, relative)
 
 
 def target_paths(root: Path, explicit: Path | None) -> list[Path]:
