@@ -148,6 +148,116 @@ jobs:
           lftp_settings: "set ftp:ssl-force true;"
           dry_run: ${{ github.event_name == 'workflow_dispatch' && inputs.dry_run && 'true' || 'false' }}
 
+      - name: Integrate Sternenglanz toggle into existing Döşemealtı homepage safely
+        if: ${{ github.event_name != 'workflow_dispatch' || inputs.dry_run != true }}
+        env:
+          FTP_HOST: ${{ secrets.TURHOST_FTP_HOST }}
+          FTP_USER: ${{ secrets.TURHOST_FTP_USER }}
+          FTP_PASSWORD: ${{ secrets.TURHOST_FTP_PASSWORD }}
+          FTP_REMOTE_DIR: ${{ vars.TURHOST_REMOTE_DIR || secrets.TURHOST_REMOTE_DIR }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq lftp
+          mkdir -p homepage-patch
+          python3 - <<'PY'
+          import os
+          from pathlib import Path
+          d = os.environ["FTP_REMOTE_DIR"].strip()
+          if not d or '..' in d or any(x in d for x in (';', '
+        if: ${{ github.event_name != 'workflow_dispatch' || inputs.dry_run != true }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd deploy/dosemealti
+          version=$(sha256sum assets/blog.css | cut -d ' ' -f 1)
+          downloaded=$(mktemp)
+          trap 'rm -f "$downloaded"' EXIT
+          verify() {
+            local file="$1" url="$2"
+            for attempt in 1 2 3; do
+              if curl --fail --silent --show-error --compressed --max-time 20 \
+                  "https://harikaseylerdukkani.com/dosemealti/$url" -o "$downloaded" &&
+                  cmp -s "$file" "$downloaded"; then
+                echo "Verified $url"
+                return 0
+              fi
+              if [[ "$attempt" != 3 ]]; then sleep 5; fi
+            done
+            echo "::error::Public response does not match staged file: $url"
+            return 1
+          }
+          verify sitemap.xml sitemap.xml
+          verify assets/blog.css "assets/blog.css?v=$version"
+          while IFS= read -r -d '' page; do
+            verify "$page" "${page%index.html}"
+          done < <(find bijuteri kirtasiye oyuncak hediyelik-esya blog -name index.html -print0)
+
+, '\\n', '\\r', '"', "'")):
+              raise SystemExit("Invalid FTP_REMOTE_DIR")
+          # This script is passed to lftp on stdin, so credentials are not included in the script.
+          Path("homepage-patch/remote-dir").write_text(d)
+          PY
+          export LFTP_PASSWORD="$FTP_PASSWORD"
+          lftp -u "$FTP_USER","$LFTP_PASSWORD" "ftp://$FTP_HOST:21" <<LFTP
+          set ftp:ssl-force true
+          set ftp:ssl-protect-data true
+          set ssl:verify-certificate true
+          set net:max-retries 2
+          set net:timeout 25
+          cd "$FTP_REMOTE_DIR"
+          get index.html -o homepage-patch/original.html
+          bye
+          LFTP
+          python3 - <<'PY'
+          from pathlib import Path
+          import re
+          src = Path("homepage-patch/original.html").read_bytes()
+          if len(src) < 500 or b'</body' not in src.lower():
+              raise SystemExit("Remote homepage missing or unexpected; refusing overwrite")
+          tag = b'<script defer src="/dosemealti/assets/sternenglanz-scroll.js?v=20261121"></script>'
+          if tag in src:
+              Path("homepage-patch/unchanged").touch()
+              print("Sternenglanz already installed")
+          elif b'sternenglanz-scroll.js' in src:
+              raise SystemExit("Another Sternenglanz version already exists; manual review required")
+          else:
+              result, n = re.subn(rb'</body\s*>', lambda m: tag + b'\n' + m.group(0), src, count=1, flags=re.I)
+              if n != 1: raise SystemExit("Could not find closing body")
+              Path("homepage-patch/updated.html").write_bytes(result)
+              print("Prepared minimally patched homepage; original preserved")
+          PY
+          if [[ ! -e homepage-patch/unchanged ]]; then
+            lftp -u "$FTP_USER","$LFTP_PASSWORD" "ftp://$FTP_HOST:21" <<LFTP
+          set ftp:ssl-force true
+          set ftp:ssl-protect-data true
+          set ssl:verify-certificate true
+          set net:max-retries 2
+          set net:timeout 25
+          cd "$FTP_REMOTE_DIR"
+          put homepage-patch/original.html -o .sternenglanz-homepage-backup-20261121.html
+          put homepage-patch/updated.html -o .sternenglanz-homepage-upload.tmp
+          mv .sternenglanz-homepage-upload.tmp index.html
+          bye
+          LFTP
+          fi
+          python3 - <<'PY'
+          import urllib.request
+          url = "https://harikaseylerdukkani.com/dosemealti/"
+          for attempt in range(3):
+              try:
+                  req = urllib.request.Request(url, headers={"Cache-Control": "no-cache", "User-Agent": "Harika-Deploy-Verify"})
+                  data = urllib.request.urlopen(req, timeout=20).read()
+                  if b'sternenglanz-scroll.js' in data:
+                      print("Verified live homepage includes Sternenglanz script")
+                      break
+              except Exception as exc:
+                  print("Verification attempt:", exc)
+              if attempt == 2: raise SystemExit("Live homepage verification failed")
+              import time; time.sleep(5)
+          PY
+
       - name: Verify the public categories, blog and sitemap
         if: ${{ github.event_name != 'workflow_dispatch' || inputs.dry_run != true }}
         shell: bash
