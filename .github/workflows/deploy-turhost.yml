@@ -161,44 +161,9 @@ jobs:
           sudo apt-get update -qq
           sudo apt-get install -y -qq lftp
           mkdir -p homepage-patch
-          python3 - <<'PY'
-          import os
-          from pathlib import Path
-          d = os.environ["FTP_REMOTE_DIR"].strip()
-          if not d or '..' in d or any(x in d for x in (';', '
-        if: ${{ github.event_name != 'workflow_dispatch' || inputs.dry_run != true }}
-        shell: bash
-        run: |
-          set -euo pipefail
-          cd deploy/dosemealti
-          version=$(sha256sum assets/blog.css | cut -d ' ' -f 1)
-          downloaded=$(mktemp)
-          trap 'rm -f "$downloaded"' EXIT
-          verify() {
-            local file="$1" url="$2"
-            for attempt in 1 2 3; do
-              if curl --fail --silent --show-error --compressed --max-time 20 \
-                  "https://harikaseylerdukkani.com/dosemealti/$url" -o "$downloaded" &&
-                  cmp -s "$file" "$downloaded"; then
-                echo "Verified $url"
-                return 0
-              fi
-              if [[ "$attempt" != 3 ]]; then sleep 5; fi
-            done
-            echo "::error::Public response does not match staged file: $url"
-            return 1
-          }
-          verify sitemap.xml sitemap.xml
-          verify assets/blog.css "assets/blog.css?v=$version"
-          while IFS= read -r -d '' page; do
-            verify "$page" "${page%index.html}"
-          done < <(find bijuteri kirtasiye oyuncak hediyelik-esya blog -name index.html -print0)
-
-, '\\n', '\\r', '"', "'")):
-              raise SystemExit("Invalid FTP_REMOTE_DIR")
-          # This script is passed to lftp on stdin, so credentials are not included in the script.
-          Path("homepage-patch/remote-dir").write_text(d)
-          PY
+          case "$FTP_REMOTE_DIR" in
+            *..*|*';'*|*'$'*|'') echo "Invalid remote directory"; exit 1 ;;
+          esac
           export LFTP_PASSWORD="$FTP_PASSWORD"
           lftp -u "$FTP_USER","$LFTP_PASSWORD" "ftp://$FTP_HOST:21" <<LFTP
           set ftp:ssl-force true
