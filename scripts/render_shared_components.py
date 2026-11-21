@@ -227,12 +227,12 @@ def ensure_social_metadata(source: str, relative: Path) -> str:
     icons = list(re.finditer(
         r'<link\b(?=[^>]*\brel\s*=\s*["\']icon["\'])[^>]*>', head, re.I
     ))
-    if len(icons) > 1:
-        raise ValueError(f"Duplicate favicon links on {relative}")
+    # The live homepage can contain two historic favicon links. Replace all
+    # of them with one canonical link, without changing the visible page.
     if icons:
-        source = source[:icons[0].start()] + SOCIAL_ICON + source[icons[0].end():]
-    else:
-        source = source.replace("</head>", SOCIAL_ICON + "\n</head>", 1)
+        for match in reversed(icons):
+            source = source[:match.start()] + source[match.end():]
+    source = source.replace("</head>", SOCIAL_ICON + "\n</head>", 1)
     return source
 
 def render(source: str, relative: Path, header_template: str, footer_template: str) -> str:
