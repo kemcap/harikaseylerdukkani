@@ -1,4 +1,4 @@
-name: Deploy Döşemealtı categories and blog to Turhost (FTPS)
+name: Deploy Döşemealtı pages to Turhost (FTPS)
 
 on:
   push:
@@ -11,6 +11,7 @@ on:
       - "dosemealti/oyuncak/**"
       - "dosemealti/hediyelik-esya/**"
       - "dosemealti/blog/**"
+      - "dosemealti/ses-atolyesi/**"
       - "dosemealti/components/**"
       - "scripts/render_shared_components.py"
       - "scripts/build_dosemealti_sitemap.py"
@@ -87,14 +88,15 @@ jobs:
           fi
           echo "FTP settings present. The remote directory must point to the existing /dosemealti/ folder (or a restricted FTP account's root)."
 
-      - name: Stage categories and blog without replacing the homepage
+      - name: Stage public subpages without replacing the homepage
         shell: bash
         run: |
           set -euo pipefail
           mkdir -p deploy/dosemealti
-          cp -R dosemealti/assets dosemealti/bijuteri dosemealti/kirtasiye dosemealti/oyuncak dosemealti/hediyelik-esya dosemealti/blog deploy/dosemealti/
+          cp -R dosemealti/assets dosemealti/bijuteri dosemealti/kirtasiye dosemealti/oyuncak dosemealti/hediyelik-esya dosemealti/blog dosemealti/ses-atolyesi deploy/dosemealti/
           test -f deploy/dosemealti/assets/site.css
           test -f deploy/dosemealti/blog/index.html
+          test -f deploy/dosemealti/ses-atolyesi/index.html
           test ! -e deploy/dosemealti/index.html
           find deploy/dosemealti -type f | sort
 
@@ -223,7 +225,7 @@ jobs:
               import time; time.sleep(5)
           PY
 
-      - name: Verify the public categories, blog and sitemap
+      - name: Verify the public subpages, atelier assets and sitemap
         if: ${{ github.event_name != 'workflow_dispatch' || inputs.dry_run != true }}
         shell: bash
         run: |
@@ -248,7 +250,14 @@ jobs:
           }
           verify sitemap.xml sitemap.xml
           verify assets/blog.css "assets/blog.css?v=$version"
+          for file in assets/ses-atolyesi.js assets/ses-atolyesi-audio.js assets/ses-atolyesi.css; do
+            verify "$file" "$file?v=1"
+          done
+          for layer in masal-ormani uzak orta yakin; do
+            file="assets/ses-atolyesi-$layer.webp"
+            verify "$file" "$file"
+          done
           while IFS= read -r -d '' page; do
             verify "$page" "${page%index.html}"
-          done < <(find bijuteri kirtasiye oyuncak hediyelik-esya blog -name index.html -print0)
+          done < <(find bijuteri kirtasiye oyuncak hediyelik-esya blog ses-atolyesi -name index.html -print0)
 

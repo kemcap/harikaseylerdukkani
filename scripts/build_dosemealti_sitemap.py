@@ -54,7 +54,7 @@ def build(site):
             XML.SubElement(node, f"{{{IMAGE}}}loc").text = image
 
     add(BASE, [BASE + "assets/" + image for image in HOME_IMAGES])
-    pages = [site / name / "index.html" for name in (*CATEGORIES, "blog")]
+    pages = [site / name / "index.html" for name in (*CATEGORIES, "blog", "ses-atolyesi")]
     pages.extend(sorted((site / "blog").glob("*/index.html")))
     for page in pages:
         expected = urljoin(BASE, page.parent.relative_to(site).as_posix() + "/")

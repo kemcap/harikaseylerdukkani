@@ -16,7 +16,7 @@ ROOT = Path(__file__).resolve().parents[1]
 SAMPLES = {
     Path("index.html"): ROOT / "sticky-discovery" / "index.html",
     **{Path(slug) / "index.html": ROOT / "dosemealti" / slug / "index.html"
-       for slug in shared.CATEGORY_SLUGS},
+       for slug in (*shared.CATEGORY_SLUGS, shared.ATELIER_SLUG)},
     **{Path(*parts): ROOT / "dosemealti" / Path(*parts)
        for parts in shared.BLOG_SLUGS},
 }
@@ -30,8 +30,8 @@ class SharedComponentsTests(unittest.TestCase):
         cls.footer = shared.template(
             shared.COMPONENT_ROOT / "footer.html", shared.SHELL_FOOTER)
 
-    def test_nine_pages_have_one_identical_shell(self):
-        self.assertEqual(len(SAMPLES), 9)  # homepage + 4 categories + 4 blog pages
+    def test_public_page_types_have_one_identical_shell(self):
+        self.assertEqual(len(SAMPLES), 10)  # homepage + 4 categories + atelier + 4 blog pages
         for relative, path in SAMPLES.items():
             with self.subTest(page=str(relative)):
                 source = path.read_text(encoding="utf-8")
@@ -42,16 +42,20 @@ class SharedComponentsTests(unittest.TestCase):
                 self.assertEqual(result.count('class="header-blog-link"'), 1)
                 self.assertEqual(result.count('class="footer-blog-link"'), 1)
                 self.assertEqual(result.count('class="header-instagram"'), 1)
+                self.assertEqual(result.count('class="header-atelier-link"'), 1)
+                self.assertEqual(result.count('class="mobile-atelier-link"'), 1)
+                self.assertEqual(result.count('class="home-sound-atelier"'), int(relative == Path("index.html")))
                 self.assertIn("/dosemealti/assets/harika-seyler-dukkani-logo.webp", result)
                 def page_content(html):
                     html = shared.SHARED_MENU.sub("", html)
                     html = shared.BASE_MENU.sub("", html)
+                    html = shared.HOME_ATELIER.sub("", html)
                     html = shared.SHELL_HEADER.sub("<SHARED_HEADER>", html)
                     return shared.SHELL_FOOTER.sub("<SHARED_FOOTER>", html)
 
                 self.assertEqual(page_content(shared.ensure_social_metadata(source, relative)), page_content(result))
                 rendered_header = shared.SHELL_HEADER.search(result).group(0)
-                if relative.parts[0] in shared.CATEGORY_SLUGS:
+                if relative.parts[0] in (*shared.CATEGORY_SLUGS, shared.ATELIER_SLUG):
                     self.assertEqual(rendered_header.count('aria-current="page"'), 2)
                 elif relative.parts[0] == "blog":
                     self.assertEqual(rendered_header.count('aria-current="page"'), 2)
@@ -62,9 +66,10 @@ class SharedComponentsTests(unittest.TestCase):
     def test_all_public_pages_have_valid_social_previews_and_shared_favicon(self):
         public_root = ROOT / "dosemealti"
         pages = sorted((public_root / "blog").rglob("index.html"))
-        pages.extend(public_root / slug / "index.html" for slug in shared.CATEGORY_SLUGS)
+        pages.extend(public_root / slug / "index.html"
+                     for slug in (*shared.CATEGORY_SLUGS, shared.ATELIER_SLUG))
         pages.append(ROOT / "sticky-discovery" / "index.html")
-        self.assertEqual(len(pages), 15)  # 9 articles + blog index + 4 categories + homepage
+        self.assertEqual(len(pages), 16)  # 9 articles + blog index + 4 categories + homepage + atelier
         for path in pages:
             relative = (Path("index.html") if path.parent.name == "sticky-discovery"
                         else path.relative_to(public_root))
@@ -94,14 +99,15 @@ class SharedComponentsTests(unittest.TestCase):
             shared.render(source.replace('category-seo-h1', 'unknown-title'),
                           Path("bijuteri/index.html"), self.header, self.footer)
 
-    def test_all_eight_deploy_subpages_are_whitelisted(self):
-        paths = [Path(slug) / "index.html" for slug in shared.CATEGORY_SLUGS]
+    def test_deploy_subpages_are_whitelisted(self):
+        public_sections = (*shared.CATEGORY_SLUGS, shared.ATELIER_SLUG)
+        paths = [Path(slug) / "index.html" for slug in public_sections]
         paths.extend(Path(*parts) for parts in shared.BLOG_SLUGS)
-        self.assertEqual(len(paths), 8)
+        self.assertEqual(len(paths), 9)
         self.assertEqual(shared.page_type(Path("blog/yeni-yazi/index.html")), "blog")
         for path in paths:
             self.assertIn(shared.page_type(path),
-                          (*shared.CATEGORY_SLUGS, "blog"))
+                          (*public_sections, "blog"))
 
 
 if __name__ == "__main__":

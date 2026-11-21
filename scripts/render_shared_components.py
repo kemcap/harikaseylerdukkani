@@ -115,8 +115,28 @@ GLOBAL_MENU_STYLE = """<style id="shared-navigation-style">
 }
 .header .mobile-worlds-panel .mobile-blog-link:hover,
 .header .mobile-worlds-panel .mobile-blog-link:focus-visible {text-decoration: underline}
+.header .header-atelier-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    min-height: 40px;
+    color: inherit;
+    font-size: .84rem;
+    font-weight: 700;
+    white-space: nowrap;
+}
+.header .header-atelier-link span {color: #c2a268}
+.header .header-atelier-link:is(:hover,:focus-visible,[aria-current="page"]) {
+    text-decoration: underline;
+    text-underline-offset: 4px;
+}
+.header .mobile-worlds-panel .mobile-atelier-link {color: #132f25}
+.header .mobile-worlds-panel .mobile-atelier-link[aria-current="page"] {
+    background: #132f25;
+    color: #faf6ed;
+}
 @media (max-width: 1060px) {
-    .header .header-actions .header-blog-link {display: none}
+    .header .header-actions :is(.header-blog-link,.header-atelier-link) {display: none}
     .header .mobile-worlds-menu {position: static}
     .header .mobile-worlds-panel {
         top: calc(100% + 8px);
@@ -125,10 +145,49 @@ GLOBAL_MENU_STYLE = """<style id="shared-navigation-style">
         overflow-y: auto;
     }
 }
+.home-sound-atelier {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px 26px;
+    max-width: 1220px;
+    margin: 0 auto clamp(24px,5vw,65px);
+    width: calc(100% - clamp(32px,11vw,160px));
+    padding: clamp(17px,3.2vw,36px);
+    color: #faf6ed;
+    background: radial-gradient(ellipse at top right,#315744,#132f25 68%);
+    border: 1px solid #a98b57;
+    border-radius: 9px;
+}
+.home-sound-atelier h2 {margin: 0;color: #f4dfb7;font: 400 clamp(1.65rem,3vw,2.5rem)/1.1 Georgia,serif}
+.home-sound-atelier h2 span {font-size: .7em}
+.home-sound-atelier p {margin: 7px 0 0;line-height: 1.5;font-size: 1rem}
+.home-sound-atelier a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    padding: 7px 15px;
+    border-radius: 6px;
+    color: #132f25;
+    background: #ebd19c;
+    font-size: .9rem;
+    font-weight: 700;
+    text-decoration: none;
+}
+.home-sound-atelier a:is(:hover,:focus-visible) {background: #f7e6be;text-decoration: underline}
 </style>
 """
 SHARED_MENU = re.compile(r'<style id="shared-navigation-style">.*?</style>\s*', re.S)
 CATEGORY_SLUGS = ("bijuteri", "kirtasiye", "oyuncak", "hediyelik-esya")
+ATELIER_SLUG = "ses-atolyesi"
+HOME_ATELIER_PROMO = """<aside class="home-sound-atelier" aria-labelledby="home-sound-title">
+<div><h2 id="home-sound-title"><span aria-hidden="true">✦</span> Ses Atölyesi</h2>
+<p>Bir yıldızı çal, kendi masalının melodisini keşfet.</p></div>
+<a href="/dosemealti/ses-atolyesi/">Atölyeyi keşfet</a>
+</aside>
+"""
+HOME_ATELIER = re.compile(r'<aside class="home-sound-atelier"[\s\S]*?</aside>\n?')
 BLOG_SLUGS = (
     ("blog", "index.html"),
     ("blog", "dogum-gunu-hediyesi-nasil-secilir", "index.html"),
@@ -149,7 +208,7 @@ def page_type(relative: Path) -> str:
     parts = relative.parts
     if parts == ("index.html",):
         return "home"
-    if len(parts) == 2 and parts[1] == "index.html" and parts[0] in CATEGORY_SLUGS:
+    if len(parts) == 2 and parts[1] == "index.html" and parts[0] in (*CATEGORY_SLUGS, ATELIER_SLUG):
         return parts[0]
     if parts[0] == "blog" and parts[-1] == "index.html" and len(parts) in (2, 3):
         return "blog"
@@ -241,6 +300,14 @@ def ensure_social_metadata(source: str, relative: Path) -> str:
     source = source.replace("</head>", SOCIAL_ICON + "\n</head>", 1)
     return source
 
+def add_home_atelier(source: str) -> str:
+    source = HOME_ATELIER.sub("", source)
+    story = '<section class="story"'
+    if source.count(story) != 1:
+        raise ValueError("Expected one homepage story after the atelier invitation")
+    return source.replace(story, HOME_ATELIER_PROMO + story, 1)
+
+
 def render(source: str, relative: Path, header_template: str, footer_template: str) -> str:
     kind = page_type(relative)
     if not all(token in source for token in ("<html", "</head>", "</body>", "</html>")):
@@ -252,15 +319,16 @@ def render(source: str, relative: Path, header_template: str, footer_template: s
         raise ValueError(f"Category identity check failed: {relative}")
     if kind == "blog" and 'class="blog-page"' not in source:
         raise ValueError(f"Blog identity check failed: {relative}")
+    if kind == ATELIER_SLUG and 'class="sound-page"' not in source:
+        raise ValueError(f"Sound atelier identity check failed: {relative}")
     headers = list(SHELL_HEADER.finditer(source))
     footers = list(SHELL_FOOTER.finditer(source))
     if len(headers) != 1 or len(footers) != 1 or headers[0].end() > footers[0].start():
         raise ValueError(f"Expected one complete header and footer: {relative}")
 
     header = header_template
-    # Active state is applied on both category links (desktop and mobile) or
-    # on the dedicated Harika Fikirler link, never on another page.
-    if kind in CATEGORY_SLUGS:
+    # Set the active state in both desktop and mobile navigation.
+    if kind in (*CATEGORY_SLUGS, ATELIER_SLUG):
         dest = f'href="/dosemealti/{kind}/"'
         if header.count(dest) != 2:
             raise ValueError(f"Missing desktop/mobile destination for {kind}")
@@ -276,11 +344,12 @@ def render(source: str, relative: Path, header_template: str, footer_template: s
         or header.count('class="mobile-worlds-menu"') != 1
         or header.count('class="header-instagram"') != 1
         or header.count('class="header-blog-link"') != 1
+        or header.count('class="header-atelier-link"') != 1
         or header.count('class="brand-logo"') != 1
         or footer_template.count('class="footer-blog-link"') != 1):
         raise ValueError("Shared shell is missing required elements")
-    if header.count('href="/dosemealti/') != 11:
-        # 4 desktop + 4 mobile category destinations + brand + 2 blog links
+    if header.count('href="/dosemealti/') != 13:
+        # Four product worlds, blog and atelier on both menus, plus the brand.
         raise ValueError("Unexpected navigation count in shared header")
 
     # Preserve every byte of page-specific content, metadata and JavaScript.
@@ -288,6 +357,8 @@ def render(source: str, relative: Path, header_template: str, footer_template: s
               + source[headers[0].end():footers[0].start()]
               + footer_template + source[footers[0].end():])
 
+    if kind == "home":
+        output = add_home_atelier(output)
     if kind in ("home", "blog"):
         if BASE_MENU.search(output):
             output = BASE_MENU.sub(lambda _: HOMEPAGE_MENU_STYLE, output, count=1)
