@@ -287,6 +287,7 @@ def render(source: str, relative: Path, header_template: str, footer_template: s
             output = BASE_MENU.sub(lambda _: HOMEPAGE_MENU_STYLE, output, count=1)
         else:
             output = output.replace("</head>", HOMEPAGE_MENU_STYLE + "\n</head>", 1)
+    output = ensure_social_metadata(output, relative)
     output = SHARED_MENU.sub("", output).replace("</head>", GLOBAL_MENU_STYLE + "</head>", 1)
 
     if (len(SHELL_HEADER.findall(output)) != 1
@@ -294,7 +295,7 @@ def render(source: str, relative: Path, header_template: str, footer_template: s
         or output.count('class="header-blog-link"') != 1
         or output.count('class="footer-blog-link"') != 1):
         raise ValueError(f"Shared shell verification failed: {relative}")
-    return ensure_social_metadata(output, relative)
+    return output
 
 
 def target_paths(root: Path, explicit: Path | None) -> list[Path]:
