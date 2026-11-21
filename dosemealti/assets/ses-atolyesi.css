@@ -101,6 +101,7 @@
   --scene-tint: #132f2514;
   --star-light: #ffe4a6;
   position: relative;
+  width: 100%;
   min-width: 0;
   min-height: 314px;
   aspect-ratio: 1.4;

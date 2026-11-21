@@ -253,7 +253,7 @@ jobs:
           for file in assets/ses-atolyesi.js assets/ses-atolyesi-audio.js; do
             verify "$file" "$file?v=1"
           done
-          verify assets/ses-atolyesi.css "assets/ses-atolyesi.css?v=2"
+          verify assets/ses-atolyesi.css "assets/ses-atolyesi.css?v=3"
           for layer in masal-ormani uzak orta yakin; do
             file="assets/ses-atolyesi-$layer.webp"
             verify "$file" "$file"
