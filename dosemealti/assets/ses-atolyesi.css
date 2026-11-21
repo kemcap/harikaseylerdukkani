@@ -101,6 +101,7 @@
   --scene-tint: #132f2514;
   --star-light: #ffe4a6;
   position: relative;
+  min-width: 0;
   min-height: 314px;
   aspect-ratio: 1.4;
   border: 1px solid #b9996473;
@@ -286,7 +287,7 @@
 .sound-dialog-actions { display: flex; flex-wrap: wrap; gap: 8px; }
 .sound-dialog-status { font-size: .875rem; margin-bottom: 0; }
 @media (max-width: 760px) {
-  .sound-hero-grid { grid-template-columns: 1fr; gap: 22px; }
+  .sound-hero-grid { grid-template-columns: minmax(0, 1fr); gap: 22px; }
   .sound-intro h1 { font-size: clamp(2.55rem, 9vw, 4.8rem); }
   .sound-lead { margin-block: 12px 16px; }
   .sound-sky { min-height: 230px; aspect-ratio: 1.65; }
@@ -294,4 +295,11 @@
   .sound-sky-hint { bottom: 12px; }
   .sound-star { width: 45px; height: 45px; }
   .sound-controls { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 1060px) {
+  .sound-page .header .mobile-worlds-menu { position: relative; }
+  .sound-page .header .mobile-worlds-panel {
+    inset-inline-end: 0;
+    width: min(330px, calc(100vw - 86px));
+  }
 }
