@@ -249,6 +249,45 @@ jobs:
             return 1
           }
           verify sitemap.xml sitemap.xml
+          # Validate the actual public preferred images and responsive image files.
+          python3 - <<'PY' > /tmp/harika-search-images.txt
+          from html.parser import HTMLParser
+          from pathlib import Path
+          from urllib.parse import urljoin, urlsplit
+
+          BASE = "https://harikaseylerdukkani.com/dosemealti/"
+          class Images(HTMLParser):
+              def __init__(self, page_url):
+                  super().__init__()
+                  self.page_url = page_url
+                  self.files = set()
+              def add(self, value):
+                  url = urljoin(self.page_url, value)
+                  if url.startswith(BASE + "assets/"):
+                      self.files.add(urlsplit(url).path.removeprefix("/dosemealti/"))
+              def handle_starttag(self, tag, attrs):
+                  a = dict(attrs)
+                  if tag == "meta" and a.get("property") == "og:image":
+                      self.add(a["content"])
+                  if tag in ("img", "source") and a.get("srcset"):
+                      for candidate in a["srcset"].split(","):
+                          parts = candidate.strip().split()
+                          if parts:
+                              self.add(parts[0])
+          images = set()
+          for folder in ("bijuteri", "kirtasiye", "oyuncak", "hediyelik-esya", "blog", "ses-atolyesi"):
+              for page in Path(folder).rglob("index.html"):
+                  parser = Images(BASE + page.parent.as_posix() + "/")
+                  parser.feed(page.read_text(encoding="utf-8"))
+                  images.update(parser.files)
+          for asset in sorted(images):
+              if not Path(asset).is_file():
+                  raise SystemExit(f"Missing search image: {asset}")
+              print(asset)
+          PY
+          while IFS= read -r image; do
+            verify "$image" "$image"
+          done < /tmp/harika-search-images.txt
           verify assets/blog.css "assets/blog.css?v=$version"
           for file in assets/ses-atolyesi.js assets/ses-atolyesi-audio.js; do
             verify "$file" "$file?v=1"
