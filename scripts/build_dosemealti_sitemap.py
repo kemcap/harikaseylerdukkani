@@ -32,7 +32,7 @@ class Metadata(HTMLParser):
         attrs = dict(attributes)
         if tag == "link" and attrs.get("rel") == "canonical":
             self.canonicals.append(attrs.get("href"))
-        if tag == "img" and attrs.get("src", "").startswith("../../assets/blog/"):
+        if tag == "img" and attrs.get("src") and attrs.get("alt", "").strip():
             self.inline_images.append(attrs["src"])
         if tag == "meta":
             if attrs.get("name", "").lower() in ("robots", "googlebot"):
@@ -62,8 +62,19 @@ def build(site):
         if not meta.indexable or meta.canonicals != [expected]:
             raise ValueError(f"Expected indexable page with canonical {expected}: {page}")
         images = [meta.image] if meta.image and meta.image.startswith(BASE + "assets/") else []
-        images.extend(urljoin(expected, src) for src in meta.inline_images)
-        add(expected, dict.fromkeys(images))
+        for src in meta.inline_images:
+            image = urljoin(expected, src)
+            if not image.startswith(BASE + "assets/"):
+                continue
+            if image.endswith(("harika-seyler-dukkani-logo.webp", "favicon.svg")):
+                continue
+            images.append(image)
+        unique = list(dict.fromkeys(images))
+        for image in unique:
+            asset = site / image.removeprefix(BASE)
+            if not asset.is_file():
+                raise ValueError(f"Missing sitemap image {image}: {page}")
+        add(expected, unique)
 
     XML.indent(root, space="  ")
     XML.ElementTree(root).write(site / "sitemap.xml", encoding="utf-8", xml_declaration=True)
