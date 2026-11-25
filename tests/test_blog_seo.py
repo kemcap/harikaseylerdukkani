@@ -92,6 +92,48 @@ class BlogSEOTests(unittest.TestCase):
             self.assertEqual(len(re.findall(r"<h1\b", html)), 1, slug)
 
 
+    def test_preferred_search_images(self):
+        base = "https://harikaseylerdukkani.com/dosemealti/"
+        pages = [SITE / slug / "index.html" for slug in (*CATEGORIES, "blog", "ses-atolyesi")]
+        pages += [SITE / "blog" / slug / "index.html" for slug in ARTICLES]
+        for page in pages:
+            html = page.read_text(encoding="utf-8")
+            head = html.split("</head>", 1)[0]
+            from html.parser import HTMLParser
+
+            class Meta(HTMLParser):
+                def __init__(self):
+                    super().__init__()
+                    self.images = []
+                    self.robots = []
+                def handle_starttag(self, tag, attrs):
+                    a = dict(attrs)
+                    if tag == "meta" and a.get("property") == "og:image":
+                        self.images.append(a.get("content"))
+                    if tag == "meta" and a.get("name") == "robots":
+                        self.robots.append(a.get("content", ""))
+
+            m = Meta()
+            m.feed(head)
+            self.assertEqual(len(m.images), 1, page)
+            image = m.images[0]
+            self.assertTrue(image.startswith(base + "assets/"), page)
+            self.assertTrue((SITE / image.removeprefix(base)).is_file(), image)
+            self.assertEqual(len(m.robots), 1, page)
+            self.assertIn("max-image-preview:large", m.robots[0], page)
+            self.assertNotIn("noindex", m.robots[0], page)
+            schemas = [json.loads(raw) for raw in SCRIPT.findall(head)]
+            if page.parent.parent == SITE / "blog":
+                post = next(s for s in schemas if s.get("@type") == "BlogPosting")
+                self.assertEqual(post["image"][0], image, page)
+            else:
+                preferred = [s["primaryImageOfPage"] for s in schemas if "primaryImageOfPage" in s]
+                self.assertEqual(len(preferred), 1, page)
+                self.assertEqual(preferred[0]["contentUrl"], image, page)
+                self.assertEqual(preferred[0]["url"], image, page)
+
+
+
 if __name__ == "__main__":
     unittest.main()
 
